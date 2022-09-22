@@ -5,15 +5,15 @@ export const useLoginStore = defineStore("loginStore", () => {
   const login = ref(true);
   const register = ref(false);
 
-  function goToLogin() {
+  function showLogin() {
     login.value = true;
     register.value = false;
   }
 
-  function goToRegister() {
+  function showRegister() {
     login.value = false;
     register.value = true;
   }
 
-  return { login, register, goToLogin, goToRegister };
+  return { login, register, showLogin, showRegister };
 });

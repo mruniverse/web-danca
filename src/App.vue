@@ -18,6 +18,5 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #E5E5E5;
 }
 </style>
