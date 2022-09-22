@@ -11,12 +11,3 @@
     </body>
   </v-app>
 </template>
-
-<style scoped>
-/* Align all body content to center */
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

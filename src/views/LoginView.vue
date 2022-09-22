@@ -8,17 +8,27 @@ const loginStore = useLoginStore();
 </script>
 
 <template>
-    <v-container class="d-flex align-center justify-center">
-        <!-- <img class="logo" src="@/assets/Logo Horizontal.svg" /> -->
-        <div v-if="loginStore.login">
-            <LoginComponent />
-        </div>
-        <div v-if="loginStore.register">
-            <RegisterComponent />
-        </div>
-    </v-container>
+    <v-col class="fill-height pa-0">
+        <v-row no-gutters class="logo">
+            <img width="200" src="@/assets/Logo Horizontal.svg" />
+        </v-row>
+        <v-row no-gutters class="login-sheet" justify="center">
+            <div v-if="loginStore.login">
+                <LoginComponent />
+            </div>
+            <div v-if="loginStore.register">
+                <RegisterComponent />
+            </div>
+        </v-row>
+    </v-col>
 </template>
 
 <style scoped>
 @import '../assets/loginScreen.css';
+
+.teste {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
 </style>
