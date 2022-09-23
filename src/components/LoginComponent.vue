@@ -8,22 +8,24 @@
                     </v-row>
                     <v-row no-gutters class="mb-n5">
                         <v-text-field 
-                            v-model="state.email" 
+                            v-model="v$.email.$model" 
                             append-icon="mdi-email-outline" 
                             label="E-mail" 
                             outlined
-                            >
+                            class="login-input-style"
+                            :error-messages="emailErrors">
                         </v-text-field>
                     </v-row>
                     <v-row no-gutters>
                         <v-text-field 
-                            v-model="state.password" 
+                            v-model="v$.password.$model" 
                             label="Senha" 
                             outlined
                             :style="{'font-size': state.passwordVisibility ? '22px':''}"
                             :type="state.passwordVisibility ? 'password' : 'text'"
                             :append-icon="state.passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
-                            @click:append="() => (state.passwordVisibility = !state.passwordVisibility)">
+                            @click:append="() => (state.passwordVisibility = !state.passwordVisibility)"
+                            :error-messages="passwordErrors">
                         </v-text-field>
                     </v-row>
                     <v-row no-gutters class="mt-n5">
@@ -48,16 +50,39 @@
 </template>
 
 <script setup>
-    import { reactive } from 'vue';
+    import { computed, reactive } from 'vue';
     import { useLoginStore } from '../stores/loginStore';
-    
+    import { useVuelidate } from '@vuelidate/core';
+    import { required, email } from '@vuelidate/validators';
+
     const state = reactive({
         passwordVisibility:'password',
         email:'',
         password:'',
     });
+
+    const validations = {
+        email: { required, email },
+        password: { required },
+    };
     
     const loginStore = useLoginStore();
+    const v$ = useVuelidate(validations, state);
+
+    const emailErrors = computed(() => {
+        const errors = [];
+        if (!v$.value.email.$dirty) return errors
+        v$.value.email.email.$invalid && errors.push('Must be valid e-mail')
+        v$.value.email.required.$invalid && errors.push('E-mail is required')
+        return errors
+    });
+
+    const passwordErrors = computed(() => {
+        const errors = [];
+        if (!v$.value.password.$dirty) return errors
+        v$.value.password.required.$invalid && errors.push('Password is required')
+        return errors
+    });
 </script>   
 
 <style scoped>
