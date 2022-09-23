@@ -1,5 +1,5 @@
 <script setup>
-import { useLoginStore } from '../stores/loginStore';
+import { useLoginStore } from '../store/loginStore';
 const loginStore = useLoginStore();
 </script>
         
@@ -10,15 +10,21 @@ const loginStore = useLoginStore();
                 <v-row no-gutters justify="start">
                     <p class="login-title-text">Cadastre-se</p>
                 </v-row>
-                <v-row no-gutters class="mb-n5">
-                    <v-text-field append-icon="mdi-account-outline" label="Seu nome" outlined>
+                <v-row no-gutters>
+                    <v-text-field 
+                        append-icon="mdi-account-outline" 
+                        label="Seu nome" 
+                        outlined>
                     </v-text-field>
                 </v-row>
-                <v-row no-gutters class="mb-n5">
-                    <v-text-field append-icon="mdi-email-outline" label="Seu e-mail" outlined>
+                <v-row no-gutters>
+                    <v-text-field 
+                        append-icon="mdi-email-outline" 
+                        label="Seu e-mail" 
+                        outlined>
                     </v-text-field>
                 </v-row>
-                <v-row no-gutters class="mb-n5">
+                <v-row no-gutters>
                     <v-checkbox>
                         <template v-slot:label>
                             <div>Li e aceito os <a @click.stop href="https://google.com">termos e condições</a> de uso.
@@ -39,6 +45,6 @@ const loginStore = useLoginStore();
     </v-sheet>
 </template>
     
-<style scoped>
+<style lang="scss" scoped>
 @import '../assets/loginComponent.scss';
 </style>

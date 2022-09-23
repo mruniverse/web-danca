@@ -1,19 +1,21 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import LoginView from '../views/LoginView.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import LoginView from "@/views/LoginView.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+
+const routes = [
+  {
+    path: "/",
+    name: "login",
+    component: LoginView,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: import.meta.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'login',
-      component: LoginView
-    },
-  ]
-})
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes,
+});
 
-export default router
+export default router;

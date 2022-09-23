@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import LoginComponent from '../components/LoginComponent.vue';
 import RegisterComponent from '../components/RegisterComponent.vue';
-import { useLoginStore } from '../stores/loginStore';
+import { useLoginStore } from '../store/loginStore';
 
 const loginStore = useLoginStore();
 </script>
@@ -23,8 +23,8 @@ const loginStore = useLoginStore();
     </v-col>
 </template>
 
-<style scoped>
-@import '../assets/loginScreen.css';
+<style lang="scss" scoped>
+@import '../assets/loginScreen.scss';
 
 .teste {
     display: flex;

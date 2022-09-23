@@ -6,29 +6,31 @@
                     <v-row no-gutters justify="start">
                         <p class="login-title-text">Entre com e-mail e senha</p>
                     </v-row>
-                    <v-row no-gutters class="mb-n5">
-                        <v-text-field 
-                            v-model="v$.email.$model" 
+                    <v-row no-gutters>
+                        <v-text-field
+                            v-model="state.email" 
                             append-icon="mdi-email-outline" 
                             label="E-mail" 
                             outlined
                             class="login-input-style"
-                            :error-messages="emailErrors">
+                            :error-messages="emailErrors"
+                            @blur="v$.email.$touch">
                         </v-text-field>
                     </v-row>
                     <v-row no-gutters>
                         <v-text-field 
-                            v-model="v$.password.$model" 
-                            label="Senha" 
+                            v-model="state.password" 
+                            label="Senha"
                             outlined
                             :style="{'font-size': state.passwordVisibility ? '22px':''}"
                             :type="state.passwordVisibility ? 'password' : 'text'"
                             :append-icon="state.passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
                             @click:append="() => (state.passwordVisibility = !state.passwordVisibility)"
-                            :error-messages="passwordErrors">
+                            :error-messages="passwordErrors"
+                            @blur="v$.password.$touch">
                         </v-text-field>
                     </v-row>
-                    <v-row no-gutters class="mt-n5">
+                    <v-row no-gutters>
                         <v-col align-self="end">
                             <a>Esqueci a senha</a>
                         </v-col>
@@ -51,7 +53,7 @@
 
 <script setup>
     import { computed, reactive } from 'vue';
-    import { useLoginStore } from '../stores/loginStore';
+    import { useLoginStore } from '../store/loginStore';
     import { useVuelidate } from '@vuelidate/core';
     import { required, email } from '@vuelidate/validators';
 
@@ -85,6 +87,6 @@
     });
 </script>   
 
-<style scoped>
+<style lang="scss" scoped>
 @import '../assets/loginComponent.scss';
 </style>
