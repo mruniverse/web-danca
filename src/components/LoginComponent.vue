@@ -1,14 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { useLoginStore } from '../stores/loginStore';
-
-const passwordVisibility = ref('password');
-const email = ref('');
-const password = ref('');
-
-const loginStore = useLoginStore();
-</script>
-    
 <template>
     <v-col>
         <v-sheet class="login-sheet-style d-flex align-center">
@@ -18,15 +7,23 @@ const loginStore = useLoginStore();
                         <p class="login-title-text">Entre com e-mail e senha</p>
                     </v-row>
                     <v-row no-gutters class="mb-n5">
-                        <v-text-field v-model="email" append-icon="mdi-email-outline" label="E-mail" outlined>
+                        <v-text-field 
+                            v-model="state.email" 
+                            append-icon="mdi-email-outline" 
+                            label="E-mail" 
+                            outlined
+                            >
                         </v-text-field>
                     </v-row>
                     <v-row no-gutters>
-                        <v-text-field v-model="password" label="Senha" outlined
-                            :style="{'font-size': passwordVisibility ? '22px':''}"
-                            :type="passwordVisibility ? 'password' : 'text'"
-                            :append-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
-                            @click:append="() => (passwordVisibility = !passwordVisibility)">
+                        <v-text-field 
+                            v-model="state.password" 
+                            label="Senha" 
+                            outlined
+                            :style="{'font-size': state.passwordVisibility ? '22px':''}"
+                            :type="state.passwordVisibility ? 'password' : 'text'"
+                            :append-icon="state.passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
+                            @click:append="() => (state.passwordVisibility = !state.passwordVisibility)">
                         </v-text-field>
                     </v-row>
                     <v-row no-gutters class="mt-n5">
@@ -49,6 +46,19 @@ const loginStore = useLoginStore();
         </v-sheet>
     </v-col>
 </template>
+
+<script setup>
+    import { reactive } from 'vue';
+    import { useLoginStore } from '../stores/loginStore';
+    
+    const state = reactive({
+        passwordVisibility:'password',
+        email:'',
+        password:'',
+    });
+    
+    const loginStore = useLoginStore();
+</script>   
 
 <style scoped>
 @import '../assets/loginComponent.scss';
