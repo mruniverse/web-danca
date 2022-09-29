@@ -1,5 +1,5 @@
 <script setup>
-import { useLoginStore } from '../store/loginStore';
+import { useLoginStore } from '../../store/loginStore';
 const loginStore = useLoginStore();
 </script>
         
@@ -34,7 +34,7 @@ const loginStore = useLoginStore();
                 </v-row>
                 <v-row no-gutters class="mt-10">
                     <v-col align-self="end">
-                        <a @click="loginStore.showLogin">Voltar</a>
+                        <a @click="$router.go(-1)">Voltar</a>
                     </v-col>
                     <v-col align="end">
                         <v-btn style="border-radius: 13px;" elevation="0" color="#2887DA" dark> Registrar-se </v-btn>
@@ -46,5 +46,5 @@ const loginStore = useLoginStore();
 </template>
     
 <style lang="scss" scoped>
-@import '../assets/loginComponent.scss';
+@import '@/assets/loginComponent.scss';
 </style>

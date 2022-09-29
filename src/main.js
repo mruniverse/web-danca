@@ -5,10 +5,9 @@ import vuetify from './plugins/vuetify'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import VueCompositionAPI from '@vue/composition-api'
 
-Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
+Vue.use(PiniaVuePlugin)
 Vue.use(VueCompositionAPI)
-
 Vue.config.productionTip = false
 
 new Vue({
