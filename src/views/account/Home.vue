@@ -1,27 +1,23 @@
 <template>
     <v-row no-gutters>
-        <v-col cols="2">
+        <v-col cols="auto">
             <NavigationDrawer />
         </v-col>
-        <v-col cols="10">
+        <v-col>
             <v-row no-gutters>
-                <v-col cols=6 class="pa-4">
+                <v-col cols="auto" class="pa-4">
                     <div class="pl-2 text-title-custom">Meus eventos</div>
                 </v-col>
-                <v-col cols="6" class="pa-4">
+                <v-col class="pa-4">
                     <v-row no-gutters justify="end">
-                        <v-col cols="2">
-                            <Notification />
-                        </v-col>
-                        <v-col cols="6">
-                            <MyAccount />
-                        </v-col>
+                        <Notification />
+                        <MyAccount />
                     </v-row>
                 </v-col>
             </v-row>
             <v-row no-gutters justify="center">
                 <v-col cols="12" class="pa-6">
-                    <MyEventsTable/>
+                    <MyEventsTable />
                 </v-col>
             </v-row>
         </v-col>
