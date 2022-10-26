@@ -22,6 +22,8 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --vt-c-shadows-1: rgba(121, 121, 121, 0.103);
 }
 
 /* semantic color variables for this project */
@@ -65,7 +67,7 @@
 .v-application--wrap {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--v-background-base);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-family: Ubuntu;

@@ -4,7 +4,7 @@ module.exports = defineConfig({
     'vuetify'
   ],
   devServer: {
-    port: 8080,
+    port: 3000,
     server: 'http',
     headers: { "Access-Control-Allow-Origin": "*" }
   },

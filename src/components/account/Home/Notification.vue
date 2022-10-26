@@ -1,9 +1,9 @@
 <template>
     <v-menu content-class="menu-style" transition="slide-y-transition" left offset-y>
         <template v-slot:activator="{ on, attrs }">
-            <v-badge overlap bottom color="error" :content="getNotificationNumber">
+            <v-badge offset-y="15" overlap bottom color="error" :content="getNotificationNumber">
                 <v-btn v-bind="attrs" v-on="on" width="40" height="60" class="button" color="white">
-                    <v-icon size="28" color="accent">mdi-bell-outline</v-icon>
+                    <v-icon size="28" color="primary">mdi-bell-outline</v-icon>
                 </v-btn>
             </v-badge>
         </template>
@@ -32,13 +32,13 @@ const getNotificationNumber = computed(() => {
 
 <style lang="scss" scoped>
 .button {
-    box-shadow: 0px 4px 4px rgba(59, 124, 182, 0.03);
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
     border-radius: 20px;
 }
 
 .menu-style {
     margin-top: 10px;
     border-radius: 10px 0 10px 10px;
-    box-shadow: 0px 4px 4px 4px rgba(59, 125, 182, 0.068);
+    box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
 }
 </style>

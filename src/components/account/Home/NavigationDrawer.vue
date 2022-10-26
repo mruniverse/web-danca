@@ -7,17 +7,23 @@
         </v-list>
         <v-list nav>
             <v-list-item-group color="primary" v-model="state.selectedItem">
-                <v-list-item link>
+                <v-list-item link @click="goToPage('Workspace')">
                     <v-list-item-icon>
                         <v-icon>mdi-monitor</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title class="">Workspace</v-list-item-title>
+                    <v-list-item-title>Workspace</v-list-item-title>
                 </v-list-item>
-                <v-list-item link>
+                <v-list-item link @click="goToPage('Events')">
+                    <v-list-item-icon>
+                        <v-icon>mdi-calendar-multiselect</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Meus Eventos</v-list-item-title>
+                </v-list-item>
+                <v-list-item link @click="goToPage('Places')">
                     <v-list-item-icon>
                         <v-icon>mdi-school-outline</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Escolas</v-list-item-title>
+                    <v-list-item-title>Ambientes</v-list-item-title>
                 </v-list-item>
             </v-list-item-group>
         </v-list>
@@ -26,13 +32,19 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { useLoginStore } from '@/store/loginStore';
-const loginStore = useLoginStore();
+import { usePageStore } from '@/store/page';
+import router from '@/router';
+const pageStore = usePageStore();
 
 const state = reactive({
     expanded: false,
     selectedItem: 0,
 });
+
+function goToPage(page) {
+    pageStore.setPage(page);
+    router.push({ name: page });
+}
 </script>
     
 <style lang="scss" scoped>

@@ -9,15 +9,6 @@
     </v-col>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import LoginComponent from '../../components/account/Login.vue';
-import RegisterComponent from '../../components/account/Register.vue';
-import { useLoginStore } from '../../store/loginStore';
-
-const loginStore = useLoginStore();
-</script>
-
 <style lang="scss" scoped>
 @import '@/assets/loginScreen.scss';
 

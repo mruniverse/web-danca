@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
+import colors from 'vuetify/lib/util/colors';
 
 Vue.use(Vuetify);
 
@@ -14,13 +15,18 @@ export default new Vuetify({
         info: "#2196F3",
         success: "#4CAF50",
         warning: "#FFC107",
+        background: "#f5f6fa",
+        textField: "#ffffff",
       },
+      dark:{
+        secondary: colors.grey.lighten2,
+        accent: colors.grey.darken2,
+        error: "#FF5252",
+        info: "#2196F3",
+        success: "#4CAF50",
+        warning: "#FFC107",
+      }
     },
-    options: {
-      themeCache: {
-        get: (key) => localStorage.getItem(key),
-        set: (key, value) => localStorage.setItem(key, value),
-      },
-    },
+    options: { customProperties: true },
   },
 });

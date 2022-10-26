@@ -1,5 +1,5 @@
 <script setup>
-import { useLoginStore } from '../../store/loginStore';
+import { useLoginStore } from '../../store/login';
 const loginStore = useLoginStore();
 </script>
         

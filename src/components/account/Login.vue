@@ -13,10 +13,10 @@
                 </v-row>
                 <v-row no-gutters>
                     <v-text-field v-model="state.password" label="Senha" outlined
-                        :style="{'font-size': state.passwordVisibility ? '22px':''}"
-                        :type="state.passwordVisibility ? 'password' : 'text'"
-                        :append-icon="state.passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
-                        @click:append="() => (state.passwordVisibility = !state.passwordVisibility)"
+                        :style="{'font-size': passwordVisibility ? '22px':''}"
+                        :type="passwordVisibility ? 'password' : 'text'"
+                        :append-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
+                        @click:append="() => (passwordVisibility = !passwordVisibility)"
                         @blur="v$.password.$touch"
                         :error-messages="v$.password.$error ? v$.password.$errors[0].$message:''">
                     </v-text-field>
@@ -26,7 +26,12 @@
                         <a>Esqueci a senha</a>
                     </v-col>
                     <v-col align="end">
-                        <v-btn @click="submit()" style="border-radius: 13px;" elevation="0" color="#2887DA" dark> Entrar
+                        <v-btn 
+                            @click="submit()" 
+                            style="border-radius: 13px;" 
+                            elevation="0" 
+                            color="#2887DA" 
+                            dark> Entrar
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -43,17 +48,17 @@
 </template>
 
 <script setup>
-import { computed, reactive } from 'vue';
-import { useLoginStore } from '../../store/loginStore';
+import { computed, reactive, ref } from 'vue';
+import { useLoginStore } from '../../store/login';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required, email } from '@vuelidate/validators';
 import router from '@/router';
 import api from '@/plugins/axios';
 
 const loginStore = useLoginStore();
+const passwordVisibility = ref('password');
 
 const state = reactive({
-    passwordVisibility: 'password',
     email: '',
     password: '',
     username: '',
