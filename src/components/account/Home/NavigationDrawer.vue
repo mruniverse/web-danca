@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer height="100vh" class="custom-box-shadow" permanent :expand-on-hover="state.expanded" floating>
+    <v-navigation-drawer class="custom-box-shadow" permanent :expand-on-hover="state.expanded" floating>
         <v-list>
             <v-list-item class="logo">
                 <v-img max-width="180" src="@/assets/Logo Horizontal.svg"></v-img>
@@ -42,6 +42,7 @@ const state = reactive({
 });
 
 function goToPage(page) {
+    if(page === router.currentRoute.name) return;
     pageStore.setPage(page);
     router.push({ name: page });
 }

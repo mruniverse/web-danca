@@ -23,7 +23,7 @@
                         <span style="color: var(--v-secondary-base);" class="subtitle-2">Resultados por página</span>
                     </v-col>
                     <v-col cols="auto" class="d-flex align-end justify-end">
-                        <v-select v-model="resultsPerPage" :items="[5,10,15]" type="number" outlined>
+                        <v-select v-model="resultsPerPage" :items="[5,10,15]" type="number" style="max-width: 80px" outlined>
                             <template v-slot:item="{ item, on, attrs }">
                                 <v-list-item v-bind="attrs" v-on="on">
                                     <v-list-item-title 
@@ -171,7 +171,6 @@ const state = reactive({
 
 .v-input.v-text-field--outlined.v-select {
     height: 48px;
-    max-width: 80px;
     background: var(--v-textField-base);
     border: 1px solid #ECECF7;
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
@@ -202,11 +201,4 @@ const state = reactive({
     border-radius: 10px;
     box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
 }
-
-.btn-larger .v-btn:not(.v-btn--round).v-size--default{
-    height: 48px;
-    border-radius: 13px;
-    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
-}
-
 </style>

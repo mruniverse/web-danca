@@ -4,10 +4,10 @@
             <NavigationDrawer />
         </v-col>
         <v-col>
-            <v-row no-gutters>
+            <v-row no-gutters v-if="showMenuBar()">
                 <v-col cols="auto" class="pa-4">
                     <div class="pl-2 text-title-custom"> 
-                        {{changePage($router.name)}}
+                        {{getCurrentPage()}}
                     </div>
                 </v-col>
                 <v-col class="pa-4">
@@ -18,7 +18,7 @@
                     </v-row>
                 </v-col>
             </v-row>
-            <v-row no-gutters justify="center" class="ma-4 mb-n4">
+            <v-row no-gutters justify="center" class="px-4 py-4 fill-height">
                 <router-view></router-view>
             </v-row>
         </v-col>
@@ -26,11 +26,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, watch } from 'vue';
+import {reactive} from 'vue';
 import NavigationDrawer from '@/components/account/Home/NavigationDrawer.vue';
 import Notification from '@/components/account/Home/Notification.vue';
 import MyAccount from '@/components/account/Home/MyAccount.vue';
 import router from '@/router';
+
 const state = reactive({
     pages: [
         {page: 'Workspace', text: 'Workspace'},
@@ -39,9 +40,13 @@ const state = reactive({
     ],
 });
 
-function changePage(page) {
+function showMenuBar() {
+    return getCurrentPage() !== 'NewEnvironment';
+};
+
+function getCurrentPage() {
     const currentPage = state.pages.find((page) => page.page === router.currentRoute.name);
-    return currentPage ? currentPage.text : '';
+    return currentPage ? currentPage.text : router.currentRoute.name;
 }
 </script>
 

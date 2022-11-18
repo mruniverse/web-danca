@@ -15,6 +15,6 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 @import '@/assets/main.scss';
 </style>

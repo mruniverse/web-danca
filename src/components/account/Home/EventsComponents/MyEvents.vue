@@ -5,8 +5,8 @@
                 <SearchBar></SearchBar>
             </v-col>
             <div class="mx-2"></div>
-            <v-col cols="auto" class="d-flex align-center btn-larger">
-                <v-btn class="button-custom subtitle-2 font-weight-bold" color="#2887DA" dark>
+            <v-col cols="auto" class="d-flex align-center">
+                <v-btn class="btn-larger subtitle-2 font-weight-bold" color="#2887DA" dark>
                     Novo Evento
                 </v-btn>
             </v-col>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import MyEventsTable from '@/components/MyEventsTable.vue';
+import MyEventsTable from '@/components/account/Home/EventsComponents/MyEventsTable.vue';
 import SearchBar from '@/components/SearchBar.vue';
 </script>
 
