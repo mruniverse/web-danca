@@ -1,9 +1,9 @@
-import Login from '@/views/account/Login'
-import LoginComponent from '@/components/account/Login'
-import RegisterComponent from '@/components/account/Register'
+import Login from '@/views/Login.vue'
+import LoginComponent from '@/components/Login/Login.vue'
+import RegisterComponent from '@/components/Login/Register.vue'
 
 export default {
-    path: '/account',
+    path: '/',
     component: Login,
     children: [
         { path: 'login', name: 'Login', component: LoginComponent },

@@ -1,8 +1,3 @@
-<script setup>
-import { useLoginStore } from '../../store/login';
-const loginStore = useLoginStore();
-</script>
-        
 <template>
     <v-sheet class="login-sheet-style d-flex align-center">
         <v-row no-gutters class="d-flex justify-center">
@@ -11,17 +6,11 @@ const loginStore = useLoginStore();
                     <p class="login-title-text">Cadastre-se</p>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field 
-                        append-icon="mdi-account-outline" 
-                        label="Seu nome" 
-                        outlined>
+                    <v-text-field append-icon="mdi-account-outline" label="Seu nome" outlined>
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field 
-                        append-icon="mdi-email-outline" 
-                        label="Seu e-mail" 
-                        outlined>
+                    <v-text-field append-icon="mdi-email-outline" label="Seu e-mail" outlined>
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
@@ -44,7 +33,12 @@ const loginStore = useLoginStore();
         </v-row>
     </v-sheet>
 </template>
-    
+
+<script setup>
+import { useLoginStore } from '@/store/login';
+const loginStore = useLoginStore();
+</script>
+
 <style lang="scss" scoped>
 @import '@/assets/loginComponent.scss';
 </style>

@@ -1,8 +1,13 @@
 <template>
     <v-menu content-class="menu-style" transition="slide-y-transition" left offset-y>
         <template v-slot:activator="{ on, attrs }">
-            <v-badge offset-y="15" overlap bottom color="error" :content="getNotificationNumber">
+            <v-badge v-if="!dense" offset-y="24" offset-x="14" overlap bottom color="error" :content="getNotificationNumber">
                 <v-btn v-bind="attrs" v-on="on" width="40" height="60" class="button" color="white">
+                    <v-icon size="28" color="primary">mdi-bell-outline</v-icon>
+                </v-btn>
+            </v-badge>
+            <v-badge v-else offset-y="36" offset-x="14" bottom color="error" :content="getNotificationNumber">
+                <v-btn v-bind="attrs" v-on="on" icon>
                     <v-icon size="28" color="primary">mdi-bell-outline</v-icon>
                 </v-btn>
             </v-badge>
@@ -18,16 +23,27 @@
     </v-menu>
 </template>
 
-<script setup>
+<script>
 import { computed, reactive } from 'vue';
 
-const state = reactive({
-    notifications: 0
-});
+export default {
+    props: {
+        dense: Boolean,
+    },
 
-const getNotificationNumber = computed(() => {
-    return state.notifications >= 100 ? '99+' : state.notifications;
-});
+    setup(props, { emit }) {
+        const state = reactive({
+            notifications: 3
+        });
+
+        const getNotificationNumber = computed(() => {
+            return state.notifications >= 100 ? '99+' : state.notifications;
+        });
+
+        return { state, getNotificationNumber }
+    }
+}
+
 </script>
 
 <style lang="scss" scoped>

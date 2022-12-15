@@ -4,7 +4,6 @@ import router from "@/router";
 import vuetify from "@/plugins/vuetify";
 import { createPinia, PiniaVuePlugin } from "pinia";
 import "@/plugins/konva";
-import "@/plugins/vue-google-maps-address-autocomplete";
 
 const pinia = createPinia();
 Vue.use(PiniaVuePlugin);

@@ -48,8 +48,8 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue';
-import { useLoginStore } from '../../store/login';
+import { reactive, ref } from 'vue';
+import { useLoginStore } from '@/store/login';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required, email } from '@vuelidate/validators';
 import router from '@/router';

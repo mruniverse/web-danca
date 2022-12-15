@@ -12,13 +12,15 @@
                 </v-col>
                 <v-col class="pa-4">
                     <v-row no-gutters justify="end">
-                        <Notification />
+                        <HomeButton></HomeButton>
                         <div class="mx-2"></div>
-                        <MyAccount />
+                        <Notification></Notification>
+                        <div class="mx-2"></div>
+                        <MyAccount></MyAccount>
                     </v-row>
                 </v-col>
             </v-row>
-            <v-row no-gutters justify="center" class="px-4 py-4 fill-height">
+            <v-row no-gutters justify="center" class="px-4 py-4">
                 <router-view></router-view>
             </v-row>
         </v-col>
@@ -29,12 +31,13 @@
 import {reactive} from 'vue';
 import NavigationDrawer from '@/components/account/Home/NavigationDrawer.vue';
 import Notification from '@/components/account/Home/Notification.vue';
-import MyAccount from '@/components/account/Home/MyAccount.vue';
+import MyAccount from '@/components/account/Home/MyAccountDrawer.vue';
 import router from '@/router';
+import HomeButton from '@/components/account/Home/HomeButton.vue';
 
 const state = reactive({
     pages: [
-        {page: 'Workspace', text: 'Workspace'},
+        {page: 'Settings', text: 'Minha conta'},
         {page: 'Events', text: 'Meus Eventos'},
         {page: 'Places', text: 'Meus Ambientes'},
     ],

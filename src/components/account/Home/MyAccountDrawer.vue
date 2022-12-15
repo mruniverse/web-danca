@@ -2,27 +2,25 @@
     <v-menu 
         content-class="menu-style" 
         transition="slide-y-transition" 
-        bottom 
-        offset-y
-        :close-on-content-click="state.closeOnContentClick">
+        bottom offset-y :close-on-content-click="state.closeOnContentClick">
         <template v-slot:activator="{ on, attrs }">
-            <v-list class="pa-0" rounded width="280" color="transparent">
+            <v-list class="pa-0" rounded :max-width="dense ? 53 : 300" color="transparent">
                 <v-list-item class="pa-0" v-bind="attrs" v-on="on">
-                    <v-btn width="40" height="60" class="button" color="primary">
+                    <v-btn :height="dense ? 50 : 60" min-width="40" :width="dense ? 53 : 65" :class="dense ? `button-dense` : `button`" color="primary">
                         <v-icon size="28" color="var(--color-background)">mdi-account-outline</v-icon>
                     </v-btn>
-                    <v-list-item-content class="ml-4">
+                    <v-list-item-content v-if="!dense" class="ml-4">
                         <v-list-item-title class="title">{{loginStore.username}}</v-list-item-title>
                         <v-list-item-subtitle>{{loginStore.email}}</v-list-item-subtitle>
                     </v-list-item-content>
-                    <v-list-item-action>
+                    <v-list-item-action v-if="!dense">
                         <v-icon>mdi-chevron-down</v-icon>
                     </v-list-item-action>
                 </v-list-item>
             </v-list>
         </template>
         <v-list shaped>
-            <v-list-item link>
+            <v-list-item link @click="pageStore.setPage('Settings')">
                 <v-list-item-title>Minha conta</v-list-item-title>
                 <v-icon>mdi-account-outline</v-icon>
             </v-list-item>
@@ -48,35 +46,46 @@
     </v-menu>
 </template>
 
-<script setup>
+<script>
 import router from '@/router';
-import vuetify from '@/plugins/vuetify';
 import { watch, onMounted, reactive, ref } from 'vue';
 import { useThemeStore } from '@/store/theme';
 import { useLoginStore } from '@/store/login';
+import { usePageStore } from '@/store/page';
 
-const loginStore = useLoginStore();
-const themeStore = useThemeStore();
-const themeDark = ref(false);
-const state = reactive({
-    notifications: 3,
-    closeOnContentClick: true,
-});
+export default {
+    props: {
+        dense: Boolean,
+    },
 
-onMounted(() => {
-    themeDark.value = themeStore.getThemeDark();
-});
+    setup(props, { emit }) {
+        const loginStore = useLoginStore();
+        const themeStore = useThemeStore();
+        const pageStore = usePageStore();
+        const themeDark = ref(false);
+        const state = reactive({
+            notifications: 3,
+            closeOnContentClick: true,
+        });
 
-watch(themeDark, (value) => {
-    themeStore.setThemeDark(value);
-    state.closeOnContentClick = false;
-    setTimeout(() => {
-        state.closeOnContentClick = true;
-    }, 100);
-});
+        onMounted(() => {
+            themeDark.value = themeStore.getThemeDark();
+        });
 
-function logout() {
-    router.push({ name: 'Login' });
+        watch(themeDark, (value) => {
+            themeStore.setThemeDark(value);
+            state.closeOnContentClick = false;
+            setTimeout(() => {
+                state.closeOnContentClick = true;
+            }, 100);
+        });
+
+        function logout() {
+            router.push({ name: 'Login' });
+        }
+
+        return { loginStore, themeDark, state, logout, pageStore };
+    }
 }
 </script>
 
@@ -84,6 +93,11 @@ function logout() {
 .button {
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
     border-radius: 20px;
+}
+
+.button-dense {
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+    border-radius: 26px;
 }
 
 .menu-style {

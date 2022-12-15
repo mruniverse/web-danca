@@ -7,19 +7,19 @@
         </v-list>
         <v-list nav>
             <v-list-item-group color="primary" v-model="state.selectedItem">
-                <v-list-item link @click="goToPage('Workspace')">
+                <v-list-item link @click="pageStore.setPage('Settings')">
                     <v-list-item-icon>
-                        <v-icon>mdi-monitor</v-icon>
+                        <v-icon>mdi-account-outline</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Workspace</v-list-item-title>
+                    <v-list-item-title>Minha conta</v-list-item-title>
                 </v-list-item>
-                <v-list-item link @click="goToPage('Events')">
+                <v-list-item link @click="pageStore.setPage('Events')">
                     <v-list-item-icon>
                         <v-icon>mdi-calendar-multiselect</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>Meus Eventos</v-list-item-title>
                 </v-list-item>
-                <v-list-item link @click="goToPage('Places')">
+                <v-list-item link @click="pageStore.setPage('Places')">
                     <v-list-item-icon>
                         <v-icon>mdi-school-outline</v-icon>
                     </v-list-item-icon>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { computed, onMounted, reactive, watch, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
 import router from '@/router';
 const pageStore = usePageStore();
@@ -39,12 +39,20 @@ const pageStore = usePageStore();
 const state = reactive({
     expanded: false,
     selectedItem: 0,
+    itemsList: ['Settings', 'Events', 'Places']
 });
 
-function goToPage(page) {
-    if(page === router.currentRoute.name) return;
-    pageStore.setPage(page);
-    router.push({ name: page });
+onMounted(() => {
+    fetchSelectedPage();
+});
+
+watchEffect(async () => {
+    fetchSelectedPage();
+});
+
+function fetchSelectedPage() {
+    const currentRoute = pageStore.getPage();
+    state.selectedItem = state.itemsList.indexOf(currentRoute); 
 }
 </script>
     
@@ -56,6 +64,7 @@ function goToPage(page) {
 }
 
 .custom-box-shadow {
+    max-width: 220px;
     box-shadow: 0px 4px 4px 4px rgba(59, 125, 182, 0.068);
 }
 </style>
