@@ -1,15 +1,21 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import LoginView from "@/views/LoginView.vue";
+import LoginRoutes from "./login";
+import HomeRoutes from "./home";
+import Main from "@/views/account/Main.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: "/",
-    name: "login",
-    component: LoginView,
-  },
+    name: 'Main',
+    component: Main,
+    children: []
+  },{
+    ...LoginRoutes
+  },{
+    ...HomeRoutes
+  }
 ];
 
 const router = new VueRouter({
