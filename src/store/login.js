@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const useLoginStore = defineStore("loginStore", () => {
   const username = ref("Yuri Luz");
   const password = ref("");
-  const email = ref("");
+  const email = ref("emailteste@teste.com.br");
   const login = ref(true);
   const register = ref(false);
 

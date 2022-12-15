@@ -1,8 +1,8 @@
 <template>
     <v-menu content-class="menu-style" transition="slide-y-transition" left offset-y>
         <template v-slot:activator="{ on, attrs }">
-            <v-badge v-if="!dense" offset-y="24" offset-x="14" overlap bottom color="error" :content="getNotificationNumber">
-                <v-btn v-bind="attrs" v-on="on" width="40" height="60" class="button" color="white">
+            <v-badge v-if="!dense" offset-y="20" offset-x="14" overlap bottom color="error" :content="getNotificationNumber">
+                <v-btn v-bind="attrs" v-on="on" width="40" height="60" class="button" color="defaultBtn">
                     <v-icon size="28" color="primary">mdi-bell-outline</v-icon>
                 </v-btn>
             </v-badge>

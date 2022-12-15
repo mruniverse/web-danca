@@ -1,5 +1,5 @@
 <template>
-    <v-sheet class="top-bar custom-box-shadow">
+    <v-sheet color="defaultSheet" class="top-bar custom-box-shadow">
         <v-row no-gutters align="center">
             <v-col class="ml-4">
                 <v-row no-gutters align="center">

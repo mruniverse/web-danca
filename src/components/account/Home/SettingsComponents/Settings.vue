@@ -16,7 +16,7 @@
                     </v-row>
                 </v-col>
             </v-row>
-            <v-row v-for="index in [1, 2, 3, 4, 5]">
+            <v-row v-for="index in [1, 2, 3, 4, 5]" :key="index">
                 <v-row no-gutters justify="center" class="my-1">
                     <v-card width="80%" height="30px" flat color="grey"></v-card>
                 </v-row>

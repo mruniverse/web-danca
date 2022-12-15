@@ -17,6 +17,8 @@ export default new Vuetify({
         warning: "#FFC107",
         background: "#f5f6fa",
         textField: "#ffffff",
+        defaultBtn: "#ffffff",
+        defaultSheet: "#ffffff",
       },
       dark:{
         secondary: colors.grey.lighten2,
@@ -26,6 +28,8 @@ export default new Vuetify({
         success: "#4CAF50",
         warning: "#FFC107",
         background: "#121212",
+        defaultBtn: "#363636",
+        defaultSheet: "#363636",
       }
     },
     options: { customProperties: true },

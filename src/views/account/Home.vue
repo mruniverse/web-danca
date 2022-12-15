@@ -11,7 +11,7 @@
                     </div>
                 </v-col>
                 <v-col class="pa-4">
-                    <v-row no-gutters justify="end">
+                    <v-row no-gutters justify="end" align="center">
                         <HomeButton></HomeButton>
                         <div class="mx-2"></div>
                         <Notification></Notification>

@@ -3,58 +3,50 @@
         <v-row no-gutters justify="center" class="mb-4">
             <TopBar></TopBar>
         </v-row>
+        <v-row no-gutters>
+            <p class="text-h6 mx-2 mb-2">Em Destaque</p>
+        </v-row>
         <v-row no-gutters justify="center">
-            <v-carousel cycle show-arrows-on-hover>
-                <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="`/temp/${i + 1}.jpg`">
-                    <v-col cols="6" class="fill-height pa-0">
-                        <v-sheet height="100%" color="black" class="blur gradient"></v-sheet>
-                        <v-row no-gutters :class="`carousel-title text-h1 font-weight-bold ${colors[i]}`"> Título apenas
-                            teste </v-row>
-                    </v-col>
-                    <v-col class="carousel-sub-info" align="end">
-                        <v-btn rounded elevation="0" color="primary"> Mais informações </v-btn>
-                    </v-col>
-                </v-carousel-item>
-            </v-carousel>
+            <Carousel></Carousel>
         </v-row>
-        <v-divider class="ma-6"></v-divider>
-        <v-row no-gutters justify="center" class="my-4 mx-n2">
+        <v-divider class="ma-6 mb-4"></v-divider>
+        <v-row no-gutters>
+            <p class="text-h6 mx-2 mb-0">Perto de você</p>
+            <v-btn text rounded class="custom-font ml-auto">Ver todos <v-icon>mdi-chevron-right</v-icon></v-btn>
+        </v-row>
+        <v-row no-gutters justify="center" class="my-2 mx-n2 mb-4">
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 1" image="/temp/cards/card (1).jpg"></EventCard>
             </v-col>
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 2" image="/temp/cards/card (2).jpg"></EventCard>
             </v-col>
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 3" image="/temp/cards/card (3).jpg"></EventCard>
+            </v-col>
+            <v-col>
+                <EventCard title="Teste 2" image="/temp/cards/card (2).jpg"></EventCard>
             </v-col>
             <v-col>
                 <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
             </v-col>
         </v-row>
-        <v-row no-gutters justify="center" class="my-4 mx-n2">
-            <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
-            </v-col>
-            <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
-            </v-col>
-            <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
-            </v-col>
-            <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
-            </v-col>
+        <v-row no-gutters>
+            <p class="text-h6 mx-2 mb-0">Outros eventos</p>
+            <v-btn text rounded class="custom-font ml-auto">Ver todos <v-icon>mdi-chevron-right</v-icon></v-btn>
         </v-row>
-        <v-row no-gutters justify="center" class="my-4 mx-n2">
+        <v-row no-gutters justify="center" class="my-2 mx-n2 mb-4">
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 4" image="/temp/cards/card (4).jpg"></EventCard>
             </v-col>
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 5" image="/temp/cards/card (5).jpg"></EventCard>
             </v-col>
             <v-col>
-                <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
+                <EventCard title="Teste 2" image="/temp/cards/card (2).jpg"></EventCard>
+            </v-col>
+            <v-col>
+                <EventCard title="Teste 1" image="/temp/cards/card (1).jpg"></EventCard>
             </v-col>
             <v-col>
                 <v-sheet class="mx-2" width="auto" height="200" rounded color="grey"></v-sheet>
@@ -64,56 +56,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import TopBar from '@/components/Main/TopNavigation/TopBar.vue';
-
-const colors = ref([
-    'white--text',
-    'success--text',
-    'white--text',
-]);
-
-const slides = ref([
-    'First',
-    'Second',
-    'Third',
-]);
-
+import TopBar from '@/components/Main/TopBar.vue';
+import Carousel from '@/components/Main/Carousel.vue';
+import EventCard from '@/components/Main/EventCard.vue';
 </script>
 
 <style lang="scss" scoped>
-.v-carousel {
-    border-radius: 10px;
-}
-
-.carousel-title {
-    position: absolute;
-    top: 50px;
-    left: 60px;
-}
-
-.carousel-sub-info {
-    position: absolute;
-    bottom: 50px;
-    right: 10px;
-}
-
-.blur {
-    backdrop-filter: blur(1px);
-}
-
-.gradient {
-    mask-image: -webkit-linear-gradient(left,
-            rgba(0, 0, 0, 0.9),
-            rgba(0, 0, 0, 0.8),
-            rgba(0, 0, 0, 0.7),
-            rgba(0, 0, 0, 0.6),
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.2),
-            transparent);
-}
-
 .container-style {
     width: 80%;
+}
+
+.custom-font {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 700;
+    text-transform:none;
+    letter-spacing: normal;
 }
 </style>
