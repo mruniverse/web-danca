@@ -1,8 +1,8 @@
 <template>
-    <v-card class="mx-1" max-width="350" elevation="0" rounded>
+    <v-card class="mr-2" max-width="350" elevation="0" rounded>
         <v-img class="white--text align-end" height="200px" :src="image">
             <v-card-title>
-                {{ title }} <v-btn color="primary" class="ml-auto" flat rounded> Comprar </v-btn>
+                {{ title }} <v-btn color="primary" class="ml-auto" rounded> Comprar </v-btn>
             </v-card-title>
         </v-img>
     </v-card>
@@ -18,9 +18,7 @@ export default {
     },
 
     setup(props) {
-        onMounted(() => {
-            console.log(props)
-        });
+        onMounted(() => {});
     }
 }
 </script>
