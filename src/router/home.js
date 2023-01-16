@@ -5,7 +5,7 @@ import Places from '@/components/account/Home/EnvironmentsComponents/Environment
 import NewEnvironmentStepper from '@/components/account/Home/EnvironmentsComponents/NewEnvironmentStepper.vue';
 
 export default {
-    path: '/account/home',
+    path: '/home/account',
     name: 'Home',
     component: Home,
     children: [

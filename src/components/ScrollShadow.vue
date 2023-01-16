@@ -10,6 +10,12 @@
 import { reactive, computed } from 'vue';
 
 export default {
+  name: 'ScrollShadow',
+
+  props: {
+    overflowX: Boolean
+  },
+
   setup() {
     const shadows = reactive({
       left: 0,

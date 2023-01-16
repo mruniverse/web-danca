@@ -10,8 +10,8 @@
                         <v-icon size="28" color="var(--color-background)">mdi-account-outline</v-icon>
                     </v-btn>
                     <v-list-item-content v-if="!dense" class="ml-4">
-                        <v-list-item-title class="title">{{loginStore.username}}</v-list-item-title>
-                        <v-list-item-subtitle>{{loginStore.email}}</v-list-item-subtitle>
+                        <v-list-item-title class="title">{{authStore.username}}</v-list-item-title>
+                        <v-list-item-subtitle>{{authStore.email}}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action v-if="!dense">
                         <v-icon>mdi-chevron-down</v-icon>
@@ -24,7 +24,7 @@
                 <v-list-item-title>Minha conta</v-list-item-title>
                 <v-icon>mdi-account-outline</v-icon>
             </v-list-item>
-            <v-list-item link @click="logout()">
+            <v-list-item link @click="authStore.logout()">
                 <v-list-item-title>Sair</v-list-item-title>
                 <v-icon>mdi-logout</v-icon>
             </v-list-item>
@@ -47,10 +47,9 @@
 </template>
 
 <script>
-import router from '@/router';
 import { watch, onMounted, reactive, ref } from 'vue';
 import { useThemeStore } from '@/store/theme';
-import { useLoginStore } from '@/store/login';
+import { useAuthStore } from '@/store/auth';
 import { usePageStore } from '@/store/page';
 
 export default {
@@ -59,7 +58,7 @@ export default {
     },
 
     setup(props, { emit }) {
-        const loginStore = useLoginStore();
+        const authStore = useAuthStore();
         const themeStore = useThemeStore();
         const pageStore = usePageStore();
         const themeDark = ref(false);
@@ -80,11 +79,7 @@ export default {
             }, 100);
         });
 
-        function logout() {
-            router.push({ name: 'Login' });
-        }
-
-        return { loginStore, themeDark, state, logout, pageStore };
+        return { authStore, themeDark, state, pageStore };
     }
 }
 </script>

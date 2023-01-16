@@ -35,8 +35,8 @@
 </template>
 
 <script setup>
-import { useLoginStore } from '@/store/login';
-const loginStore = useLoginStore();
+import { useAuthStore } from '@/store/auth.js';
+const authStore = useAuthStore();
 </script>
 
 <style lang="scss" scoped>

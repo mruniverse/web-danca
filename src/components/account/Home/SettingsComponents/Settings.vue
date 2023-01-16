@@ -9,10 +9,10 @@
                         </v-avatar>
                     </v-row>
                     <v-row no-gutters justify="center">
-                        <p class="mb-0 text-h5">{{ loginStore.username }}</p>
+                        <p class="mb-0 text-h5">{{ authStore.username }}</p>
                     </v-row>
                     <v-row no-gutters justify="center">
-                        <p class="mb-0 caption ">{{ loginStore.email }}</p>
+                        <p class="mb-0 caption ">{{ authStore.email }}</p>
                     </v-row>
                 </v-col>
             </v-row>
@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { useLoginStore } from '@/store/login';
-const loginStore = useLoginStore();
+import { useAuthStore } from '@/store/auth.js';
+const authStore = useAuthStore();
 
 </script>
 

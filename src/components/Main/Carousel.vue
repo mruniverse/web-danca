@@ -1,9 +1,9 @@
 <template>
     <v-carousel cycle show-arrows-on-hover>
-        <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="`/temp/${i + 1}.jpg`">
+        <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.image">
             <v-col cols="6" class="fill-height pa-0">
                 <v-sheet height="100%" color="black" class="blur gradient"></v-sheet>
-                <v-row no-gutters :class="`carousel-title text-h1 font-weight-bold ${colors[i]}`"> Título apenas teste
+                <v-row no-gutters :class="`carousel-title text-h1 font-weight-bold ${slide.color}`"> {{ slide.title }}
                 </v-row>
             </v-col>
             <v-col class="carousel-sub-info" align="end">
@@ -13,20 +13,22 @@
     </v-carousel>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
 
-const colors = ref([
-    'white--text',
-    'success--text',
-    'white--text',
-]);
+export default {
+    name: 'Carousel',
 
-const slides = ref([
-    'First',
-    'Second',
-    'Third',
-]);
+    props: {
+        slides: {
+            type: Array,
+            default: [{
+                image: '',
+                title: '',
+                color: ''
+            }]
+        },
+    }
+}
 </script>
 
 <style lang="scss" scoped>
