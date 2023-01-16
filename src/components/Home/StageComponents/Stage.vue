@@ -48,7 +48,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Konva from 'konva';
-import controlPannel from '@/components/account/Home/StageComponents/ControlPanelComponents/controlPanel.vue';
+import controlPannel from '@/components/Home/StageComponents/ControlPanelComponents/controlPanel.vue';
 import { useStageStore } from '@/store/stage';
 
 const GUIDELINE_OFFSET = ref(5);

@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import MyEventsTable from '@/components/account/Home/EventsComponents/MyEventsTable.vue';
+import MyEventsTable from '@/components/Home/EventsComponents/MyEventsTable.vue';
 import SearchBar from '@/components/SearchBar.vue';
 </script>
 

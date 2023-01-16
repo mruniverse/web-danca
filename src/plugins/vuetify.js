@@ -21,7 +21,7 @@ export default new Vuetify({
         defaultSheet: "#ffffff",
       },
       dark:{
-        secondary: colors.grey.lighten2,
+        secondary: "#424242",
         accent: colors.grey.darken2,
         error: "#FF5252",
         info: "#2196F3",

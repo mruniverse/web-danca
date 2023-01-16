@@ -1,5 +1,5 @@
 <template>
-    <v-container class="container-style">
+    <v-container :class="containerStyle">
         <v-row no-gutters justify="center" class="mb-4">
             <TopBar></TopBar>
         </v-row>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import TopBar from '@/components/Main/TopBar.vue';
 import Carousel from '@/components/Main/Carousel.vue';
 import EventsList from '@/components/Main/EventsList.vue';
@@ -56,6 +56,12 @@ const cards = ref([{
     image: '/temp/cards/card (5).jpg',
     color: 'white--text'
 }]);
+
+const containerStyle = computed({
+    get() {
+        return this.$vuetify.breakpoint.width > 1280 ? 'container-style' : '';
+    }
+});
 </script>
 
 <style lang="scss" scoped>

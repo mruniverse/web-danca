@@ -29,11 +29,11 @@
 
 <script setup>
 import {reactive} from 'vue';
-import NavigationDrawer from '@/components/account/Home/NavigationDrawer.vue';
-import Notification from '@/components/account/Home/Notification.vue';
-import MyAccount from '@/components/account/Home/MyAccountDrawer.vue';
+import NavigationDrawer from '@/components/Home/NavigationDrawer.vue';
+import Notification from '@/components/Home/Notification.vue';
+import MyAccount from '@/components/Home/MyAccountDrawer.vue';
 import router from '@/router';
-import HomeButton from '@/components/account/Home/HomeButton.vue';
+import HomeButton from '@/components/Home/HomeButton.vue';
 
 const state = reactive({
     pages: [

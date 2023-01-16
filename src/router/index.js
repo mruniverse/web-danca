@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import LoginRoutes from "./login";
 import HomeRoutes from "./home";
-import Main from "@/views/account/Main.vue";
+import Main from "@/views/Main.vue";
 import {useAuthStore} from "@/store/auth";
 import { createApp } from "vue-demi";
 import { createPinia } from 'pinia'

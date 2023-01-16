@@ -1,21 +1,21 @@
 <template>
     <v-card>
         <v-img :style="cardTitleHeight" :src="image">
-            <v-row class="fill-height">
-                    <v-row align="center" justify="start" class="ml-1">
-                        <v-card-title :style="cardTitleHeight" class="text-h1 font-weight-bold white--text">
-                            {{ title }}
-                        </v-card-title>
-                    </v-row>
-                <v-col cols="2" align="start" class="mt-3">
+            <v-col>
+                <v-row no-gutters justify="center" class="mx-n2">
                     <v-app-bar flat color="transparent">
                         <v-spacer></v-spacer>
-                        <v-btn fab color="white">
+                        <v-btn fab>
                             <v-icon @click="setDialog(false)" large>mdi-close</v-icon>
                         </v-btn>
                     </v-app-bar>
-                </v-col>
-            </v-row>
+                </v-row>
+                <v-row no-gutters>
+                    <v-card-title :style="cardTitleHeight" class="text-h1 font-weight-bold white--text">
+                        {{ title }}
+                    </v-card-title>
+                </v-row>
+            </v-col>
         </v-img>
         <v-card-text class="text--primary subtitle-1 py-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             Aenean eget diam semper, mollis turpis vel, lobortis ipsum. Nam nec dapibus turpis. Maecenas nisl odio,
