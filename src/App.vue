@@ -8,10 +8,14 @@
 import { useThemeStore } from '@/store/theme';
 import { computed, onMounted, provide, reactive } from 'vue';
 import vuetify from './plugins/vuetify';
+import api from './plugins/axios';
+import { useAuthStore } from './store/auth';
 
 export default {
   name: 'App',
-  setup(props, context) {
+  
+  setup() {
+    const authStore = useAuthStore();
     const themeStore = useThemeStore();
     const toast = reactive({
       notify: computed({
@@ -22,9 +26,19 @@ export default {
     });
 
     provide('toast', toast.notify);
+
     onMounted(() => {
-      vuetify.framework.theme.isDark = themeStore.getThemeDark();
+      setupTheme();
+      setupAxios();
     });
+
+    function setupTheme(){
+      vuetify.framework.theme.isDark = themeStore.getThemeDark();
+    }
+
+    function setupAxios(){
+      api.defaults.headers.common['Authorization'] = `Bearer ${authStore.getAccessToken()}`;
+    }
 
     return {};
   },

@@ -86,3 +86,8 @@
   border-radius: 13px;
   box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
 }
+
+.btn-custom.v-btn:not(.v-btn--round).v-size--default{
+  border-radius: 13px;
+  box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+}
