@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import EnvironmentTypes from '@/components/Home/EnvironmentsComponents/EnvironmentsOptions/EnvironmentTypes.vue';
-import EnvironmentFeatures from './EnvironmentFeatures.vue';
+import EnvironmentTypes from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentTypes.vue';
+import EnvironmentFeatures from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentFeatures.vue';
 
 export default {
     name: "EnvironmentOptions",

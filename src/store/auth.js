@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("authStore", () => {
     }).then((response) => {
       access_token.value = response.data.access_token;
       refresh_token.value = response.data.refresh_token;
-      created_at.value = new Date().getTime();
+      created_at.value = getTimestampInSeconds();
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
       localStorage.setItem("created_at", created_at.value);
@@ -65,8 +65,10 @@ export const useAuthStore = defineStore("authStore", () => {
   function logout(){
     access_token.value = "";
     refresh_token.value = "";
+    created_at.value = "";
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    localStorage.removeItem("created_at");
     router.push({ name: "Login" });
   }
 

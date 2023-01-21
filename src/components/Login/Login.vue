@@ -9,9 +9,13 @@
                     <p class="login-title-text">Entre com e-mail e senha</p>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field v-model="state.email" append-icon="mdi-email-outline" label="E-mail" outlined
-                        class="login-input-style" @blur="v$.email.$touch"
-                        :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
+                    <v-text-field 
+                    v-model="state.email" 
+                    append-icon="mdi-email-outline" 
+                    label="E-mail" outlined
+                    class="login-input-style" 
+                    @blur="v$.email.$touch"
+                    :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>

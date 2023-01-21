@@ -21,7 +21,9 @@
                 </v-col>
             </v-row>
             <v-row no-gutters justify="center" class="px-4 py-4">
-                <router-view></router-view>
+                <KeepAlive>
+                    <router-view></router-view>
+                </KeepAlive>
             </v-row>
         </v-col>
     </v-row>
@@ -40,6 +42,7 @@ const state = reactive({
         {page: 'Settings', text: 'Minha conta'},
         {page: 'Events', text: 'Meus Eventos'},
         {page: 'Places', text: 'Meus Ambientes'},
+        {page: 'Users', text: 'Usuários'},
     ],
 });
 

@@ -24,6 +24,13 @@ export const usePageStore = defineStore("pageStore", () => {
   function getSerach() {
     return serach.value;
   }
+ 
+  function getRoutesNames(routeInstance) {
+    const routerComponent = router.options.routes.filter(route => route.name === routeInstance)[0];
+    const routesNames = routerComponent.children.map((child) => child.name);
 
-  return { setPage, getPage, setSerach, getSerach };
+    return routesNames;
+  }
+
+  return { setPage, getPage, setSerach, getSerach, getRoutesNames };
 });

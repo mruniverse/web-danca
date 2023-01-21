@@ -46,6 +46,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+*,
+*::before,
+*::after {
+  position: relative;
+}
 .shadow {
   position: absolute;
   top: 0;

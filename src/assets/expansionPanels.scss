@@ -1,3 +1,22 @@
+$v-select-height: 42px;
+
+.v-input.v-text-field--outlined.v-select {
+    margin-top: 3px;
+    max-height: $v-select-height;
+    background: var(--v-textField-base);
+    border: 1px solid #ECECF7;
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+    border-radius: 13px;
+    transition: border 0.1s linear 0s;
+}
+
+.v-input--is-focused.v-text-field--outlined.v-select::v-deep(fieldset) {
+    max-height: $v-select-height;
+    border: 2px solid #2886DA;
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+    transition: border 0.1s linear 0s;
+}
+
 .v-expansion-panels{
     padding-right: 1px;
 }

@@ -6,10 +6,10 @@
             </v-list-item>
         </v-list>
         <v-list nav>
-            <v-list-item-group color="primary" v-model="state.selectedItem">
+            <v-list-item-group color="primary" v-model="homeRoutes">
                 <v-list-item link @click="pageStore.setPage('Settings')">
                     <v-list-item-icon>
-                        <v-icon>mdi-account-outline</v-icon>
+                        <v-icon>mdi-account-circle-outline</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>Minha conta</v-list-item-title>
                 </v-list-item>
@@ -25,21 +25,26 @@
                     </v-list-item-icon>
                     <v-list-item-title>Ambientes</v-list-item-title>
                 </v-list-item>
+                <v-list-item link @click="pageStore.setPage('Users')">
+                    <v-list-item-icon>
+                        <v-icon>mdi-account-multiple-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Usuários</v-list-item-title>
+                </v-list-item>
             </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, watch, watchEffect } from 'vue';
+import { onMounted, reactive, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
-import router from '@/router';
-const pageStore = usePageStore();
 
+const pageStore = usePageStore();
+const homeRoutes = pageStore.getRoutesNames('Home');
 const state = reactive({
     expanded: false,
     selectedItem: 0,
-    itemsList: ['Settings', 'Events', 'Places']
 });
 
 onMounted(() => {
@@ -52,7 +57,7 @@ watchEffect(async () => {
 
 function fetchSelectedPage() {
     const currentRoute = pageStore.getPage();
-    state.selectedItem = state.itemsList.indexOf(currentRoute); 
+    state.selectedItem = homeRoutes.indexOf(currentRoute); 
 }
 </script>
     

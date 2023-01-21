@@ -2,7 +2,7 @@
     <v-col>
         <v-row no-gutters justify="end">
             <v-col cols="auto">
-                <SearchBar></SearchBar>
+                <SearchBar :search="search" @update:search="(value) => {search = value}"></SearchBar>
             </v-col>
             <div class="mx-2"></div>
             <v-col cols="auto" class="d-flex align-center">
@@ -23,6 +23,3 @@
 import MyEventsTable from '@/components/Home/EventsComponents/MyEventsTable.vue';
 import SearchBar from '@/components/SearchBar.vue';
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -37,6 +37,7 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   switch (to.name) {
     case "Login":
+    case "Register":
       if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
         next({ name: "Home" });
       } else {

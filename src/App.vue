@@ -6,7 +6,7 @@
 
 <script>
 import { useThemeStore } from '@/store/theme';
-import { computed, onMounted, provide, reactive } from 'vue';
+import { computed, onBeforeMount, provide, reactive } from 'vue';
 import vuetify from './plugins/vuetify';
 import api from './plugins/axios';
 import { useAuthStore } from './store/auth';
@@ -27,7 +27,7 @@ export default {
 
     provide('toast', toast.notify);
 
-    onMounted(() => {
+    onBeforeMount(() => {
       setupTheme();
       setupAxios();
     });

@@ -1,5 +1,5 @@
 <template>
-    <v-row no-gutters style="height: 79vh;">
+    <v-row no-gutters :style="{height: `${height}px`}">
         <v-col align="left" class="pr-0">
             <v-card id="stage-parent" flat v-resize="fitStageIntoParentContainer">
                 <v-stage
@@ -25,6 +25,11 @@
                                 :config="element">
                             </v-circle>
                             <v-text 
+                                v-for="elementText in stageStore.configs.elementsTexts" 
+                                :key="elementText.id" 
+                                :config="elementText">
+                            </v-text>
+                            <v-text
                                 v-for="text in stageStore.configs.texts"
                                 :key="text.id"
                                 :config="text">
@@ -46,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import Konva from 'konva';
 import controlPannel from '@/components/Home/StageComponents/ControlPanelComponents/controlPanel.vue';
 import { useStageStore } from '@/store/stage';
@@ -80,9 +85,15 @@ onMounted(() => {
     listenToDeleteElements();
 });
 
+const height = ref(0);
+function resizeHeight() {
+    height.value = window.innerHeight - 232;
+}
+
 function listenToDeleteElements() {
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', async (e) => {
         if (e.key === 'Delete') {
+            stageStore.hideSeatsTexts();
             deleteSelectedElements();
         }
     });
@@ -133,6 +144,8 @@ function setTransformerNodes(nodes, rotate = true, resize = false) {
 }
 
 function handleSelectionClick(e) {
+    stageStore.generateSeatsTexts();
+
     // do we pressed shift or ctrl?
     const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
     const isSelected = stageStore.refs.transformer.getNode().nodes().indexOf(e.target) >= 0;
@@ -161,13 +174,12 @@ function handleSelectionUp(e) {
     let selectionRectangle = stage.findOne('.selectionRectangle');
     let isAnchor = e.target.name().includes('anchor');
 
-    if (isAnchor) return;
+    if (isAnchor) return stageStore.generateSeatsTexts();
 
     // update visibility in timeout, so we can check it in click event
     setTimeout(() => {
         selectionRectangle.visible(false);
     });
-
 
     // if selection is not visible, handle element clicks
     if (!selectionRectangle.visible()) {
@@ -220,11 +232,13 @@ function handleSelectionDown(e) {
     // if clicked with right button, move stage
     if (e.evt.button === 2) return moveStage(e);
 
+    
     let stage = stageStore.refs.stage.getStage();
     let selectionRectangle = stage.findOne('.selectionRectangle');
-
+    
     // do nothing if we mousedown on any shape
     if (e.target !== stage) {
+        stageStore.hideSeatsTexts();
         return listenToDragMove(e);
     }
 
@@ -308,6 +322,8 @@ function onStageZoom(e) {
 }
 
 function fitStageIntoParentContainer() {
+    resizeHeight();
+
     stageStore.configs.konva.width = 1;
     stageStore.configs.konva.height = 1;
 
@@ -585,5 +601,9 @@ function onDragMoveEnd(e) {
     background-color: var(--v-background-base);
     width: 100%;
     height: 100%;
+}
+
+.custom-height{
+    height: 60vh;
 }
 </style>

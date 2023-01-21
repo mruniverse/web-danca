@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer width="300" height="100%" class="custom-box-shadow" floating :mini-variant="stageStore.expanded" permanent>
+    <v-navigation-drawer width="300" class="custom-box-shadow" floating :mini-variant="stageStore.expanded" permanent>
         <v-list>
             <v-list-item-group color="primary" v-model="state.selectedItem">
                 <v-list-item link @click="stageStore.togglePanel()">
@@ -11,6 +11,7 @@
             </v-list-item-group>
             <v-expansion-panels v-if="!stageStore.expanded" v-model="state.expandedPanels" multiple flat tile>
                 <NewSeatPanel></NewSeatPanel>
+                <SeatsNames></SeatsNames>
                 <NewPodiumPanel></NewPodiumPanel>
                 <NewTextPanel></NewTextPanel>
             </v-expansion-panels>
@@ -24,11 +25,12 @@ import { useStageStore } from '@/store/stage';
 import NewSeatPanel from './newSeatPanel.vue';
 import NewPodiumPanel from './newPodiumPanel.vue';
 import NewTextPanel from './newTextPanel.vue';
+import SeatsNames from './seatsNames.vue';
 
 const stageStore = useStageStore();
 const state = reactive({
     toggleNone: null,
-    expandedPanels: [0, 1, 2],
+    expandedPanels: [0, 1],
 });
 </script>
     

@@ -17,4 +17,11 @@
     align-content: center;
     justify-content: center;
 }
+
+
+*,
+*::before,
+*::after {
+  position: relative;
+}
 </style>

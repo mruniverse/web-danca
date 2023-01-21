@@ -1,18 +1,35 @@
 <template>
-    <v-text-field v-model="search" outlined append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
+    <v-text-field 
+    v-model="search" 
+    outlined 
+    append-icon="mdi-magnify" 
+    label="Buscar" 
+    single-line 
+    hide-details>
+    </v-text-field>
 </template>
 
-<script setup>
-import { ref, watch } from 'vue'
-import { usePageStore } from '@/store/page';
+<script>
+import { computed } from 'vue';
 
-const pageStore = usePageStore();
-const search = ref('');
+export default {
+    name: 'SearchBar',
+    props: {
+        search: {
+            type: String,
+            default: ''
+        },
+    },
 
-watch(search, (value) => {
-    pageStore.setSerach(value);
-});
+    setup(props, context) {      
+        const search = computed({
+            get: () => props.search,
+            set: (value) => context.emit('update:search', value)
+        });
 
+        return { search }
+    }
+}
 </script>
 
 <style lang="scss" scoped>

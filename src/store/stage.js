@@ -1,9 +1,16 @@
-import { ref, reactive } from "vue";
+import { ref, reactive, watch, watchEffect, computed, onMounted, nextTick } from "vue";
 import { defineStore } from "pinia";
 import Konva from "konva";
 
 export const useStageStore = defineStore("stageStore", () => {
   const expanded = ref(false);
+  const customSeatNames = ref([]);
+  const series = ref([{
+    from: null,
+    to: null,
+    prefix: '',
+  }]);
+
   const seats = reactive({
     rows: 1,
     columns: 1,
@@ -28,9 +35,92 @@ export const useStageStore = defineStore("stageStore", () => {
       rotationSnaps: [0, 45, 90, 135, 180, 225, 270]
     },
     elements: [],
+    elementsTexts: [],
     podiums: [],
     texts: [],
   });
+
+  function updateSeatsNames(series) {
+    let seatNames = [];
+    series.forEach(function (element){
+      let from = +element.from;
+      let to = +element.to;
+      if(+element.from > +element.to){
+        from = element.to;
+        to = element.from;
+      }
+
+      for (from; from <= to; from++) {
+        console.log(from, to);
+        seatNames.push({
+          id: from,
+          text: element.prefix + from,
+        });
+      }
+    });
+
+    customSeatNames.value = seatNames;
+  }
+
+  function hideSeatsTexts(){
+    configs.elementsTexts = [];
+  }
+
+  function generateSeatsTexts() {
+    const updatedElements = configs.elements.map((element) => {
+      let elementText = getSeatName(element.id);
+
+      return {
+        id: `${element.id}-text`,
+        x: element.x - 4,
+        y: element.y + 9,
+        text: elementText,
+        fontSize: getfontSize(elementText.length),
+        name: "seat-text",
+        draggable: false,
+        offsetX: getOffsetX(elementText.length),
+        offsetY: 8,
+        lineHeight: 0,
+      };
+    });
+
+    Object.assign(configs.elementsTexts, updatedElements);
+  }
+
+  function getfontSize(length) {
+    switch (length) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+        return 18;
+      case 5:
+        return 14;
+    }
+  }
+
+  function getOffsetX(length) {
+    switch (length) {
+      case 1:
+        return length * 2;
+      case 2:
+        return length * 3;
+      case 3:
+        return length * 4.5;
+      case 4:
+        return length * 4.5;
+      case 5:
+        return length * 3.8;
+    }
+  }
+
+  function getSeatName(seatID){
+    let customSeatID = customSeatNames.value.find((seat) => {
+      return seat.id == seatID.replace(/\D/g, '');
+    });
+
+    return customSeatID ? customSeatID.text : seatID.replace(/\D/g, '');
+  }
 
   function getElementsByName(name) {
     const stage = refs.stage.getStage();
@@ -68,6 +158,7 @@ export const useStageStore = defineStore("stageStore", () => {
   }
 
   function clearSelection() {
+    generateSeatsTexts();
     return refs.transformer.getNode().nodes([]);
   }
 
@@ -136,6 +227,7 @@ export const useStageStore = defineStore("stageStore", () => {
       }
     }
     loadSeatsAssets();
+    generateSeatsTexts();
   }
 
   function getSeatColor(type) {
@@ -250,5 +342,9 @@ export const useStageStore = defineStore("stageStore", () => {
     generatePodiums,
     generateText,
     syncElements,
+    generateSeatsTexts,
+    hideSeatsTexts,
+    updateSeatsNames,
+    series
   };
 });

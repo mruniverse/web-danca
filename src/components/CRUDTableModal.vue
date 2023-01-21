@@ -1,12 +1,11 @@
 <template>
-    <v-dialog v-model="tableDialog" :fullscreen="isExtraSmall" :max-width="maxWidth" content-class="custom-dialog" scrollable>
+    <v-dialog v-model="tableDialog" :fullscreen="isExtraSmall" :max-width="maxWidth" content-class="custom-dialog"
+        scrollable>
         <template v-slot:activator="{ on, attrs }">
             <v-list-item-title v-bind="attrs" v-on="on">{{ title }}</v-list-item-title>
         </template>
         <v-dialog v-model="dialogDelete" content-class="custom-dialog" max-width="300">
-            <template v-slot:activator="{ on, attrs }">
-            </template>
-            <v-card>
+            <v-card class="pa-2">
                 <v-card-title class="text-h5">
                     <v-row justify="center">Tem certeza?</v-row>
                 </v-card-title>
@@ -14,87 +13,89 @@
                 <v-card-actions>
                     <v-btn text @click="closeDelete">Cancelar</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="error" class="btn-custom" @click="$emit('deleteItemConfirm')">Deletar</v-btn>
+                    <v-btn color="error" class="btn-custom" @click="emitAndCloseDelete()">Deletar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-sheet class="custom-dialog">
-            <v-data-table :headers="headers" :items="data" :page.sync="page" :items-per-page="resultsPerPage"
-                @page-count="pageCount = $event" hide-default-footer>
-                <template v-slot:top>
-                    <v-toolbar dark color="primary">
-                        <v-toolbar-title>{{ title }}</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-btn icon dark @click="closeNewEnvironmentStatus()">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                    </v-toolbar>
-                </template>
-                <template v-slot:item.actions="{ item }">
-                    <v-icon color="primary lighten-1" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                    <v-icon color="error lighten-1" @click="deleteItem(item)"> mdi-delete </v-icon>
-                </template>
-                <template v-slot:no-data> Ue tem nada aqui </template>
-            </v-data-table>
-            <v-row no-gutters justify="center">
-                <v-pagination v-model="page" :length="pageCount"></v-pagination>
-            </v-row>
-            <v-row align="end" class="mb-5 mx-4">
-                <v-col cols="auto" class="px-0">
-                    <v-row no-gutters align="end">
-                        <v-col cols="auto" class="d-flex align-end justify-end">
-                            <v-select v-model="resultsPerPage" :items="[5, 10, 15]" type="number"
-                                style="max-width: 80px" outlined>
-                                <template v-slot:item="{ item, on, attrs }">
-                                    <v-list-item v-bind="attrs" v-on="on">
-                                        <v-list-item-title :id="attrs['aria-labelledby']" v-text="item">
-                                        </v-list-item-title>
-                                    </v-list-item>
-                                </template>
-                            </v-select>
-                        </v-col>
-                        <v-col class="d-flex align-end justify-end mx-2">
-                            <span style="color: var(--v-secondary-base);" class="subtitle-2">Resultados por
-                                página</span>
-                        </v-col>
-                    </v-row>
-                </v-col>
-                <v-col class="ml-auto" align="end">
-                    <v-dialog v-model="dialog" max-width="400" content-class="custom-dialog">
-                        <v-overlay absolute :value="loadingUpdate">
-                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                        </v-overlay>
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="btn-larger subtitle-2 font-weight-bold mt-2"
-                                v-bind="attrs" v-on="on"> Adicionar </v-btn>
-                        </template>
-                        <v-card>
-                            <v-card-title class="pa-0">
-                                <v-toolbar dark color="primary">
-                                    <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
-                                    <v-spacer></v-spacer>
-                                    <v-btn icon dark @click="close()">
-                                        <v-icon>mdi-close</v-icon>
+        <v-card class="custom-dialog">
+            <slot></slot>
+            <v-card-title class="pa-0">
+                <v-toolbar dark color="primary">
+                            <v-toolbar-title>{{ title }}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn icon dark @click="closeNewEnvironmentStatus()">
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar>
+            </v-card-title>
+            <v-card-text class="pa-0">
+                <v-data-table :headers="headersWithActions" :items="data" :page.sync="page"
+                    :items-per-page="resultsPerPage" @page-count="pageCount = $event" hide-default-footer>
+                    <template v-slot:item.actions="{ item }">
+                        <v-icon color="primary lighten-1" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+                        <v-icon color="error lighten-1" @click="deleteItem(item)"> mdi-delete </v-icon>
+                    </template>
+                    <template v-slot:no-data> Ue tem nada aqui </template>
+                </v-data-table>
+            </v-card-text>
+            <v-card-actions class="row no-gutters">
+                <v-row no-gutters justify="center">
+                    <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                </v-row>
+                <v-row align="end" class="mb-5 mx-4">
+                    <v-col cols="auto" class="px-0">
+                        <v-row no-gutters align="end">
+                            <v-col cols="auto" class="d-flex align-end justify-end">
+                                <v-select v-model="resultsPerPage" :items="[5, 10, 15]" type="number"
+                                    style="max-width: 80px" outlined>
+                                    <template v-slot:item="{ item, on, attrs }">
+                                        <v-list-item v-bind="attrs" v-on="on">
+                                            <v-list-item-title :id="attrs['aria-labelledby']" v-text="item">
+                                            </v-list-item-title>
+                                        </v-list-item>
+                                    </template>
+                                </v-select>
+                            </v-col>
+                            <v-col class="d-flex align-end justify-end mx-2">
+                                <span style="color: var(--v-secondary-base);" class="subtitle-2">Resultados por
+                                    página</span>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col class="ml-auto" align="end">
+                        <v-dialog v-model="dialog" max-width="400" content-class="custom-dialog">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn color="primary" dark class="btn-larger subtitle-2 font-weight-bold mt-2"
+                                    v-bind="attrs" v-on="on"> Adicionar </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title class="pa-0">
+                                    <v-toolbar dark color="primary">
+                                        <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        <v-btn icon dark @click="close()">
+                                            <v-icon>mdi-close</v-icon>
+                                        </v-btn>
+                                    </v-toolbar>
+                                </v-card-title>
+                                <v-card-text class="text--primary subtitle-1 pt-6">
+                                    <v-text-field v-for="(header, index) in headers" :key="index" :label="header.text"
+                                        outlined v-model="editedItem[header.value]" @keyup.enter="save()"
+                                        :ref="(ref) => { editTextField.push(ref) }">
+                                    </v-text-field>
+                                </v-card-text>
+                                <v-card-actions class="pa-4 pb-5">
+                                    <v-btn @click="close()" class="px-6" x-large rounded text color="error"> Cancelar
                                     </v-btn>
-                                </v-toolbar>
-                            </v-card-title>
-                            <v-card-text class="text--primary subtitle-1 py-2">
-                                <v-text-field 
-                                    outlined v-model="editedItem.name" 
-                                    @keyup.enter="save()"ref="editTextField">
-                                </v-text-field>
-                            </v-card-text>
-                            <v-card-actions class="pa-4 pb-5">
-                                <v-btn @click="close()" class="px-6" x-large rounded text color="error"> Cancelar
-                                </v-btn>
-                                <v-btn @click="save()" x-large rounded color="primary" class="ml-auto px-6"> Salvar
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-col>
-            </v-row>
-        </v-sheet>
+                                    <v-btn @click="save()" x-large rounded color="primary" class="ml-auto px-6"> Salvar
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-col>
+                </v-row>
+            </v-card-actions>
+        </v-card>
     </v-dialog>
 </template>
 
@@ -108,11 +109,6 @@ export default {
         title: {
             type: String,
             default: 'Título',
-            required: true
-        },
-        loadingUpdate: {
-            type: Boolean,
-            default: false,
             required: true
         },
         maxWidth: {
@@ -138,19 +134,15 @@ export default {
                     align: 'center',
                     sortable: true,
                     value: 'example2',
-                }, {
-                    text: 'Ações',
-                    align: 'end',
-                    value: 'actions',
-                    sortable: false
                 },
             ],
             required: true
         },
     },
-    
+
     setup(props, { emit }) {
-        const editTextField = ref(null);
+        const loadingUpdate = ref(false);
+        const editTextField = ref([]);
         const tableDialog = ref(false);
         const dialog = ref(false);
         const dialogDelete = ref(false);
@@ -158,21 +150,22 @@ export default {
         const resultsPerPage = ref(5);
         const page = ref(1);
         const pageCount = ref(0);
-
-        const editedItem = ref({
-            id: '',
-            name: ''
-        });
+        const editedItem = ref({});
         const defaultItem = ref({});
 
+        function emitAndCloseDelete() {
+            emit('delete-item-confirm', editedItem.value, editedIndex.value);
+            closeDelete();
+        }
+
         function editItem(item) {
-            editedIndex.value = data.value.indexOf(item)
+            editedIndex.value = props.data.indexOf(item)
             editedItem.value = Object.assign({}, item)
             dialog.value = true
         };
 
         function deleteItem(item) {
-            editedIndex.value = data.value.indexOf(item)
+            editedIndex.value = props.data.indexOf(item)
             editedItem.value = Object.assign({}, item)
             dialogDelete.value = true
         };
@@ -196,13 +189,13 @@ export default {
             editedIndex.value = -1
         };
 
-        async function save() {
+        function save() {
             if (editedIndex.value > -1) {
-                emit('updateItem', editedIndex.value, editedItem.value);
+                emit('update-item', editedIndex.value, editedItem.value);
             } else {
-                emit('addNewItem', editedItem.value);
+                emit('add-new-item', editedItem.value);
             }
-            await nextTick(); close();
+            close();
         };
 
         watch(tableDialog, (val) => {
@@ -211,7 +204,8 @@ export default {
 
         watch(dialog, async (val) => {
             if (val) {
-                await nextTick(); editTextField.value.focus();
+                await nextTick();
+                editTextField.value[0].focus();
             } else {
                 close();
             }
@@ -221,8 +215,17 @@ export default {
             val || closeDelete();
         });
 
+        const headersWithActions = computed(() => {
+            return [...props.headers, {
+                text: 'Ações',
+                align: 'end',
+                value: 'actions',
+                sortable: false
+            }];
+        })
+
         const formTitle = computed(() => {
-            return editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return editedIndex === -1 ? 'Novo item' : 'Editar item'
         });
 
         const isExtraSmall = computed({
@@ -250,18 +253,20 @@ export default {
             save,
             formTitle,
             isExtraSmall,
+            headersWithActions,
+            emitAndCloseDelete,
+            loadingUpdate
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+.v-data-table{
+    border-radius: 0;
+}
 .v-dialog__content--active::v-deep .v-dialog.custom-dialog {
     border-radius: 16px;
-}
-
-.v-text-field.v-input {
-    margin-top: 14px;
 }
 
 .v-text-field--outlined::v-deep(fieldset) {
