@@ -62,10 +62,19 @@ const rules = ref({
 });
 async function updateSeats() {
     if (stageStore.series.length > 0 && stageStore.series[0].from != null && stageStore.series[0].to != null) {
+        removeUnusedSeries();
         stageStore.updateSeatsNames(stageStore.series);
         stageStore.generateSeatsTexts();
         stageStore.syncElements();
     }
+}
+
+function removeUnusedSeries() {
+    stageStore.series.forEach(element => {
+        if (!element.from || !element.to || !element.prefix) {
+            stageStore.series.splice(stageStore.series.indexOf(element), 1);
+        }
+    });
 }
 
 onUpdated(() => {

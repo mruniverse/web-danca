@@ -40,21 +40,32 @@ export const useStageStore = defineStore("stageStore", () => {
     texts: [],
   });
 
+  const layout_map = computed(() => {
+    return {
+      seats: configs.elements.map(({ id, x, y, name }) => ({id, x, y, name})),
+      seatsLabels: configs.elementsTexts.map(({ id, x, y, text }) => ({id, x, y, text})),
+      podiums: configs.podiums.map(({ id, x, y, name }) => ({id, x, y, name})),
+      texts: configs.texts.map(({ id, x, y, text }) => ({id, x, y, text})),
+    }
+  });
+
   function updateSeatsNames(series) {
     let seatNames = [];
     series.forEach(function (element){
+      let index = +element.from;
       let from = +element.from;
       let to = +element.to;
-      if(+element.from > +element.to){
-        from = element.to;
-        to = element.from;
+      if(from > to){
+        index = to;
+        to = from;
+        from = index;
       }
 
-      for (from; from <= to; from++) {
-        console.log(from, to);
+      for (index; index <= to; index++) {
         seatNames.push({
-          id: from,
-          text: element.prefix + from,
+          id: index,
+          prefix: element.prefix,
+          text: element.prefix + (index - from),
         });
       }
     });
@@ -67,8 +78,8 @@ export const useStageStore = defineStore("stageStore", () => {
   }
 
   function generateSeatsTexts() {
-    const updatedElements = configs.elements.map((element) => {
-      let elementText = getSeatName(element.id);
+    const updatedElements = configs.elements.map((element, index) => {
+      let elementText = getSeatName(element.id, index);
 
       return {
         id: `${element.id}-text`,
@@ -114,7 +125,7 @@ export const useStageStore = defineStore("stageStore", () => {
     }
   }
 
-  function getSeatName(seatID){
+  function getSeatName(seatID, index){
     let customSeatID = customSeatNames.value.find((seat) => {
       return seat.id == seatID.replace(/\D/g, '');
     });
@@ -345,6 +356,7 @@ export const useStageStore = defineStore("stageStore", () => {
     generateSeatsTexts,
     hideSeatsTexts,
     updateSeatsNames,
-    series
+    series,
+    layout_map,
   };
 });

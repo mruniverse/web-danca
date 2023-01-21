@@ -93,10 +93,10 @@
                 <Stage v-if="step === 2"></Stage>
             </v-stepper-content>
         </v-stepper-items>
-        <v-row no-gutters class="px-8">
+        <v-row no-gutters class="px-8 my-4">
             <v-col>
-                <v-btn v-if="step > 1" @click="step--" text> Voltar </v-btn>
-                <v-btn v-else @click="$router.go(-1)" text> Cancelar </v-btn>
+                <v-btn v-if="step > 1" @click="back()" text> Voltar </v-btn>
+                <v-btn v-else @click="$emit('closeDialog')" text> Cancelar </v-btn>
             </v-col>
             <v-col cols="auto">
                 <v-btn class="btn-larger" color="primary" @click="submit()"> {{ submitText }} </v-btn>
@@ -110,6 +110,7 @@ import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEnvironmentTypeStore } from '@/store/Models/environmentTypes';
+import { useStageStore } from '@/store/stage';
 
 export default {
     name: 'NewEnvironment',
@@ -121,8 +122,9 @@ export default {
         }
     },
 
-    setup() {
+    setup(props, { emit }) {
         const notify = inject('toast');
+        const stageStore = useStageStore();
         const userStore = useUserStore();
         const environmentTypeStore = useEnvironmentTypeStore();
         const submitText = computed(() => {
@@ -146,14 +148,22 @@ export default {
             city: '',
             state: '',
             capacity: '',
-            layout_map: ''
+            layout_map: computed(() => stageStore.layout_map),
         });
+
+        function back(){
+            step.value--;
+            emit('toggleFullScreen');
+        }
 
         function submit() {
             if (step.value === 1) {
                 step.value++;
+                emit('toggleFullScreen');
             } else {
-                console.log(environment.value);
+                console.log({
+                    environment: environment.value
+                });
             }
         }
 
@@ -172,10 +182,22 @@ export default {
 
         const height = ref(0);
         function resizeHeight() {
-            height.value = window.innerHeight - 232;
+            height.value = window.innerHeight - (200*1.5);
         }
 
-        return { step, environment, rules, editTextField, height, resizeHeight, userStore, environmentTypeStore, submitText };
+        return {
+            step,
+            environment,
+            rules,
+            editTextField,
+            height,
+            resizeHeight,
+            userStore,
+            environmentTypeStore,
+            submitText,
+            submit,
+            back
+        };
     }
 }
 </script>

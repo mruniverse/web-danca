@@ -11,8 +11,11 @@
         </template>
         <template v-slot:add-button>
             <v-dialog 
-            v-model="dialog" 
-            fullscreen scrollable>
+            v-model="dialog"
+            max-width="70%" 
+            :fullscreen="fullscreen" 
+            :content-class="fullscreen ? '' : 'custom-dialog'" 
+            scrollable>
                 <template v-slot:activator="{on, attrs}">
                     <v-btn 
                     class="btn-larger subtitle-2 font-weight-bold" 
@@ -20,7 +23,7 @@
                         Novo ambiente 
                     </v-btn>
                 </template>
-                <NewEnvironment @closeDialog="closeDialog" title="Novo ambiente"></NewEnvironment>
+                <NewEnvironment @toggleFullScreen="fullscreen = !fullscreen" @closeDialog="closeDialog" title="Novo ambiente"></NewEnvironment>
             </v-dialog>
         </template>
     </CRUDTable>
@@ -35,6 +38,7 @@ import NewEnvironment from './NewEnvironment.vue';
 
 const notify = inject('toast');
 const loading = ref(false);
+const fullscreen = ref(false);
 const dialog = ref(false);
 const data = ref([{
     name: 'Ambiente 1',
