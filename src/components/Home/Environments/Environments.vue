@@ -1,11 +1,10 @@
 <template>
     <CRUDTable 
     :loading="loading" 
-    :data="data" 
+    :data="environments" 
     :headers="headers" 
-    @delete-item-confirm="deleteItem" 
-    @update-item="updateItem"
-    @add-new-item="addItem">
+    @delete-item-confirm="environmentStore.deleteEnvironment" 
+    @update-item="environmentStore.updateEnvironment">
         <template v-slot:options>
             <EnvironmentOptions></EnvironmentOptions>
         </template>
@@ -23,87 +22,54 @@
                         Novo ambiente 
                     </v-btn>
                 </template>
-                <NewEnvironment @toggleFullScreen="fullscreen = !fullscreen" @closeDialog="closeDialog" title="Novo ambiente"></NewEnvironment>
+                <NewEnvironment 
+                @toggleFullScreen="fullscreen = !fullscreen" 
+                @closeDialog="closeDialog" 
+                title="Novo ambiente">
+                </NewEnvironment>
             </v-dialog>
         </template>
     </CRUDTable>
 </template>
 
 <script setup>
-import api from '@/plugins/axios';
-import { inject, onMounted, ref, watch, computed } from 'vue';
+import { computed, inject, onBeforeMount, onMounted, ref, watch } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import EnvironmentOptions from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentOptions.vue';
 import NewEnvironment from './NewEnvironment.vue';
+import { useEnvironmentStore } from '@/store/Models/environment';
+import { useUserStore } from '@/store/Models/user';
+import { useEnvironmentTypeStore } from '@/store/Models/environmentType';
 
 const notify = inject('toast');
-const loading = ref(false);
+const userStore = useUserStore();
+const environmentTypeStore = useEnvironmentTypeStore();
+const environmentStore = useEnvironmentStore();
+const environments = ref([]);
+const loading = computed(() => environmentStore.loading);
 const fullscreen = ref(false);
 const dialog = ref(false);
-const data = ref([{
-    name: 'Ambiente 1',
-    environment_type_id: '1',
-    owner_id: '1',
-    country: 'Brasil',
-    number: '123',
-    street: 'Rua 1',
-    district: 'Bairro 1',
-    city: 'Cidade 1',
-    state: 'Estado 1',
-    capacity: '100',
-    layout_map: 'json'
-}]);
 const headers = ref([{
     text: 'Nome',
-    value: 'name',
+    value: 'lang.name',
     align: 'left',
     sortable: true,
     filterable: true
 }, {
+    text: 'Descrição',
+    value: 'lang.description',
+    align: 'center',
+    sortable: true,
+    filterable: true
+}, {
     text: 'Tipo de ambiente',
-    value: 'environment_type_id',
+    value: 'environment_type_name',
     align: 'center',
     sortable: true,
     filterable: true
 }, {
     text: 'Usuário',
-    value: 'owner_id',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'País',
-    value: 'country',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'Número',
-    value: 'number',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'Rua',
-    value: 'street',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'Bairro',
-    value: 'district',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'Cidade',
-    value: 'city',
-    align: 'center',
-    sortable: true,
-    filterable: true
-}, {
-    text: 'Estado',
-    value: 'state',
+    value: 'user_name',
     align: 'center',
     sortable: true,
     filterable: true
@@ -115,78 +81,23 @@ const headers = ref([{
     filterable: true
 }]);
 
+onBeforeMount(async () => {
+    await userStore.getUsers().catch((error) => {
+        notify.error(error.message);
+    });
+    await environmentTypeStore.getEnvironmentTypes().catch((error) => {
+        notify.error(error.message);
+    });
+    await environmentStore.getEnvironments().then(() => {
+        environments.value = environmentStore.environments;
+    }).catch((error) => {
+        notify.error(error.message);
+    });
+});
 
 function closeDialog() {
     dialog.value = false;
 }
-
-watch(dialog, (val) => {
-    val || closeDialog();
-});
-
-const isExtraSmall = computed({
-    get() {
-        return this.$vuetify.breakpoint.width <= 600 ? true : false;
-    }
-});
-
-onMounted(() => {
-    getItems();
-});
-
-async function whileLoading(callback) {
-    loading.value = true;
-    await callback();
-    loading.value = false;
-}
-
-async function addItem(item) {
-    whileLoading(async () => {
-        await api.post('/user', {
-            name: item.name,
-            outer_id: item.outer_id
-        }).then(response => {
-            data.value = [item, ...data.value];
-        }).catch(error => {
-            notify.error(error.message);
-        });
-    });
-}
-
-async function updateItem(itemIndex, item) {
-    whileLoading(async () => {
-        await api.put(`/user/${item.id}`, {
-            name: item.name,
-            outer_id: item.outer_id
-        }).then(response => {
-            Object.assign(data.value[itemIndex], item)
-        }).catch(error => {
-            notify.error(error.message);
-        });
-    });
-}
-
-function getItems() {
-    whileLoading(async () => {
-        await api.get('/user').then(response => {
-            if (response.data.length !== 0) {
-                data.value.push(...response.data.reverse());
-            }
-        }).catch(error => {
-            notify.error(error.message);
-        })
-    });
-}
-
-function deleteItem(item, index) {
-    whileLoading(async () => {
-        api.delete(`/user/${item.id}`).then(response => {
-            data.value.splice(index, 1);
-        }).catch(error => {
-            notify.error(error.message);
-        });
-    });
-};
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,9 @@
 <template>
     <v-stepper v-model="step" width="100%" flat v-resize="resizeHeight">
+        <v-overlay absolute :value="loading">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-overlay>
+
         <v-toolbar dark dense color="primary">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -17,76 +21,65 @@
         <v-stepper-items>
             <v-stepper-content step="1">
                 <v-card class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" flat color="var(--v-background-base)">
-                    <v-row no-gutters justify="center" class="pa-4">
-                        <v-col cols="6" class="pr-4">
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Nome do ambiente" v-model="environment.lang.name" outlined
-                                    @keyup.enter="save()" ref="editTextField" :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" type="number" label="Capacidade" v-model="environment.capacity" outlined
-                                    @keyup.enter="save()" :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-select
-                                    label="Tipo de ambiente" 
-                                    v-model="environment.environment_type_id" 
-                                    :items="environmentTypeStore.environmentTypes" 
-                                    item-text="name"
-                                    item-value="id"
-                                    :rules="[rules.required]" 
-                                    @keyup.enter="save()"
-                                    outlined>
-                                </v-select>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-select
-                                    label="Usuário responsável" 
-                                    v-model="environment.owner_id" 
-                                    :items="userStore.users"
-                                    item-text="name"
-                                    item-value="id"
-                                    :rules="[rules.required]" 
-                                    @keyup.enter="save()"
-                                    outlined>
-                                </v-select>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="País" v-model="environment.country" outlined @keyup.enter="save()"
-                                    :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Número" v-model="environment.number" outlined
-                                    @keyup.enter="save()" :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Rua" v-model="environment.street" outlined @keyup.enter="save()"
-                                    :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Bairro" v-model="environment.district" outlined
-                                    @keyup.enter="save()" :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Cidade" v-model="environment.city" outlined @keyup.enter="save()"
-                                    :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                            <v-row no-gutters>
-                                <v-text-field class="custom-text-field" label="Estado" v-model="environment.state" outlined @keyup.enter="save()"
-                                    :rules="[rules.required]">
-                                </v-text-field>
-                            </v-row>
-                        </v-col>
-                    </v-row>
+                    <v-form ref="address" v-model="validAddress" lazy-validation>
+                        <v-row no-gutters justify="center" class="pa-4">
+                            <v-col cols="6" class="pr-4">
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Nome do ambiente" v-model="environment.lang.name"
+                                        outlined @keyup.enter="save()" ref="editTextField" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" type="number" label="Capacidade" v-model="environment.capacity"
+                                        outlined @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-select label="Tipo de ambiente" v-model="environment.environment_type_id"
+                                        :items="environmentTypeStore.environmentTypes" item-text="name" item-value="id"
+                                        :rules="[rules.required]" @keyup.enter="save()" outlined>
+                                    </v-select>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-select label="Usuário responsável" v-model="environment.owner_id" :items="userStore.users"
+                                        item-text="name" item-value="id" :rules="[rules.required]" @keyup.enter="save()" outlined>
+                                    </v-select>
+                                </v-row>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="País" v-model="environment.country" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Número" v-model="environment.number" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Rua" v-model="environment.street" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Bairro" v-model="environment.district" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Cidade" v-model="environment.city" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Estado" v-model="environment.state" outlined
+                                        @keyup.enter="save()" :rules="[rules.required]">
+                                    </v-text-field>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-form>
                 </v-card>
             </v-stepper-content>
             <v-stepper-content step="2">
@@ -106,11 +99,12 @@
 </template>
 
 <script>
-import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onMounted, ref } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
-import { useEnvironmentTypeStore } from '@/store/Models/environmentTypes';
+import { useEnvironmentTypeStore } from '@/store/Models/environmentType';
 import { useStageStore } from '@/store/stage';
+import { useEnvironmentStore } from '@/store/Models/environment';
 
 export default {
     name: 'NewEnvironment',
@@ -124,9 +118,13 @@ export default {
 
     setup(props, { emit }) {
         const notify = inject('toast');
+        const address = ref('');
+        const validAddress = ref(false);
         const stageStore = useStageStore();
+        const environmentStore = useEnvironmentStore();
         const userStore = useUserStore();
         const environmentTypeStore = useEnvironmentTypeStore();
+        const loading = computed(() => environmentStore.loading);
         const submitText = computed(() => {
             return step.value === 2 ? 'Concluir' : 'Continuar';
         });
@@ -148,7 +146,7 @@ export default {
             city: '',
             state: '',
             capacity: '',
-            layout_map: computed(() => stageStore.layout_map),
+            layout_map: computed(() => JSON.stringify(stageStore.layout_map)),
         });
 
         function back(){
@@ -157,25 +155,29 @@ export default {
         }
 
         function submit() {
-            if (step.value === 1) {
-                step.value++;
-                emit('toggleFullScreen');
-            } else {
-                console.log({
-                    environment: environment.value
-                });
+            switch (step.value) {
+                case 1:
+                    if (!validAddress.value) {
+                        notify.error('Preencha os campos obrigatórios');
+                    } else {
+                        step.value++;
+                        emit('toggleFullScreen');
+                    }
+                    break;
+                case 2:
+                    environmentStore.addEnvironment(environment.value).then((response) => {
+                        notify.success('Ambiente criado com sucesso!');
+                        emit('closeDialog');
+                    }).catch((error) => {
+                        notify.error(error.message);
+                    });
+                    break;
+                default:
+                    break;
             }
         }
 
         onMounted(async () => {
-            userStore.getUsers().catch((error) => {
-                notify.error(error.message);
-            });
-
-            environmentTypeStore.getEnvironmentTypes().catch((error) => {
-                notify.error(error.message);
-            });
-
             await nextTick();
             editTextField.value.focus();
         });
@@ -196,7 +198,9 @@ export default {
             environmentTypeStore,
             submitText,
             submit,
-            back
+            back,
+            loading,
+            validAddress,
         };
     }
 }

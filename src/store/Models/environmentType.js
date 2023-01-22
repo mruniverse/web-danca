@@ -1,13 +1,15 @@
-import { ref } from "vue";
+import { nextTick, onBeforeMount, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
 export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () => {
   const loading = ref(false);
-  const environmentTypes = ref([{
-    id: '',
-    name: '',
-  }]);
+  const environmentTypes = ref([]);
+
+  function getEnvironmentTypeName(id) {
+    if(environmentTypes.value.length === 0) return;
+    return environmentTypes.value.find(environmentType => environmentType.id === id).name;
+  }
 
   async function whileLoading(callback) {
     loading.value = true;
@@ -62,5 +64,5 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
     });
   }
 
-  return { addEnvironmentType, updateEnvironmentType, getEnvironmentTypes, deleteEnvironmentType, environmentTypes };
+  return { addEnvironmentType, updateEnvironmentType, getEnvironmentTypes, deleteEnvironmentType, environmentTypes, getEnvironmentTypeName };
 });

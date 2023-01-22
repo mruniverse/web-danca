@@ -1,14 +1,15 @@
-import { ref } from "vue";
+import { nextTick, onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
 export const useUserStore = defineStore("userStore", () => {
   const loading = ref(false);
-  const users = ref([{
-    id: '',
-    name: '',
-    outer_id: ''
-  }]);
+  const users = ref([]);
+
+  function getUserName(id) {
+    if(users.value.length === 0) return;
+    return users.value.find(user => user.id === id).name;
+  }
 
   async function whileLoading(callback) {
     loading.value = true;
@@ -57,5 +58,5 @@ export const useUserStore = defineStore("userStore", () => {
     });
   };
 
-  return { addUser, updateUser, getUsers, deleteUser, users };
+  return { addUser, updateUser, getUsers, deleteUser, users, getUserName };
 });

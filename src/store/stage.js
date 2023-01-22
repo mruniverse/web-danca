@@ -42,10 +42,10 @@ export const useStageStore = defineStore("stageStore", () => {
 
   const layout_map = computed(() => {
     return {
-      seats: configs.elements.map(({ id, x, y, name }) => ({id, x, y, name})),
-      seatsLabels: configs.elementsTexts.map(({ id, x, y, text }) => ({id, x, y, text})),
-      podiums: configs.podiums.map(({ id, x, y, name }) => ({id, x, y, name})),
-      texts: configs.texts.map(({ id, x, y, text }) => ({id, x, y, text})),
+      seats: configs.elements.map(({ id, x, y, fill }) => ({ id, x, y, fill })),
+      seatsLabels: configs.elementsTexts.map(({ id, x, y, text }) => ({ id, x, y, text })),
+      podiums: configs.podiums.map(({ id, x, y }) => ({ id, x, y })),
+      texts: configs.texts.map(({ id, x, y, text }) => ({ id, x, y, text })),
     }
   });
 
@@ -251,6 +251,19 @@ export const useStageStore = defineStore("stageStore", () => {
         return "#2196F3";
       default:
         return "#4CAF50";
+    }
+  }
+
+  function getSeatType(color){
+    switch (color) {
+      case "#4CAF50":
+        return "default";
+      case "#FFC107":
+        return "special";
+      case "#2196F3":
+        return "wheelchair";
+      default:
+        return "default";
     }
   }
 

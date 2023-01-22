@@ -41,7 +41,7 @@
         </v-row>
         <v-row no-gutters>
             <v-col cols="12" class="py-6">
-                <v-card class="custom-card">
+                <v-card class="custom-card" style="overflow-x: auto;">
                     <v-data-table
                     :loading="loading"
                     loading-text="Loading... Please wait"
@@ -196,9 +196,6 @@ export default {
         function save() {
             if (editedIndex.value > -1) {
                 emit("update-item", editedIndex.value, editedItem.value);
-            }
-            else {
-                emit("add-new-item", editedItem.value);
             }
             close();
         };

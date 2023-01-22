@@ -3,7 +3,7 @@
         <v-col cols="auto">
             <NavigationDrawer />
         </v-col>
-        <v-col>
+        <v-col style="overflow: auto;">
             <v-row no-gutters v-if="showMenuBar()">
                 <v-col cols="auto" class="pa-4">
                     <div class="pl-2 text-title-custom"> 
