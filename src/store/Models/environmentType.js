@@ -8,7 +8,8 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
 
   function getEnvironmentTypeName(id) {
     if(environmentTypes.value.length === 0) return;
-    return environmentTypes.value.find(environmentType => environmentType.id === id).name;
+    const found = environmentTypes.value.find(environmentType => environmentType.id === id);
+    return found ? found.name : 'Usuário não encontrado';
   }
 
   async function whileLoading(callback) {

@@ -13,69 +13,68 @@
         </v-toolbar>
         <v-stepper-header class="custom-card-header">
             <v-spacer></v-spacer>
-            <v-stepper-step :complete="step > 1" step="1"> Dados do ambiente </v-stepper-step>
+            <v-stepper-step :complete="step > 1" step="1"> Dados do evento </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step :complete="step > 2" step="2"> Criação do ambiente </v-stepper-step>
+            <v-stepper-step :complete="step > 2" step="2"> Capa do evento </v-stepper-step>
             <v-spacer></v-spacer>
         </v-stepper-header>
         <v-stepper-items>
             <v-stepper-content step="1">
-                <v-card class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" flat color="var(--v-background-base)">
+                <v-card class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" 
+                flat color="var(--v-background-base)">
                     <v-form ref="address" v-model="validAddress" lazy-validation>
                         <v-row no-gutters justify="center" class="pa-4">
-                            <v-col cols="6" class="pr-4">
+                            <v-col cols="6" class="pr-2">
                                 <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Nome do ambiente" v-model="environment.lang.name"
+                                    <v-text-field class="custom-text-field" label="Nome do evento" 
+                                    v-model="eventStore.event.lang.name"
                                         outlined @keyup.enter="save()" ref="editTextField" :rules="[rules.required]">
                                     </v-text-field>
                                 </v-row>
                                 <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" type="number" label="Capacidade" v-model="environment.capacity"
+                                    <v-text-field class="custom-text-field" type="number" label="Limite de vendas" 
+                                    v-model="eventStore.event.maximum_sale_limit"
                                         outlined @keyup.enter="save()" :rules="[rules.required]">
                                     </v-text-field>
                                 </v-row>
                                 <v-row no-gutters>
-                                    <v-select label="Tipo de ambiente" v-model="environment.environment_type_id"
-                                        :items="environmentTypeStore.environmentTypes" item-text="name" item-value="id"
+                                    <v-select label="Tipo de evento" v-model="eventStore.event.event_type_id"
+                                        :items="eventTypeStore.eventTypes" item-text="name" item-value="id"
                                         :rules="[rules.required]" @keyup.enter="save()" outlined>
                                     </v-select>
                                 </v-row>
+                                <v-row no-gutters justify="center" class="pl-2 text-title-custom">Data do evento</v-row>
                                 <v-row no-gutters>
-                                    <v-select label="Usuário responsável" v-model="environment.owner_id" :items="userStore.users"
-                                        item-text="name" item-value="id" :rules="[rules.required]" @keyup.enter="save()" outlined>
-                                    </v-select>
+                                    <v-date-picker full-width v-model="datetimeRange" 
+                                    :rules="[rules.required]" range></v-date-picker>
                                 </v-row>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="6" class="pl-2">
                                 <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="País" v-model="environment.country" outlined
+                                    <v-select label="Organizador" v-model="eventStore.event.planner_id" 
+                                    :items="userStore.users"
+                                        item-text="name" item-value="id" :rules="[rules.required]" 
+                                        @keyup.enter="save()" outlined>
+                                    </v-select>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-select label="Local" v-model="eventStore.event.environment_id" 
+                                    :items="environmentStore.environments"
+                                        item-text="lang.name" item-value="id" :rules="[rules.required]" 
+                                        @keyup.enter="save()" outlined>
+                                    </v-select>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" label="Políticas" 
+                                    v-model="eventStore.event.lang.policies" outlined
                                         @keyup.enter="save()" :rules="[rules.required]">
                                     </v-text-field>
                                 </v-row>
+
+                                <v-row no-gutters justify="center" class="pl-2 text-title-custom">Data das vendas</v-row>
                                 <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Número" v-model="environment.number" outlined
-                                        @keyup.enter="save()" :rules="[rules.required]">
-                                    </v-text-field>
-                                </v-row>
-                                <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Rua" v-model="environment.street" outlined
-                                        @keyup.enter="save()" :rules="[rules.required]">
-                                    </v-text-field>
-                                </v-row>
-                                <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Bairro" v-model="environment.district" outlined
-                                        @keyup.enter="save()" :rules="[rules.required]">
-                                    </v-text-field>
-                                </v-row>
-                                <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Cidade" v-model="environment.city" outlined
-                                        @keyup.enter="save()" :rules="[rules.required]">
-                                    </v-text-field>
-                                </v-row>
-                                <v-row no-gutters>
-                                    <v-text-field class="custom-text-field" label="Estado" v-model="environment.state" outlined
-                                        @keyup.enter="save()" :rules="[rules.required]">
-                                    </v-text-field>
+                                    <v-date-picker full-width v-model="salesRange" 
+                                    :rules="[rules.required]" range></v-date-picker>
                                 </v-row>
                             </v-col>
                         </v-row>
@@ -83,7 +82,7 @@
                 </v-card>
             </v-stepper-content>
             <v-stepper-content step="2">
-                <Stage v-if="step === 2"></Stage>
+                    <EventDescription :height="height" editable :title="eventStore.event.lang.name"></EventDescription>
             </v-stepper-content>
         </v-stepper-items>
         <v-row no-gutters class="px-8 my-4">
@@ -102,51 +101,40 @@
 import { computed, inject, nextTick, onMounted, ref } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
-import { useEnvironmentTypeStore } from '@/store/Models/environmentType';
+import { useEventTypeStore } from '@/store/Models/eventType';
 import { useStageStore } from '@/store/stage';
+import { useEventStore } from '@/store/Models/event';
 import { useEnvironmentStore } from '@/store/Models/environment';
+import EventDescription from '@/components/Main/EventDescription.vue';
 
 export default {
-    name: 'NewEnvironment',
-    components: { Stage },
+    name: 'EventStepper',
+    components: { Stage, EventDescription },
     props: {
         title: {
             type: String,
             default: 'Título'
-        }
+        },
     },
 
     setup(props, { emit }) {
         const notify = inject('toast');
-        const address = ref('');
+        const datetimeRange = ref([]);
+        const salesRange = ref([]);
         const validAddress = ref(false);
         const stageStore = useStageStore();
-        const environmentStore = useEnvironmentStore();
+        const eventStore = useEventStore();
         const userStore = useUserStore();
-        const environmentTypeStore = useEnvironmentTypeStore();
-        const loading = computed(() => environmentStore.loading);
+        const environmentStore = useEnvironmentStore();
+        const eventTypeStore = useEventTypeStore();
+        const loading = false;
         const submitText = computed(() => {
-            return step.value === 2 ? 'Concluir' : 'Continuar';
+            return step.value === 3 ? 'Concluir' : 'Continuar';
         });
         const editTextField = ref(null);
         const step = ref(1);
         const rules = ref({
             required: value => !!value || 'Obrigatório.'
-        })
-        const environment = ref({
-            lang: {
-                name: '',
-            },
-            environment_type_id: null,
-            owner_id: null,
-            country: '',
-            number: '',
-            street: '',
-            district: '',
-            city: '',
-            state: '',
-            capacity: '',
-            layout_map: computed(() => JSON.stringify(stageStore.layout_map)),
         });
 
         function back(){
@@ -157,20 +145,11 @@ export default {
         function submit() {
             switch (step.value) {
                 case 1:
-                    if (!validAddress.value) {
-                        notify.error('Preencha os campos obrigatórios');
-                    } else {
-                        step.value++;
-                        emit('toggleFullScreen');
-                    }
+                    step.value++;
                     break;
                 case 2:
-                    environmentStore.addEnvironment(environment.value).then((response) => {
-                        notify.success('Ambiente criado com sucesso!');
-                        emit('closeDialog');
-                    }).catch((error) => {
-                        notify.error(error.message);
-                    });
+                    break;
+                case 3:
                     break;
                 default:
                     break;
@@ -189,24 +168,32 @@ export default {
 
         return {
             step,
-            environment,
             rules,
             editTextField,
             height,
             resizeHeight,
             userStore,
-            environmentTypeStore,
+            environmentStore,
+            eventTypeStore,
             submitText,
             submit,
             back,
             loading,
             validAddress,
+            eventStore,
+            datetimeRange,
+            salesRange,
         };
     }
 }
 </script>
 
 <style lang="scss" scoped>
+.text-title-custom {
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--v-secondary-base);
+}
 
 .v-input.v-text-field--outlined.v-select::v-deep{
     margin-top: 14px;

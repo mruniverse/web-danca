@@ -24,9 +24,9 @@
                                     </v-btn>
                                 </v-toolbar>
                             </v-card-title>
-                            <v-card-text class="text--primary subtitle-1 pt-6">
+                            <v-card-text class="text--primary subtitle-1 pt-6 mb-n6">
                                 <v-text-field v-for="(header, index) in headers" :key="index" :label="header.text"
-                                    v-model="editedItem[header.value]" class="custom-field" outlined @keyup.enter="save()"
+                                    v-model="editedItem[header.value]" class="custom-field mb-4" outlined @keyup.enter="save()"
                                     :ref="(ref) => { editTextField.push(ref) }" :rules="[rules.required]">
                                 </v-text-field>
                             </v-card-text>
@@ -53,7 +53,9 @@
                     @page-count="pageCount = $event" 
                     hide-default-footer>
                         <template v-slot:item.actions="{ item }">
-                            <v-icon color="primary lighten-1" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+                            <slot name="edit" :item="item">
+                                <v-icon color="primary lighten-1" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+                            </slot>
                             <v-icon color="error lighten-1" @click="deleteItem(item)"> mdi-delete </v-icon>
                         </template>
                         <template v-slot:no-data> Ue tem nada aqui </template>

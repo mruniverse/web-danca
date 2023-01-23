@@ -1,8 +1,9 @@
 import { ref, reactive, watch, watchEffect, computed, onMounted, nextTick } from "vue";
 import { defineStore } from "pinia";
-import Konva from "konva";
 
 export const useStageStore = defineStore("stageStore", () => {
+  const seatRadius = ref(25);
+  const spaceBetweenSeats = ref(8);
   const expanded = ref(false);
   const customSeatNames = ref([]);
   const series = ref([{
@@ -31,7 +32,7 @@ export const useStageStore = defineStore("stageStore", () => {
       draggable: false,
     },
     transformer: {
-      resizeEnabled: true, 
+      resizeEnabled: true,
       rotationSnaps: [0, 45, 90, 135, 180, 225, 270]
     },
     elements: [],
@@ -42,20 +43,68 @@ export const useStageStore = defineStore("stageStore", () => {
 
   const layout_map = computed(() => {
     return {
+      konva: configs.konva,
       seats: configs.elements.map(({ id, x, y, fill }) => ({ id, x, y, fill })),
-      seatsLabels: configs.elementsTexts.map(({ id, x, y, text }) => ({ id, x, y, text })),
+      customSeatNames: customSeatNames.value,
       podiums: configs.podiums.map(({ id, x, y }) => ({ id, x, y })),
-      texts: configs.texts.map(({ id, x, y, text }) => ({ id, x, y, text })),
+      texts: configs.texts.map(({ id, x, y, text, fontSize, padding }) => ({ id, x, y, text, fontSize, padding })),
     }
   });
 
+  function setConfigsFromNodes(nodes) {
+    configs.elementsTexts = [];
+    configs.elements = [];
+    configs.podiums = [];
+    configs.texts = [];
+
+    nodes.forEach((node) => {
+      if (node.attrs.name === 'seat') {
+        configs.elements.push(node.attrs);
+      } else if (node.attrs.name === 'podium') {
+        configs.podiums.push(node.attrs);
+      } else if (node.attrs.name === 'text') {
+        configs.texts.push(node.attrs);
+      }
+    });
+
+    generateSeatsTexts();
+  }
+
+  function getOnScreenNodes() {
+    let namesArray = ['seat', 'podium', 'text'];
+    return refs.layer.getNode().getChildren().filter((node) => {
+      return namesArray.includes(node.attrs.name) && node.isClientRectOnScreen();
+    });
+  }
+
+  function parseLayoutMap(layout_map) {
+    if (layout_map) {
+      configs.elements = layout_map.seats.map((element) => ({
+        id: element.id,
+        fill: element.fill,
+        x: element.x,
+        y: element.y,
+        stroke: "transparent",
+        strokeWidth: spaceBetweenSeats.value,
+        radius: seatRadius.value,
+        name: "seat",
+        draggable: true,
+      }));
+      customSeatNames.value = layout_map.customSeatNames;
+      configs.podiums = layout_map.podiums;
+      configs.texts = layout_map.texts;
+      configs.konva = layout_map.konva;
+      generateSeatsTexts();
+    }
+  }
+
   function updateSeatsNames(series) {
     let seatNames = [];
-    series.forEach(function (element){
+    series.forEach(function (element) {
       let index = +element.from;
       let from = +element.from;
       let to = +element.to;
-      if(from > to){
+      if (from > to) {
         index = to;
         to = from;
         from = index;
@@ -73,7 +122,7 @@ export const useStageStore = defineStore("stageStore", () => {
     customSeatNames.value = seatNames;
   }
 
-  function hideSeatsTexts(){
+  function hideSeatsTexts() {
     configs.elementsTexts = [];
   }
 
@@ -125,7 +174,7 @@ export const useStageStore = defineStore("stageStore", () => {
     }
   }
 
-  function getSeatName(seatID, index){
+  function getSeatName(seatID, index) {
     let customSeatID = customSeatNames.value.find((seat) => {
       return seat.id == seatID.replace(/\D/g, '');
     });
@@ -227,8 +276,8 @@ export const useStageStore = defineStore("stageStore", () => {
         configs.elements.push({
           id: id,
           fill: getSeatColor(type),
-          x: firstFreeColumn + column * ((seatRadius*2) + spaceBetweenSeats),
-          y: firstFreeRow + row * ((seatRadius*2) + spaceBetweenSeats),
+          x: firstFreeColumn + column * ((seatRadius * 2) + spaceBetweenSeats),
+          y: firstFreeRow + row * ((seatRadius * 2) + spaceBetweenSeats),
           stroke: "transparent",
           strokeWidth: spaceBetweenSeats,
           radius: seatRadius,
@@ -254,7 +303,7 @@ export const useStageStore = defineStore("stageStore", () => {
     }
   }
 
-  function getSeatType(color){
+  function getSeatType(color) {
     switch (color) {
       case "#4CAF50":
         return "default";
@@ -295,8 +344,8 @@ export const useStageStore = defineStore("stageStore", () => {
       default:
         element.id = generateNewID('podium', configs.podiums);
         element.width = width * 50,
-        element.height = height * 50,
-        configs.podiums.push(element);
+          element.height = height * 50,
+          configs.podiums.push(element);
         break;
     }
 
@@ -334,7 +383,7 @@ export const useStageStore = defineStore("stageStore", () => {
 
     if (configs.elements.length > 0) {
       elementsRows = configs.elements.map(
-        (element) => element.y + element.radius*2
+        (element) => element.y + element.radius * 2
       );
       rows.push(...elementsRows);
     }
@@ -371,5 +420,8 @@ export const useStageStore = defineStore("stageStore", () => {
     updateSeatsNames,
     series,
     layout_map,
+    parseLayoutMap,
+    getOnScreenNodes,
+    setConfigsFromNodes,
   };
 });

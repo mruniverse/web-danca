@@ -8,7 +8,8 @@ export const useUserStore = defineStore("userStore", () => {
 
   function getUserName(id) {
     if(users.value.length === 0) return;
-    return users.value.find(user => user.id === id).name;
+    const found = users.value.find(user => user.id === id);
+    return found ? found.name : 'Usuário não encontrado';
   }
 
   async function whileLoading(callback) {

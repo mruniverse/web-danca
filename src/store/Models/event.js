@@ -1,23 +1,30 @@
-import { computed, onBeforeMount, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { useUserStore } from "./user";
-import { useEnvironmentTypeStore } from "./environmentType";
+import { useEventTypeStore } from "@/store/Models/eventType";
 
-export const useEnvironmentStore = defineStore("environmentStore", () => {
-  const loading = ref(false);
-  const environments = ref([]);
-  const environment = ref();
+export const useEventStore = defineStore("eventStore", () => {
   const userStore = useUserStore();
-  const environmentTypeStore = useEnvironmentTypeStore();
-
-  function getUserName(owner_id){
-    return userStore.getUserName(owner_id);
-  }
-
-  function getEnvironmentTypeName(environment_type_id){
-    return environmentTypeStore.getEnvironmentTypeName(environment_type_id);
-  }
+  const eventTypeStore = useEventTypeStore();
+  const loading = ref(false);
+  const events = ref([]);
+  const event = ref({
+    planner_id: "",
+    event_type_id: "",
+    environment_id: "",
+    initial_datetime: null,
+    final_datetime: null,
+    initial_sales_ticket: null,
+    final_sales_ticket: null,
+    maximum_sale_limit: 0,
+    image: null,
+    lang: {
+        name: "",
+        description: "",
+        policies: ""
+    }
+  });
 
   async function whileLoading(callback) {
     loading.value = true;
@@ -26,14 +33,14 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
     return newCallback;
   }
 
-  async function addEnvironment(item) {
+  async function addEvent(item) {
     return whileLoading(async () => {
-      return await api.post('/environment', {
+      return await api.post('/events', {
         lang: {
           name: item.lang.name,
           description: 'Sem descrição',
         },
-        environment_type_id: item.environment_type_id,
+        event_type_id: item.event_type_id,
         owner_id: item.owner_id,
         country: item.country,
         number: item.number,
@@ -44,22 +51,22 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
         capacity: item.capacity,
         layout_map: JSON.stringify(item.layout_map),
       }).then(response => {
-        environments.value = [{
+        events.value = [{
           ...item,
-          user_name: getUserName(item.owner_id),
-          environment_type_name: getEnvironmentTypeName(item.environment_type_id),
-        }, ...environments.value];
+          user_name: userStore.getUserName(item.owner_id),
+          event_type_name: eventTypeStore.getEventTypeName(item.event_type_id),
+        }, ...events.value];
       });
     });
   }
 
-  async function updateEnvironment(item, index) {
+  async function updateEvent(item, index) {
     return whileLoading(async () => {
-      return await api.put(`/environment/${item.id}`, {
+      return await api.put(`/events/${item.id}`, {
         lang: {
           name: item.lang.name,
         },
-        environment_type_id: item.environment_type_id,
+        event_type_id: item.event_type_id,
         owner_id: item.owner_id,
         country: item.country,
         number: item.number,
@@ -70,14 +77,14 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
         capacity: item.capacity,
         layout_map: JSON.stringify(item.layout_map),
       }).then(response => {
-        Object.assign(environments.value[index], item)
+        Object.assign(events.value[index], item)
       });
     });
   }
 
-  function getEnvironments() {
+  function getEvents() {
     return whileLoading(async () => {
-      return await api.get('/environment').then(response => {
+      return await api.get('/events').then(response => {
         const data = response.data.map(item => {
           return {
             id: item.id,
@@ -85,10 +92,10 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
               name: item.lang.name,
               description: item.lang.description,
             },
-            environment_type_id: item.environment_type_id,
+            event_type_id: item.event_type_id,
             owner_id: item.owner_id,
-            user_name: getUserName(item.owner_id),
-            environment_type_name: getEnvironmentTypeName(item.environment_type_id),
+            user_name: userStore.getUserName(item.owner_id),
+            event_type_name: eventTypeStore.getEventTypeName(item.event_type_id),
             country: item.country,
             number: item.number,
             street: item.street,
@@ -99,18 +106,18 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
             layout_map: JSON.parse(item.layout_map),
           }
         }).reverse();
-        environments.value = data;
+        events.value = data;
       });
     });
   }
 
-  function deleteEnvironment(item, index) {
+  function deleteEvent(item, index) {
     return whileLoading(async () => {
-      return await api.delete(`/environment/${item.id}`).then(response => {
-        environments.value.splice(index, 1);
+      return await api.delete(`/events/${item.id}`).then(response => {
+        events.value.splice(index, 1);
       });
     });
   }
 
-  return { addEnvironment, updateEnvironment, getEnvironments, deleteEnvironment, environments, loading, environment };
+  return { addEvent, updateEvent, getEvents, deleteEvent, events, loading, event };
 });

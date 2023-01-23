@@ -86,3 +86,37 @@
 .v-text-field.v-text-field--enclosed .v-text-field__details{
   margin-bottom: 0;
 }
+
+.data-table-custom {
+  font-weight: 500;
+  font-size: 12px;
+  box-shadow: 0px 4px 4px rgba(59, 124, 182, 0.03);
+  border-radius: 13px;
+}
+
+.v-input.v-text-field--outlined.v-select {
+  height: 48px;
+  background: var(--v-textField-base);
+  border: 1px solid #ECECF7;
+  box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+  border-radius: 13px;
+  transition: border 0.1s linear 0s;
+}
+
+.v-text-field .v-label {
+  top: 14px;
+}
+
+.v-text-field--outlined > .v-input__control > .v-input__slot, .v-text-field--outlined fieldset {
+  min-height: 48px;
+  border-width: 0;
+}
+
+.v-text-field--full-width .v-input__prepend-outer, .v-text-field--full-width .v-input__prepend-inner, .v-text-field--full-width .v-input__append-inner, .v-text-field--full-width .v-input__append-outer, .v-text-field--enclosed .v-input__prepend-outer, .v-text-field--enclosed .v-input__prepend-inner, .v-text-field--enclosed .v-input__append-inner, .v-text-field--enclosed .v-input__append-outer {
+  margin-top: 14px;
+}
+
+.v-pagination__navigation, .v-pagination__item{
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
+}

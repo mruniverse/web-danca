@@ -1,8 +1,8 @@
 import Home from '@/views/Home.vue';
-import MyEvents from '@/components/Home/EventsComponents/MyEvents.vue';
+import MyEvents from '@/components/Home/Events/Events.vue';
 import Settings from '@/components/Home/Account/SettingsComponents/Settings.vue';
 import Places from '@/components/Home/Environments/Environments.vue';
-import NewEnvironment from '@/components/Home/Environments/NewEnvironment.vue';
+import NewEnvironment from '@/components/Home/Environments/EnvironmentStepper.vue';
 import Users from '@/components/Home/Users/Users.vue';
 
 export default {

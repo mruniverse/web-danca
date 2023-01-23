@@ -33,25 +33,25 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  switch (to.name) {
-    case "Login":
-    case "Register":
-      if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
-        next({ name: "Home" });
-      } else {
-        next();
-      }
-      break;
-    default:
-      if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
-        next();
-      } else {
-        next({ name: "Login" });
-      }
-      break;
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
+//   switch (to.name) {
+//     case "Login":
+//     case "Register":
+//       if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
+//         next({ name: "Home" });
+//       } else {
+//         next();
+//       }
+//       break;
+//     default:
+//       if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
+//         next();
+//       } else {
+//         next({ name: "Login" });
+//       }
+//       break;
+//   }
+// });
 
 export default router;
