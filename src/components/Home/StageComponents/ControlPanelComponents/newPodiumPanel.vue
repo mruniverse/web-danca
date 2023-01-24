@@ -34,7 +34,7 @@ const stageStore = useStageStore();
 let type = ref('square');
 let types = ref([
     { text: 'Quadrado', value: 'square' },
-    { text: 'Circulo', value: 'circle' },
+    // { text: 'Circulo', value: 'circle' },
 ]);
 </script>
 

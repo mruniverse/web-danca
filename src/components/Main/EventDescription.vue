@@ -1,67 +1,60 @@
 <template>
-    <div>
-        <v-card v-if="!editable">
-            <v-img :style="cardTitleHeight" :src="image">
-                <v-col>
-                    <v-row no-gutters justify="center" class="mx-n2">
-                        <v-app-bar flat color="transparent">
-                            <v-spacer></v-spacer>
-                            <v-btn fab>
-                                <v-icon @click="setDialog(false)" large>mdi-close</v-icon>
-                            </v-btn>
-                        </v-app-bar>
-                    </v-row>
-                    <v-row no-gutters>
-                        <v-card-title :style="cardTitleHeight" class="text-h1 font-weight-bold white--text">
-                            {{ title }}
-                        </v-card-title>
-                    </v-row>
-                </v-col>
-            </v-img>
-            <v-card-text class="text--primary subtitle-1 py-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Aenean eget diam semper, mollis turpis vel, lobortis ipsum. Nam nec dapibus turpis. Maecenas nisl odio,
-                egestas elementum fermentum quis, mattis in urna. Nunc aliquam sapien non venenatis laoreet.
-                Pellentesque habitant morbi. </v-card-text>
-            <v-card-actions class="pa-4 pb-5">
-                <v-btn class="px-6" x-large rounded text @click="setDialog(false)" color="error"> Cancelar </v-btn>
-                <v-btn x-large rounded @click="" color="primary" class="ml-auto px-6"> Comprar </v-btn>
-            </v-card-actions>
-        </v-card>
-        <v-card v-else class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" flat
-            color="var(--v-background-base)">
-            <v-img v-if="eventStore.event.image" :style="cardTitleHeight" :src="eventStore.event.image">
-                <v-col>
-                    <v-row no-gutters justify="center" class="mx-n2">
-                        <v-app-bar flat color="transparent">
-                        </v-app-bar>
-                    </v-row>
-                    <v-row no-gutters>
-                        <v-card-title :style="cardTitleHeight" class="text-h1 font-weight-bold white--text">
-                            {{ title }}
-                        </v-card-title>
-                    </v-row>
-                </v-col>
-            </v-img>
-            <v-row no-gutters justify="center" class="pa-4">
-                <v-col cols="6" class="pr-2">
-                    <v-row no-gutters>
-                        <v-file-input label="Imagem" accept="image/*" v-model="eventStore.event.image" class="custom-text-field"
-                            outlined>
+    <v-card v-if="!editable">
+        <v-img :style="cardTitleHeight" :src="image">
+            <v-col>
+                <v-row no-gutters justify="center" class="mx-n2">
+                    <v-app-bar flat color="transparent">
+                        <v-spacer></v-spacer>
+                        <v-btn fab>
+                            <v-icon @click="setDialog(false)" large>mdi-close</v-icon>
+                        </v-btn>
+                    </v-app-bar>
+                </v-row>
+                <v-row no-gutters>
+                    <v-card-title :style="cardTitleHeight" class="text-h2 font-weight-bold white--text">
+                        {{ title }}
+                    </v-card-title>
+                </v-row>
+            </v-col>
+        </v-img>
+        <v-card-text class="text--primary subtitle-1 py-2">
+            {{ description || 'Sem descrição' }}
+        </v-card-text>
+        <v-card-actions class="pa-4 pb-5">
+            <v-btn class="px-6" x-large rounded text @click="setDialog(false)" color="error"> Cancelar </v-btn>
+            <v-btn x-large rounded @click="" color="primary" class="ml-auto px-6"> Comprar </v-btn>
+        </v-card-actions>
+    </v-card>
+    <v-card v-else class="custom-card" style="overflow: auto" :style="{ height: `${height}px` }" flat
+        color="var(--v-background-base)">
+        <v-sheet height="40%" color="primary" no-gutters justify="center" class="pa-4">
+            <v-col>
+                <v-row no-gutters justify="center">
+                    <v-col cols="6" align="center" class="mx-auto">
+                        <v-file-input append-icon="mdi-paperclip" prepend-icon label="Imagem" accept="image/*"
+                            v-model="eventStore.event.image" class="custom-text-field" outlined>
                         </v-file-input>
-                    </v-row>
-                </v-col>
-            </v-row>
-            <v-card-text class="text--primary subtitle-1 py-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget
-                diam semper, mollis turpis vel, lobortis ipsum. Nam nec dapibus turpis. Maecenas nisl odio, egestas elementum
-                fermentum quis, mattis in urna. Nunc aliquam sapien non venenatis laoreet. Pellentesque habitant morbi.
-            </v-card-text>
-        </v-card>
-    </div>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters>
+                    <v-card-title :style="cardTitleHeight" class="text-h2 font-weight-bold white--text">
+                        {{ title }}
+                    </v-card-title>
+                </v-row>
+            </v-col>
+        </v-sheet>
+        <v-card-text class="text--primary subtitle-1 py-6">
+            <v-textarea class="custom-text-field fill-height" label="Descrição do evento"
+                v-model="eventStore.event.lang.description" outlined auto-grow autocomplete
+                @keyup.ctrl.enter="$emit('submit')" :rules="[rules.required]">
+            </v-textarea>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
-import { useEventStore } from '@/store/Models/event';
-import { onMounted, reactive, watchEffect } from 'vue';
+import { useEventStore } from '@/store/Models/Event/event.js';
+import { onMounted, reactive, ref, watchEffect } from 'vue';
 
 
 export default {
@@ -83,6 +76,10 @@ export default {
         height: {
             type: Number,
             default: 0
+        },
+        description: {
+            type: String,
+            default: ''
         }
     },
 
@@ -91,20 +88,15 @@ export default {
         const cardTitleHeight = reactive({
             maxHeight: '40%'
         });
-
-        onMounted(() => {
-            console.log('mounted', props.editable)
-        })
-
-        watchEffect(() => {
-            console.log('watch', eventStore.event.image)
-        })
+        const rules = ref({
+            required: value => !!value || 'Obrigatório.'
+        });
 
         const setDialog = (status) => {
             return emit('setDialog', status)
         }
 
-        return { cardTitleHeight, setDialog, eventStore }
+        return { cardTitleHeight, setDialog, eventStore, rules }
     }
 }
 

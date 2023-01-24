@@ -1,8 +1,8 @@
 import { computed, onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
-import { useUserStore } from "./user";
-import { useEnvironmentTypeStore } from "./environmentType";
+import { useUserStore } from "../user";
+import { useEnvironmentTypeStore } from "../Environment/environmentType";
 
 export const useEnvironmentStore = defineStore("environmentStore", () => {
   const loading = ref(false);
@@ -13,6 +13,12 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
 
   function getUserName(owner_id){
     return userStore.getUserName(owner_id);
+  }
+
+  function getEnvironmentName(environment_id){
+    if(environments.value.length === 0) return;
+    const found = environments.value.find(environment => environment.id === environment_id);
+    return found ? found.lang.name : 'Ambiente não encontrado';
   }
 
   function getEnvironmentTypeName(environment_type_id){
@@ -112,5 +118,5 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
     });
   }
 
-  return { addEnvironment, updateEnvironment, getEnvironments, deleteEnvironment, environments, loading, environment };
+  return { addEnvironment, updateEnvironment, getEnvironments, deleteEnvironment, environments, loading, environment, getEnvironmentName };
 });

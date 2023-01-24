@@ -53,7 +53,7 @@ async function addItem(item) {
     });
 }
 
-async function updateItem(itemIndex, item) {
+async function updateItem(item, itemIndex) {
     whileLoading(async () => {
         await api.put(`/feature/${item.id}`, {
             lang: {

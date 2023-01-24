@@ -2,8 +2,8 @@ import Home from '@/views/Home.vue';
 import MyEvents from '@/components/Home/Events/Events.vue';
 import Settings from '@/components/Home/Account/SettingsComponents/Settings.vue';
 import Places from '@/components/Home/Environments/Environments.vue';
-import NewEnvironment from '@/components/Home/Environments/EnvironmentStepper.vue';
 import Users from '@/components/Home/Users/Users.vue';
+import Batches from '@/components/Home/Batches/Batches.vue';
 
 export default {
     path: '/home',
@@ -11,9 +11,9 @@ export default {
     component: Home,
     children: [
         { path: 'account/settings', name: 'Settings', component: Settings },
-        { path: 'events', name: 'Events', component: MyEvents },
+        { path: 'events', name: 'Events', component: MyEvents},
+        { path: 'batches', name: 'Batches', component: Batches },
         { path: 'places', name: 'Places', component: Places },
-        { path: 'new_environment', name: 'NewEnvironment', component: NewEnvironment },
         { path: 'users', name: 'Users', component: Users },
     ]
 };

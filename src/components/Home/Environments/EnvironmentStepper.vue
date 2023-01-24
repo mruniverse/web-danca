@@ -107,9 +107,9 @@
 import { computed, inject, nextTick, onMounted, ref } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
-import { useEnvironmentTypeStore } from '@/store/Models/environmentType';
+import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';
 import { useStageStore } from '@/store/stage';
-import { useEnvironmentStore } from '@/store/Models/environment';
+import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 
 export default {
     name: 'EnvironmentStepper',

@@ -16,51 +16,71 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, inject, onMounted, ref } from 'vue';
 import TopBar from '@/components/Main/TopBar.vue';
 import Carousel from '@/components/Main/Carousel.vue';
 import EventsList from '@/components/Main/EventsList.vue';
+import { useEventStore } from '@/store/Models/Event/event.js';
 
+const notify = inject('toast');
+const eventStore = useEventStore();
 const slides = ref([{
     title: 'Slide apenas teste 1',
     image: '/temp/1.jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Slide apenas teste 2',
     image: '/temp/2.jpg',
-    color: 'success--text'
+    color: 'success--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Slide apenas teste 3',
     image: '/temp/3.jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }]);
 
 const cards = ref([{
     title: 'Teste 1',
     image: '/temp/cards/card (1).jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Teste 2 apenas teste',
     image: '/temp/cards/card (2).jpg',
-    color: 'success--text'
+    color: 'success--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Teste 3',
     image: '/temp/cards/card (3).jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Teste 4',
     image: '/temp/cards/card (4).jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }, {
     title: 'Teste 5',
     image: '/temp/cards/card (5).jpg',
-    color: 'white--text'
+    color: 'white--text',
+    lang: {description: 'Sem descrição'}
 }]);
 
 const containerStyle = computed({
     get() {
         return this.$vuetify.breakpoint.width > 1280 ? 'container-style' : '';
     }
+});
+
+onMounted(() => {
+    eventStore.getEvents().then(() => {
+        cards.value = [...eventStore.events, ...cards.value];
+        slides.value = [...eventStore.events, ...slides.value];
+    }).catch(error => {
+        notify.error(error.message);
+    });
 });
 </script>
 

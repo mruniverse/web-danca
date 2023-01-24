@@ -41,6 +41,7 @@ const state = reactive({
     pages: [
         {page: 'Settings', text: 'Minha conta'},
         {page: 'Events', text: 'Meus Eventos'},
+        {page: 'Batches', text: 'Lotes'},
         {page: 'Places', text: 'Meus Ambientes'},
         {page: 'Users', text: 'Usuários'},
     ],

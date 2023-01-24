@@ -9,7 +9,7 @@
                 <slot name="options"></slot>
                 <div v-show="$slots.options" class="mx-2"></div>
                 <slot name="add-button">
-                    <v-dialog v-model="dialog" max-width="400" content-class="custom-dialog">
+                    <v-dialog v-model="dialog" max-width="500" content-class="custom-dialog" scrollable>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn color="primary" dark class="btn-larger subtitle-2 font-weight-bold" v-bind="attrs" v-on="on">
                                 Adicionar </v-btn>
@@ -25,10 +25,23 @@
                                 </v-toolbar>
                             </v-card-title>
                             <v-card-text class="text--primary subtitle-1 pt-6 mb-n6">
-                                <v-text-field v-for="(header, index) in headers" :key="index" :label="header.text"
-                                    v-model="editedItem[header.value]" class="custom-field mb-4" outlined @keyup.enter="save()"
-                                    :ref="(ref) => { editTextField.push(ref) }" :rules="[rules.required]">
-                                </v-text-field>
+                                <div v-for="(property, key) in properties" :key="key">
+                                    <v-text-field 
+                                        v-if="property.type !== 'select'" :label="property.label" 
+                                        v-model="editedItem[key]" :type="property.type"
+                                        class="custom-field mb-4" outlined @keyup.enter="save()" 
+                                        :ref="(ref) => { editTextField.push(ref) }"
+                                        :rules="[rules.required]">
+                                    </v-text-field>
+                                    
+                                    <v-select 
+                                        v-else :label="property.label" v-model="editedItem[key]" 
+                                        :items="property.item.items" class="mb-8"
+                                        :item-text="property.item.text" :item-value="property.item.value" 
+                                        :rules="[rules.required]"
+                                        @keyup.enter="save()" outlined>
+                                    </v-select>
+                                </div>
                             </v-card-text>
                             <v-card-actions class="pa-4 pb-5">
                                 <v-btn @click="close()" class="px-6" x-large rounded text color="error"> Cancelar </v-btn>
@@ -119,7 +132,6 @@ export default {
         },
         data: {
             type: Array,
-            default: () => [],
             required: true
         },
         headers: {
@@ -139,6 +151,10 @@ export default {
                 },
             ],
             required: true
+        },
+        properties: {
+            type: Object,
+            required: false
         },
     },
 
@@ -198,6 +214,8 @@ export default {
         function save() {
             if (editedIndex.value > -1) {
                 emit("update-item", editedIndex.value, editedItem.value);
+            } else {
+                emit("add-new-item", editedItem.value);
             }
             close();
         };
@@ -280,7 +298,7 @@ export default {
     background: var(--v-background-color);
     border: 1px solid #ECECF7;
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
-    border-radius: 8px;
+    border-radius: 13px;
     transition: border 0.1s linear 0s;
 }
 

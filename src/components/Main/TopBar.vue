@@ -5,8 +5,6 @@
                 <v-row no-gutters align="center">
                     <img class="logo" width="100" src="@/assets/Logo Horizontal.svg" />
                     <v-divider vertical class="ml-8 mr-4"></v-divider>
-                    <v-btn plain text>Início</v-btn>
-                    <v-btn plain text>Teste</v-btn>
                 </v-row>
             </v-col>
             <v-col cols="auto">

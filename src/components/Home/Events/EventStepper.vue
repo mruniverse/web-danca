@@ -1,6 +1,6 @@
 <template>
     <v-stepper v-model="step" width="100%" flat v-resize="resizeHeight">
-        <v-overlay absolute :value="loading">
+        <v-overlay absolute :value="eventStore.loading">
             <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </v-overlay>
 
@@ -13,9 +13,13 @@
         </v-toolbar>
         <v-stepper-header class="custom-card-header">
             <v-spacer></v-spacer>
-            <v-stepper-step :complete="step > 1" step="1"> Dados do evento </v-stepper-step>
+            <v-stepper-step :complete="step > 1" step="1"> Dados </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step :complete="step > 2" step="2"> Capa do evento </v-stepper-step>
+            <v-stepper-step :complete="step > 2" step="2"> Datas (evento) </v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="step > 3" step="3"> Datas (vendas) </v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="step > 4" step="4"> Capa </v-stepper-step>
             <v-spacer></v-spacer>
         </v-stepper-header>
         <v-stepper-items>
@@ -43,11 +47,6 @@
                                         :rules="[rules.required]" @keyup.enter="save()" outlined>
                                     </v-select>
                                 </v-row>
-                                <v-row no-gutters justify="center" class="pl-2 text-title-custom">Data do evento</v-row>
-                                <v-row no-gutters>
-                                    <v-date-picker full-width v-model="datetimeRange" 
-                                    :rules="[rules.required]" range></v-date-picker>
-                                </v-row>
                             </v-col>
                             <v-col cols="6" class="pl-2">
                                 <v-row no-gutters>
@@ -70,19 +69,69 @@
                                         @keyup.enter="save()" :rules="[rules.required]">
                                     </v-text-field>
                                 </v-row>
-
-                                <v-row no-gutters justify="center" class="pl-2 text-title-custom">Data das vendas</v-row>
-                                <v-row no-gutters>
-                                    <v-date-picker full-width v-model="salesRange" 
-                                    :rules="[rules.required]" range></v-date-picker>
-                                </v-row>
                             </v-col>
                         </v-row>
                     </v-form>
                 </v-card>
             </v-stepper-content>
             <v-stepper-content step="2">
-                    <EventDescription :height="height" editable :title="eventStore.event.lang.name"></EventDescription>
+                <v-card class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" 
+                flat color="var(--v-background-base)">
+                    <v-form ref="address" v-model="validAddress" lazy-validation>
+                        <v-row no-gutters justify="center" class="text-title-custom py-4">Datas e horários do evento</v-row>
+                        <v-row no-gutters justify="center" class="pa-4">
+                            <v-col cols="6" class="pr-2">
+                                <v-row no-gutters>
+                                    <v-date-picker full-width v-model="datetimeRange" 
+                                    :rules="[rules.required]" range></v-date-picker>
+                                </v-row>
+                            </v-col>
+                            <v-col cols="6" class="pl-2">
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" outlined v-model="initial_datetime" label="Início"
+                                        append-icon="mdi-calendar" prepend-icon>
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" outlined v-model="final_datetime" label="Fim"
+                                        append-icon="mdi-calendar" prepend-icon>
+                                    </v-text-field>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-content step="3">
+                <v-card class="custom-card" style="overflow: auto" :style="{height: `${height}px`}" 
+                flat color="var(--v-background-base)">
+                    <v-form ref="address" v-model="validAddress" lazy-validation>
+                        <v-row no-gutters justify="center" class="text-title-custom py-4">Datas e horários das vendas</v-row>
+                        <v-row no-gutters justify="center" class="pa-4">
+                            <v-col cols="6" class="pr-2">
+                                <v-row no-gutters>
+                                    <v-date-picker full-width v-model="salesRange" 
+                                    :rules="[rules.required]" range></v-date-picker>
+                                </v-row>
+                            </v-col>
+                            <v-col cols="6" class="pl-2">
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" outlined v-model="initial_sales_ticket" label="Início"
+                                        append-icon="mdi-calendar" prepend-icon>
+                                    </v-text-field>
+                                </v-row>
+                                <v-row no-gutters>
+                                    <v-text-field class="custom-text-field" outlined v-model="final_sales_ticket" label="Fim"
+                                        append-icon="mdi-calendar" prepend-icon>
+                                    </v-text-field>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-content step="4">
+                    <EventDescription v-if="step === 4" @submit="submit()" :height="height" editable :title="eventStore.event.lang.name"></EventDescription>
             </v-stepper-content>
         </v-stepper-items>
         <v-row no-gutters class="px-8 my-4">
@@ -101,10 +150,10 @@
 import { computed, inject, nextTick, onMounted, ref } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
-import { useEventTypeStore } from '@/store/Models/eventType';
+import { useEventTypeStore } from '@/store/Models/Event/eventType';
 import { useStageStore } from '@/store/stage';
-import { useEventStore } from '@/store/Models/event';
-import { useEnvironmentStore } from '@/store/Models/environment';
+import { useEventStore } from '@/store/Models/Event/event';
+import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 import EventDescription from '@/components/Main/EventDescription.vue';
 
 export default {
@@ -114,6 +163,10 @@ export default {
         title: {
             type: String,
             default: 'Título'
+        },
+        edit: {
+            type: Boolean,
+            default: false
         },
     },
 
@@ -127,9 +180,44 @@ export default {
         const userStore = useUserStore();
         const environmentStore = useEnvironmentStore();
         const eventTypeStore = useEventTypeStore();
-        const loading = false;
+        const initial_datetime = computed({
+            get() {
+                if (datetimeRange.value[0]) {
+                    const date = new Date(datetimeRange.value[0]);
+                    eventStore.event.initial_datetime = date.toISOString().replace('Z', '').replace('T', ' ');
+                    return date.toDateString();
+                }
+            },
+        });
+        const final_datetime = computed({
+            get() {
+                if (datetimeRange.value[1]) {
+                    const date = new Date(datetimeRange.value[1]);
+                    eventStore.event.final_datetime = date.toISOString().replace('Z', '').replace('T', ' ');
+                    return date.toDateString();
+                }
+            },
+        });
+        const initial_sales_ticket = computed({
+            get() {
+                if (salesRange.value[0]) {
+                    const date = new Date(salesRange.value[0]);
+                    eventStore.event.initial_sales_ticket = date.toISOString().replace('Z', '').replace('T', ' ');
+                    return date.toDateString();
+                }
+            },
+        });
+        const final_sales_ticket = computed({
+            get() {
+                if (salesRange.value[1]) {
+                    const date = new Date(salesRange.value[1]);
+                    eventStore.event.final_sales_ticket = date.toISOString().replace('Z', '').replace('T', ' ');
+                    return date.toDateString();
+                }
+            },
+        });
         const submitText = computed(() => {
-            return step.value === 3 ? 'Concluir' : 'Continuar';
+            return step.value === 4 ? 'Concluir' : 'Continuar';
         });
         const editTextField = ref(null);
         const step = ref(1);
@@ -142,14 +230,49 @@ export default {
             emit('toggleFullScreen');
         }
 
-        function submit() {
+        const getBase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            });
+        };
+
+        async function submit() {
             switch (step.value) {
                 case 1:
                     step.value++;
                     break;
                 case 2:
+                    step.value++;
                     break;
                 case 3:
+                    step.value++;
+                    break;
+                case 4:
+                    // let image = eventStore.event.image;
+                    // await getBase64(image).then((data) => {
+                    //     eventStore.event.image = data;
+                    // });
+                    
+                    eventStore.event.image = 'Indisponível'
+                    if (props.edit) {
+                        eventStore.updateEvent(eventStore.event).then(() => {
+                            notify.success('Evento atualizado com sucesso!');
+                            emit('closeDialog');
+                        }).catch(() => {
+                            notify.error('Erro ao atualizar evento!');
+                        });
+                        break;
+                    } else {
+                        eventStore.addEvent(eventStore.event).then(() => {
+                            notify.success('Evento criado com sucesso!');
+                            emit('closeDialog');
+                        }).catch(() => {
+                            notify.error('Erro ao criar evento!');
+                        });
+                    }
                     break;
                 default:
                     break;
@@ -157,6 +280,13 @@ export default {
         }
 
         onMounted(async () => {
+            userStore.users.length === 0 && await userStore.getUsers();
+            environmentStore.environments.length === 0 && await environmentStore.getEnvironments();
+            datetimeRange.value = [eventStore.event.initial_datetime, eventStore.event.final_datetime];
+            salesRange.value = [eventStore.event.initial_sales_ticket, eventStore.event.final_sales_ticket];
+            if(eventStore.event.image === ''){
+                eventStore.event.image = null;
+            }
             await nextTick();
             editTextField.value.focus();
         });
@@ -178,11 +308,14 @@ export default {
             submitText,
             submit,
             back,
-            loading,
             validAddress,
             eventStore,
             datetimeRange,
             salesRange,
+            initial_datetime,
+            final_datetime,
+            initial_sales_ticket,
+            final_sales_ticket
         };
     }
 }

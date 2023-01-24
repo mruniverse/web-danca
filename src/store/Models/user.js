@@ -5,6 +5,16 @@ import api from "@/plugins/axios";
 export const useUserStore = defineStore("userStore", () => {
   const loading = ref(false);
   const users = ref([]);
+  const properties = ref({
+    name: {
+      label: 'Nome',
+      type: 'text',
+    },
+    outer_id: {
+      label: 'ID Externo',
+      type: 'text',
+    }
+  });
 
   function getUserName(id) {
     if(users.value.length === 0) return;
@@ -59,5 +69,5 @@ export const useUserStore = defineStore("userStore", () => {
     });
   };
 
-  return { addUser, updateUser, getUsers, deleteUser, users, getUserName };
+  return { addUser, updateUser, getUsers, deleteUser, users, getUserName, properties };
 });

@@ -10,12 +10,12 @@
         </v-row>
         <ScrollShadow v-if="!toggleOverflow">
             <v-col v-for="(card, index) in cards" :key="index">
-                <EventCard :title="card.title" :image="card.image"></EventCard>
+                <EventCard :description="card.lang.description" :title="card.title" :image="card.image || '/temp/not_found.jpg'"></EventCard>
             </v-col>
         </ScrollShadow>
         <v-row no-gutters v-else>
             <v-col cols="auto" class="my-1" v-for="(card, index) in cards" :key="index">
-                <EventCard :title="card.title" :image="card.image"></EventCard>
+                <EventCard :description="card.lang.description" :title="card.title" :image="card.image || '/temp/not_found.jpg'"></EventCard>
             </v-col>
         </v-row>
     </div>

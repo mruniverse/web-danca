@@ -2,7 +2,8 @@
     <CRUDTable 
     :loading="loading" 
     :data="data" 
-    :headers="headers" 
+    :headers="headers"
+    :properties="userStore.properties" 
     @delete-item-confirm="deleteItem" 
     @update-item="updateItem"
     @add-new-item="addItem">
@@ -13,9 +14,11 @@
 import CRUDTable from '@/components/CRUDTable.vue';
 import { inject, onMounted, ref } from 'vue';
 import api from '@/plugins/axios';
+import { useUserStore } from '@/store/Models/user';
 
 const notify = inject('toast');
 const loading = ref(false);
+const userStore = useUserStore();
 const headers = ref([{
     text: 'Nome',
     value: 'name',

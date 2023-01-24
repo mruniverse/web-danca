@@ -23,7 +23,8 @@ export const useEventTypeStore = defineStore("eventTypeStore", () => {
     return whileLoading(async () => {
       return await api.post('/event-types', {
         lang: {
-          name: item.name
+          name: item.name,
+          observation: item.observation
         }
       }).then(response => {
         eventTypes.value = [item, ...eventTypes.value];
@@ -35,10 +36,11 @@ export const useEventTypeStore = defineStore("eventTypeStore", () => {
     return whileLoading(async () => {
       return await api.put(`/event-types/${item.id}`, {
         lang: {
-          name: item.name
+          name: item.name,
+          observation: item.observation
         }
       }).then(response => {
-        Object.assign(eventTypes.value[itemIndex], item)
+        Object.assign(eventTypes.value[index], item)
       });
     });
   }
@@ -49,7 +51,8 @@ export const useEventTypeStore = defineStore("eventTypeStore", () => {
         const data = response.data.map(item => {
           return {
             id: item.id,
-            name: item.lang.name
+            name: item.lang.name,
+            observation: item.lang.observation
           }
         }).reverse();
         eventTypes.value = data;
@@ -65,5 +68,5 @@ export const useEventTypeStore = defineStore("eventTypeStore", () => {
     });
   }
 
-  return { addEventType, updateEventType, getEventTypes, deleteEventType, eventTypes, getEventTypeName };
+  return { addEventType, updateEventType, getEventTypes, deleteEventType, eventTypes, getEventTypeName, loading };
 });

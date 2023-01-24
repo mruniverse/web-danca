@@ -1,6 +1,6 @@
 <template>
     <v-carousel cycle show-arrows-on-hover>
-        <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.image">
+        <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.image || '/temp/not_found.jpg'">
             <v-col cols="6" class="fill-height pa-0">
                 <v-sheet height="100%" color="black" class="blur gradient"></v-sheet>
                 <v-row no-gutters :class="`carousel-title text-h1 font-weight-bold ${slide.color}`"> 
@@ -8,7 +8,11 @@
                 </v-row>
             </v-col>
             <v-col class="carousel-sub-info" align="end">
-                <EventDescriptionModal btn-title="Mais informações" :image="slide.image" :title="slide.title">
+                <EventDescriptionModal 
+                    btn-title="Mais informações" 
+                    :image="slide.image || '/temp/not_found.jpg'" 
+                    :title="slide.title"
+                    :description="slide.lang.description">
                 </EventDescriptionModal>
             </v-col>
         </v-carousel-item>
@@ -27,7 +31,8 @@ export default {
             default: [{
                 image: "",
                 title: "",
-                color: ""
+                color: "",
+                lang: {description: ""}
             }]
         },
     },

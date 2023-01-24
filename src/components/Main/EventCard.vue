@@ -4,7 +4,7 @@
             <v-img class="white--text align-end" height="200px" :src="image">
                 <v-card-title>
                     {{ title }}
-                    <EventDescriptionModal btn-title="Comprar" :image="image" :title="title"></EventDescriptionModal>
+                    <EventDescriptionModal :description="description" btn-title="Comprar" :image="image" :title="title"></EventDescriptionModal>
                 </v-card-title>
             </v-img>
         </v-card>
@@ -18,6 +18,7 @@ export default {
     props: {
         image: String,
         title: String,
+        description: String
     },
     components: { EventDescriptionModal }
 }

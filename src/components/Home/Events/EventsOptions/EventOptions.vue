@@ -10,6 +10,9 @@
                 <v-list-item link>
                     <EventTypes></EventTypes>
                 </v-list-item>
+                <v-list-item link>
+                    <TicketTypes></TicketTypes>
+                </v-list-item>
                 <!-- <v-list-item link>
                     <EventFeatures></EventFeatures>
                 </v-list-item> -->
@@ -21,10 +24,11 @@
 <script>
 import EventTypes from '@/components/Home/Events/EventsOptions/EventTypes.vue';
 import EventFeatures from '@/components/Home/Events/EventsOptions/EventFeatures.vue';
+import TicketTypes from '@/components/Home/Events/EventsOptions/TicketTypes.vue';
 
 export default {
     name: "EventOptions",
-    components: { EventTypes, EventFeatures }
+    components: { EventTypes, EventFeatures, TicketTypes }
 }
 </script>
 

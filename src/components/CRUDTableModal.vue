@@ -191,7 +191,7 @@ export default {
 
         function save() {
             if (editedIndex.value > -1) {
-                emit('update-item', editedIndex.value, editedItem.value);
+                emit('update-item', editedItem.value, editedIndex.value);
             } else {
                 emit('add-new-item', editedItem.value);
             }

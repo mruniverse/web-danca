@@ -1,89 +1,60 @@
 <template>
     <CRUDTableModal 
         title="Tipos de eventos" 
-        :data="events" 
+        :data="eventTypeStore.eventTypes" 
         :headers="headers" 
-        @add-new-item="addItem"
-        @update-item="updateItem" 
-        @delete-item-confirm="deleteItem">
-        <v-overlay absolute :value="loading">
+        @add-new-item="newEventType"
+        @update-item="updateEventType" 
+        @delete-item-confirm="deleteEventType">
+        <v-overlay absolute :value="eventTypeStore.loading">
             <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </v-overlay>
     </CRUDTableModal>
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { computed, inject, onMounted, ref } from 'vue';
 import CRUDTableModal from '@/components/CRUDTableModal.vue';
 import api from '@/plugins/axios';
+import { useEventStore } from '@/store/Models/Event/event.js';
+import { useEventTypeStore } from '@/store/Models/Event/eventType.js';
 
-const loading = ref(false);
 const notify = inject('toast');
+const eventTypeStore = useEventTypeStore();
 const events = ref([]);
 const headers = ref([{
     text: 'Tipo',
     align: 'start',
     sortable: true,
     value: 'name',
+},{
+    text: 'Observações',
+    value: 'observation',
+    sortable: true,
+    align: 'center',
 }]);
 
 onMounted(() => {
-    getItems();
+    if(eventTypeStore.eventTypes.length === 0) {
+        eventTypeStore.getEventTypes();
+    }
 });
 
-async function whileLoading(callback) {
-    loading.value = true;
-    await callback();
-    loading.value = false;
+function newEventType(eventType) {
+    eventTypeStore.addEventType(eventType).catch((error) => {
+        notify.error(error.message);
+    });
 }
 
-async function addItem(item) {
-    whileLoading(async () => {
-        await api.post('/event-types', {
-            lang: {
-                name: item.name
-            }
-        }).then(response => {
-            events.value = [item, ...events.value];
-        });
+function updateEventType(eventType, index) {
+    eventTypeStore.updateEventType(eventType, index).catch((error) => {
+        notify.error(error.message);
     })
 }
 
-async function updateItem(itemIndex, item) {
-    whileLoading(async () => {
-        await api.put(`/event-types/${item.id}`, {
-            lang: {
-                name: item.name
-            }
-        }).then(response => {
-            Object.assign(events.value[itemIndex], item)
-        }).catch(error => {
-            notify.error(error.message);
-        });
-    });
+function deleteEventType(eventType, index) {
+    eventTypeStore.deleteEventType(eventType, index).catch((error) => {
+        notify.error(error.message);
+    })
 }
-
-async function getItems() {
-    whileLoading(async () => {
-        await api.get('/event-types').then(response => {
-            const data = response.data.map(item => {
-                return {
-                    id: item.id,
-                    name: item.lang.name
-                }
-            }).reverse();
-            events.value.push(...data);
-        });
-    });
-}
-
-async function deleteItem(item, index) {
-    whileLoading(async () => {
-        await api.delete(`/event-types/${item.id}`).then(response => {
-            events.value.splice(index, 1);
-        }).catch(error => {
-            notify.error(error.message);
-        });
-    });
-};
 </script>

@@ -40,9 +40,9 @@ import { computed, inject, nextTick, onBeforeMount, onMounted, ref, watch } from
 import CRUDTable from '@/components/CRUDTable.vue';
 import EnvironmentOptions from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentOptions.vue';
 import NewEnvironment from './EnvironmentStepper.vue';
-import { useEnvironmentStore } from '@/store/Models/environment';
+import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 import { useUserStore } from '@/store/Models/user';
-import { useEnvironmentTypeStore } from '@/store/Models/environmentType';
+import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';
 import { useStageStore } from '@/store/stage';
 
 const notify = inject('toast');

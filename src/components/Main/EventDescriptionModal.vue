@@ -7,7 +7,7 @@
         <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" color="primary" class="ml-auto" rounded> {{ btnTitle }} </v-btn>
         </template>
-        <EventDescription @setDialog="setDialog" :title="title" :image="image"></EventDescription>
+        <EventDescription :description="description" @setDialog="setDialog" :title="title" :image="image"></EventDescription>
     </v-dialog>
 </template>
 
@@ -22,6 +22,7 @@ export default {
         image: String,
         title: String,
         btnTitle: String,
+        description: String
     },
 
     components: { EventDescription },

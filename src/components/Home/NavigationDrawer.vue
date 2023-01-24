@@ -6,45 +6,69 @@
             </v-list-item>
         </v-list>
         <v-list nav>
-            <v-list-item-group color="primary" v-model="homeRoutes">
-                <v-list-item link @click="pageStore.setPage('Settings')">
-                    <v-list-item-icon>
-                        <v-icon>mdi-account-circle-outline</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Minha conta</v-list-item-title>
-                </v-list-item>
-                <v-list-item link @click="pageStore.setPage('Events')">
-                    <v-list-item-icon>
-                        <v-icon>mdi-calendar-multiselect</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Meus Eventos</v-list-item-title>
-                </v-list-item>
-                <v-list-item link @click="pageStore.setPage('Places')">
-                    <v-list-item-icon>
-                        <v-icon>mdi-school-outline</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Ambientes</v-list-item-title>
-                </v-list-item>
-                <v-list-item link @click="pageStore.setPage('Users')">
-                    <v-list-item-icon>
-                        <v-icon>mdi-account-multiple-outline</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Usuários</v-list-item-title>
-                </v-list-item>
+            <v-list-item-group v-model="itemGroup" color="primary">
+                <div v-for="item in items" :key="item.title">
+                    <v-list-group v-if="item.items.length > 0" @click="pageStore.setPage(item.route)"
+                        :prepend-icon="item.icon" no-action>
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.title"></v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+                        <v-list-item v-for="child in item.items" :key="child.title">
+                            <v-list-item-content @click="pageStore.setPage(child.route)">
+                                <v-list-item-title v-text="child.title"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
+                    <v-list-item v-else link @click="pageStore.setPage(item.route)">
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                </div>
             </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
 </template>
 
 <script setup>
-import { onMounted, reactive, watchEffect } from 'vue';
+import { nextTick, onMounted, reactive, ref, watchEffect, watch } from 'vue';
 import { usePageStore } from '@/store/page';
+import router from '@/router';
 
 const pageStore = usePageStore();
 const homeRoutes = pageStore.getRoutesNames('Home');
+const itemGroup = ref([]);
+const items = [{
+    title: 'Minha conta',
+    route: 'Settings',
+    icon: 'mdi-account-circle-outline',
+    items: []
+}, {
+    title: 'Meus Eventos',
+    route: 'Events',
+    icon: 'mdi-calendar-multiselect',
+    items: []
+}, {
+    title: 'Lotes',
+    route: 'Batches',
+    icon: 'mdi-human-queue',
+    items: []
+}, {
+    title: 'Ambientes',
+    route: 'Places',
+    icon: 'mdi-school-outline',
+    items: []
+}, {
+    title: 'Usuários',
+    route: 'Users',
+    icon: 'mdi-account-multiple-outline',
+    items: []
+}];
 const state = reactive({
     expanded: false,
-    selectedItem: 0,
 });
 
 onMounted(() => {
@@ -52,12 +76,12 @@ onMounted(() => {
 });
 
 watchEffect(async () => {
+    await nextTick();
     fetchSelectedPage();
 });
 
 function fetchSelectedPage() {
-    const currentRoute = pageStore.getPage();
-    state.selectedItem = homeRoutes.indexOf(currentRoute); 
+    itemGroup.value = homeRoutes.indexOf(router.currentRoute.name);
 }
 </script>
     
@@ -69,7 +93,7 @@ function fetchSelectedPage() {
 }
 
 .custom-box-shadow {
-    max-width: 220px;
+    max-width: 260px;
     box-shadow: 0px 4px 4px 4px rgba(59, 125, 182, 0.068);
 }
 </style>
