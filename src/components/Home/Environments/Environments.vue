@@ -22,11 +22,11 @@
                         Novo ambiente 
                     </v-btn>
                 </template>
-                <NewEnvironment 
+                <EnvironmentStepper 
                 @toggleFullScreen="fullscreen = !fullscreen" 
                 @closeDialog="closeDialog" 
                 title="Novo ambiente">
-                </NewEnvironment>
+                </EnvironmentStepper>
             </v-dialog>
         </template>
         <template v-slot:edit="{item}">
@@ -39,7 +39,7 @@
 import { computed, inject, nextTick, onBeforeMount, onMounted, ref, watch } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import EnvironmentOptions from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentOptions.vue';
-import NewEnvironment from './EnvironmentStepper.vue';
+import EnvironmentStepper from './EnvironmentStepper.vue';
 import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 import { useUserStore } from '@/store/Models/user';
 import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';

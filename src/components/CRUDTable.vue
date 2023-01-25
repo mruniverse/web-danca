@@ -15,6 +15,10 @@
                                 Adicionar </v-btn>
                         </template>
                         <v-card>
+                            <v-overlay absolute :value="loading">
+                                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                            </v-overlay>
+
                             <v-card-title class="pa-0">
                                 <v-toolbar dark color="primary">
                                     <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
@@ -38,6 +42,7 @@
                                         v-else :label="property.label" v-model="editedItem[key]" 
                                         :items="property.item.items" class="mb-8"
                                         :item-text="property.item.text" :item-value="property.item.value" 
+                                        :ref="(ref) => { editTextField.push(ref) }"
                                         :rules="[rules.required]"
                                         @keyup.enter="save()" outlined>
                                     </v-select>
@@ -119,7 +124,7 @@
 </template>
 
 <script>
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import SearchBar from '@/components/SearchBar.vue';
 
 export default {
@@ -172,8 +177,13 @@ export default {
         const pageCount = ref(0);
         const editedItem = ref({});
         const defaultItem = ref({});
+        const loading = computed(() => props.loading);
         const rules = ref({
             required: value => !!value || 'Obrigatório.'
+        });
+
+        onMounted(() => {
+            console.log(props.data);
         });
 
         function emitAndCloseDelete() {
@@ -217,8 +227,13 @@ export default {
             } else {
                 emit("add-new-item", editedItem.value);
             }
-            close();
         };
+
+        watch(loading, (value) => {
+            if(!value){
+                close();
+            }
+        });
 
         watch(tableDialog, (val) => {
             val || closeNewEnvironmentStatus();

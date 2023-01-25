@@ -1,8 +1,9 @@
-import { nextTick, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
 export const useUserStore = defineStore("userStore", () => {
+  const notify = inject('toast');
   const loading = ref(false);
   const users = ref([]);
   const properties = ref({
@@ -16,10 +17,18 @@ export const useUserStore = defineStore("userStore", () => {
     }
   });
 
+  onBeforeMount(() => {
+    whileLoading(async () => {
+      await getUsers();
+    });
+  });
+
   function getUserName(id) {
-    if(users.value.length === 0) return;
-    const found = users.value.find(user => user.id === id);
-    return found ? found.name : 'Usuário não encontrado';
+    return new Promise((resolve, reject) => {
+      if(users.value.length === 0) reject('Vazio');
+      const found = users.value.find(user => user.id === id);
+      resolve(found ? found.name : 'Usuário não encontrado');
+    });
   }
 
   async function whileLoading(callback) {
@@ -36,6 +45,8 @@ export const useUserStore = defineStore("userStore", () => {
         outer_id: item.outer_id
       }).then(response => {
         users.value = [item, ...users.value];
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -47,6 +58,8 @@ export const useUserStore = defineStore("userStore", () => {
         outer_id: item.outer_id
       }).then(response => {
         Object.assign(users.value[index], item)
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -57,14 +70,18 @@ export const useUserStore = defineStore("userStore", () => {
         if (response.data.length !== 0) {
           users.value = response.data.reverse();
         }
-      })
+      }).catch(error => {
+        notify.error(error.message);
+      });
     });
   }
 
-  function deleteUser(item, index) {
+  function deleteUser(index, item) {
     return whileLoading(async () => {
       return api.delete(`/user/${item.id}`).then(response => {
         users.value.splice(index, 1);
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   };

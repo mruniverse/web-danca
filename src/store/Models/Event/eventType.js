@@ -1,10 +1,17 @@
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
 export const useEventTypeStore = defineStore("eventTypeStore", () => {
   const loading = ref(false);
   const eventTypes = ref([]);
+
+
+  onBeforeMount(async () => {
+    whileLoading(async () => {
+      await getEventTypes();
+    });
+  });
 
   function getEventTypeName(id) {
     if(eventTypes.value.length === 0) return;

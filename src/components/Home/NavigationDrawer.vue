@@ -58,7 +58,7 @@ const items = [{
     items: []
 }, {
     title: 'Ambientes',
-    route: 'Places',
+    route: 'Environments',
     icon: 'mdi-school-outline',
     items: []
 }, {

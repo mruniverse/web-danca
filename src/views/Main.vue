@@ -75,12 +75,8 @@ const containerStyle = computed({
 });
 
 onMounted(() => {
-    eventStore.getEvents().then(() => {
-        cards.value = [...eventStore.events, ...cards.value];
-        slides.value = [...eventStore.events, ...slides.value];
-    }).catch(error => {
-        notify.error(error.message);
-    });
+    cards.value = [...eventStore.events, ...cards.value];
+    slides.value = [...eventStore.events, ...slides.value];
 });
 </script>
 

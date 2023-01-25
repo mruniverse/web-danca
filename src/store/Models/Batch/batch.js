@@ -1,15 +1,20 @@
-import { computed, onMounted, ref } from "vue";
+import { computed, inject, nextTick, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { useEventStore } from "../Event/event";
-import { useTicketTypeStore } from "../Event/ticketType";
+import { useTicketTypeStore } from "../Ticket/ticketType";
 
 export const useBatchStore = defineStore("batchStore", () => {
+  const notify = inject('toast');
   const loading = ref(false);
   const eventStore = useEventStore();
   const ticketTypeStore = useTicketTypeStore();
   const batches = ref([]);
   const properties = ref({
+    name: {
+      label: 'Nome',
+      type: 'text',
+    },
     event_id: {
       label: 'Evento',
       type: 'select',
@@ -19,14 +24,6 @@ export const useBatchStore = defineStore("batchStore", () => {
         items: computed(() => eventStore.events),
       },
     },
-    discount_id: {
-      label: 'Cumpom de desconto',
-      type: 'text',
-    },
-    promotion_id: {
-      label: 'Código da promoção',
-      type: 'text',
-    },
     ticket_type_id: {
       label: 'Tipo de ingresso',
       type: 'select',
@@ -35,6 +32,14 @@ export const useBatchStore = defineStore("batchStore", () => {
         text: 'lang.name',
         items: computed(() => ticketTypeStore.ticketTypes),
       },
+    },
+    discount_id: {
+      label: 'Cupom de desconto',
+      type: 'text',
+    },
+    promotion_id: {
+      label: 'Código da promoção',
+      type: 'text',
     },
     sales_limit: {
       label: 'Limite de vendas',
@@ -50,10 +55,6 @@ export const useBatchStore = defineStore("batchStore", () => {
     },
     price: {
       label: 'Preço',
-      type: 'text',
-    },
-    name: {
-      label: 'Nome',
       type: 'text',
     }
   });
@@ -71,10 +72,9 @@ export const useBatchStore = defineStore("batchStore", () => {
     }
   });
 
-  onMounted(async () => {
-    await whileLoading(async () => {
-      await eventStore.getEvents();
-      await ticketTypeStore.getTicketTypes();
+  onMounted(() => {
+    whileLoading(async () => {
+      await getBatches();
     });
   });
 
@@ -87,41 +87,66 @@ export const useBatchStore = defineStore("batchStore", () => {
 
   async function addBatch(item) {
     return whileLoading(async () => {
-      return await api.post('/batches', item).then(response => {
-        batches.value = [{
-          ...item,
-        }, ...batches.value];
+      return await api.post('/batches', {
+        event_id: item.event_id,
+        discount_id: item.discount_id,
+        promotion_id: item.promotion_id,
+        ticket_type_id: item.ticket_type_id,
+        sales_limit: item.sales_limit,
+        minimum_per_user: item.minimum_per_user,
+        maximum_per_user: item.maximum_per_user,
+        price: item.price,
+        lang: {
+          name: item.name
+        }
+      }).then(response => {
+        batches.value = [{ id: response.data.id, ...item }, ...batches.value];
+        notify.success('Lote adicionado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
 
-  async function updateBatch(item, index) {
+  async function updateBatch(index, item) {
     return whileLoading(async () => {
-      return await api.put(`/batches/${item.id}`, item).then(response => {
-        Object.assign(batches.value[index], item)
+      return await api.put(`/batches/${item.id}`, {
+        event_id: item.event_id,
+        discount_id: item.discount_id,
+        promotion_id: item.promotion_id,
+        ticket_type_id: item.ticket_type_id,
+        sales_limit: item.sales_limit,
+        minimum_per_user: item.minimum_per_user,
+        maximum_per_user: item.maximum_per_user,
+        price: item.price,
+        lang: {
+          name: item.name
+        }
+      }).then(response => {
+        Object.assign(batches.value[index], item);
+        notify.success('Lote atualizado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
 
-  function getBatches() {
+  async function getBatches() {   
     return whileLoading(async () => {
       return await api.get('/batches').then(response => {
-        const data = response.data.map(item => {
-          return {
-            event_id: item.event_id,
-            discount_id: item.discount_id,
-            promotion_id: item.promotion_id,
-            ticket_type_id: item.ticket_type_id,
-            sales_limit: item.sales_limit,
-            minimum_per_user: item.minimum_per_user,
-            maximum_per_user: item.maximum_per_user,
-            price: item.price,
-            lang: {
-              name: item.name
-            }
-          }
+        const data = response.data.map((item) => {
+          var newItem = item;
+          eventStore.getEventName(item.event_id).then((event_name) => {
+            ticketTypeStore.getTicketTypeName(item.ticket_type_id).then((ticket_type_name) => {
+              newItem.event_name = event_name;
+              newItem.ticket_type_name = ticket_type_name;
+            });
+          });
+          return newItem;
         }).reverse();
         batches.value = data;
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -130,6 +155,9 @@ export const useBatchStore = defineStore("batchStore", () => {
     return whileLoading(async () => {
       return await api.delete(`/batches/${item.id}`).then(response => {
         batches.value.splice(index, 1);
+        notify.success('Lote excluído com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }

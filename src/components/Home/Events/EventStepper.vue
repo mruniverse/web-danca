@@ -280,8 +280,6 @@ export default {
         }
 
         onMounted(async () => {
-            userStore.users.length === 0 && await userStore.getUsers();
-            environmentStore.environments.length === 0 && await environmentStore.getEnvironments();
             datetimeRange.value = [eventStore.event.initial_datetime, eventStore.event.final_datetime];
             salesRange.value = [eventStore.event.initial_sales_ticket, eventStore.event.final_sales_ticket];
             if(eventStore.event.image === ''){

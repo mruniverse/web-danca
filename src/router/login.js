@@ -4,7 +4,7 @@ import RegisterComponent from '@/components/Login/Register.vue'
 
 export default {
     path: '/',
-    name: 'Login',
+    name: '',
     component: Login,
     children: [
         { path: 'login', name: 'Login', component: LoginComponent },

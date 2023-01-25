@@ -7,7 +7,6 @@ export const usePageStore = defineStore("pageStore", () => {
   const serach = ref('');
 
   function setPage(data) {
-    console.log(data);
     if(data === router.currentRoute.name) return;
     page.value = data;
     router.push({ name: data });

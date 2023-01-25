@@ -1,13 +1,12 @@
-import { ref } from "vue";
+import { inject, nextTick, onBeforeMount, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { useUserStore } from "../user";
-import { useEventTypeStore } from "@/store/Models/Event/eventType";
 import { useEnvironmentStore } from "../Environment/environment";
 
 export const useEventStore = defineStore("eventStore", () => {
+  const notify = inject("toast");
   const userStore = useUserStore();
-  const eventTypeStore = useEventTypeStore();
   const environmentStore = useEnvironmentStore();
   const loading = ref(false);
   const events = ref([]);
@@ -28,6 +27,20 @@ export const useEventStore = defineStore("eventStore", () => {
     }
   });
 
+  onBeforeMount(() => {
+    whileLoading(async () => {
+      await getEvents();
+    });
+  });
+
+  async function getEventName(id) {
+    return new Promise((resolve, reject) => {
+      if(events.value.length === 0) return;
+      const found = events.value.find(event => event.id === id);
+      resolve(found ? found.lang.name : 'Evento não encontrado');
+    });
+  }
+
   async function whileLoading(callback) {
     loading.value = true;
     let newCallback = await callback();
@@ -43,6 +56,9 @@ export const useEventStore = defineStore("eventStore", () => {
           planner_name: userStore.getUserName(item.planner_id),
           environment_name: environmentStore.getEnvironmentName(item.environment_id),
         }, ...events.value];
+        notify.success('Evento criado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -51,41 +67,40 @@ export const useEventStore = defineStore("eventStore", () => {
     return whileLoading(async () => {
       return await api.put(`/events/${item.id}`, item).then(response => {
         Object.assign(events.value[index], item)
+        notify.success('Evento atualizado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
 
-  function getEvents() {
+  async function getEvents() {
     return whileLoading(async () => {
       return await api.get('/events').then(response => {
-        const data = response.data.map(item => {
-          let initial_datetime = new Date(item.initial_datetime);
-          let final_datetime = new Date(item.final_datetime);
-          let initial_sales_ticket = new Date(item.initial_sales_ticket);
-          let final_sales_ticket = new Date(item.final_sales_ticket);
-          return {
-            planner_id: item.planner_id,
-            event_type_id: item.event_type_id,
-            environment_id: item.environment_id,
-            initial_datetime: initial_datetime.toISOString(),
-            final_datetime: final_datetime.toISOString(),
-            initial_sales_ticket: initial_sales_ticket.toISOString(),
-            final_sales_ticket: final_sales_ticket.toISOString(),
-            maximum_sale_limit: item.maximum_sale_limit,
-            image: '',
-            lang: {
-                name: item.lang.name,
-                description: item.lang.description,
-                policies: item.lang.policies
-            },
-            title: item.lang.name,
-            final_datetime_formated: final_datetime.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-            final_sales_ticket_formated: final_sales_ticket.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-            planner_name: userStore.getUserName(item.planner_id),
-            environment_name: environmentStore.getEnvironmentName(item.environment_id),
-          }
+        events.value = response.data.map((item) => {
+          let environment_name = environmentStore.getEnvironmentName(item.environment_id);
+          let planner_name = userStore.getUserName(item.planner_id);
+          var newItem = item;
+
+          Promise.all([environment_name, planner_name]).then((values) => {
+            console.log(values);
+            
+            newItem.image = null;
+            newItem.title = item.lang.name;
+            newItem.environment_name = values[0];
+            newItem.planner_name = values[1];
+            newItem.initial_datetime = new Date(item.initial_datetime).toISOString();
+            newItem.initial_sales_ticket = new Date(item.initial_sales_ticket).toISOString();
+            newItem.final_datetime = new Date(item.final_datetime).toISOString();
+            newItem.final_datetime_formated = new Date(item.final_datetime).toLocaleDateString();
+            newItem.final_sales_ticket = new Date(item.final_sales_ticket).toISOString();
+            newItem.final_sales_ticket_formated = new Date(item.final_sales_ticket).toLocaleDateString();
+          });
+
+          return newItem;
         }).reverse();
-        events.value = data;
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -94,9 +109,12 @@ export const useEventStore = defineStore("eventStore", () => {
     return whileLoading(async () => {
       return await api.delete(`/events/${item.id}`).then(response => {
         events.value.splice(index, 1);
+        notify.success('Evento excluído com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
 
-  return { addEvent, updateEvent, getEvents, deleteEvent, events, loading, event };
+  return { addEvent, updateEvent, getEvents, deleteEvent, events, loading, event, getEventName, whileLoading };
 });

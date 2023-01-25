@@ -8,23 +8,19 @@
             </template>
             <v-list>
                 <v-list-item link>
-                    <EventTypes></EventTypes>
+                    <TicketTypes></TicketTypes>
                 </v-list-item>
-                <!-- <v-list-item link>
-                    <EventFeatures></EventFeatures>
-                </v-list-item> -->
             </v-list>
         </v-menu>
     </div>
 </template>
 
 <script>
-import EventTypes from '@/components/Home/Events/EventsOptions/EventTypes.vue';
-import EventFeatures from '@/components/Home/Events/EventsOptions/EventFeatures.vue';
+import TicketTypes from '@/components/Home/Batches/Tickets/TicketTypes.vue';
 
 export default {
-    name: "EventOptions",
-    components: { EventTypes, EventFeatures }
+    name: "BatchesOptions",
+    components: { TicketTypes }
 }
 </script>
 

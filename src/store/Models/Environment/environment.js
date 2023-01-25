@@ -7,18 +7,41 @@ import { useEnvironmentTypeStore } from "../Environment/environmentType";
 export const useEnvironmentStore = defineStore("environmentStore", () => {
   const loading = ref(false);
   const environments = ref([]);
-  const environment = ref();
   const userStore = useUserStore();
   const environmentTypeStore = useEnvironmentTypeStore();
+  const environment = ref({
+    lang: {
+      name: '',
+      description: '',
+    },
+    environment_type_id: null,
+    owner_id: null,
+    country: '',
+    number: '',
+    street: '',
+    district: '',
+    city: '',
+    state: '',
+    capacity: '',
+    layout_map: null,
+  });
+
+  onBeforeMount(async () => {
+    whileLoading(async () => {
+      await getEnvironments();
+    });
+  });
 
   function getUserName(owner_id){
     return userStore.getUserName(owner_id);
   }
 
-  function getEnvironmentName(environment_id){
-    if(environments.value.length === 0) return;
-    const found = environments.value.find(environment => environment.id === environment_id);
-    return found ? found.lang.name : 'Ambiente não encontrado';
+  function getEnvironmentName(environment_id) {
+    return new Promise((resolve, reject) => {
+      if (environments.value.length === 0) reject('Vazio');
+      const found = environments.value.find(environment => environment.id === environment_id);
+      resolve(found ? found.lang.name : 'Ambiente não encontrado');
+    });
   }
 
   function getEnvironmentTypeName(environment_type_id){
