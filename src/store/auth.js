@@ -58,7 +58,7 @@ export const useAuthStore = defineStore("authStore", () => {
       localStorage.setItem("refresh_token", response.data.refresh_token);
       localStorage.setItem("created_at", created_at.value);
       
-      router.push({ name: "Home" });
+      router.push({ name: "Events" });
     })
   }
 

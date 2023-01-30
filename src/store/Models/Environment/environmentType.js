@@ -5,6 +5,12 @@ import api from "@/plugins/axios";
 export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () => {
   const loading = ref(false);
   const environmentTypes = ref([]);
+  const properties = ref({
+    name: {
+      label: "Nome",
+      type: "text",
+    },
+  });
   const notify = inject("toast");
 
   function getEnvironmentTypeName(id) {
@@ -35,14 +41,14 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
     });
   }
 
-  async function updateEnvironmentType(item, index) {
+  async function updateEnvironmentType(index, item) {
     return whileLoading(async () => {
       return await api.put(`/environment-types/${item.id}`, {
         lang: {
           name: item.name
         }
       }).then(response => {
-        Object.assign(environmentTypes.value[itemIndex], item)
+        Object.assign(environmentTypes.value[index], item)
         notify.success('Tipo de ambiente atualizado com sucesso!');
       }).catch(error => {
         notify.error(error.message);
@@ -75,5 +81,5 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
     });
   }
 
-  return { addEnvironmentType, updateEnvironmentType, getEnvironmentTypes, deleteEnvironmentType, environmentTypes, getEnvironmentTypeName };
+  return { addEnvironmentType, updateEnvironmentType, getEnvironmentTypes, deleteEnvironmentType, environmentTypes, getEnvironmentTypeName, properties, loading, whileLoading};
 });

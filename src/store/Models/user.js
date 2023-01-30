@@ -36,7 +36,7 @@ export const useUserStore = defineStore("userStore", () => {
         name: item.name,
         outer_id: item.outer_id
       }).then(response => {
-        users.value = [item, ...users.value];
+        users.value = [{id: response.data.id, ...item}, ...users.value];
       }).catch(error => {
         notify.error(error.message);
       });

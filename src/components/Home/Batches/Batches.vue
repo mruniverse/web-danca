@@ -1,9 +1,6 @@
 <template>
     <CRUDTable :loading="batchStore.loading" :data="batchStore.batches" :headers="headers" :properties="batchStore.properties"
         @add-new-item="batchStore.addBatch" @delete-item-confirm="batchStore.deleteBatch" @update-item="batchStore.updateBatch">
-        <template v-slot:options>
-            <BatchesOptions></BatchesOptions>
-        </template>
     </CRUDTable>
 </template>
 
@@ -11,7 +8,6 @@
 import { onBeforeMount, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import { useBatchStore } from '@/store/Models/Batch/batch.js';
-import BatchesOptions from './BatchesOptions.vue';
 
 const batchStore = useBatchStore();
 const headers = ref([{

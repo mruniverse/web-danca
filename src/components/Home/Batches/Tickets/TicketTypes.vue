@@ -1,21 +1,26 @@
 <template>
-    <CRUDTableModal 
+    <CRUDTable
         title="Tipos de ingressos" 
         :data="ticketTypeStore.ticketTypes" 
-        :headers="headers" 
+        :headers="headers"
+        :loading="ticketTypeStore.loading"
+        :properties="ticketTypeStore.properties"
         @add-new-item="ticketTypeStore.addTicketType"
         @update-item="ticketTypeStore.updateTicketType" 
         @delete-item-confirm="ticketTypeStore.deleteTicketType">
-        <v-overlay absolute :value="ticketTypeStore.loading">
-            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </v-overlay>
-    </CRUDTableModal>
+    </CRUDTable>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import CRUDTableModal from '@/components/CRUDTableModal.vue';
+import { onBeforeMount, ref } from 'vue';
+import CRUDTable from '@/components/CRUDTable.vue';
 import { useTicketTypeStore } from '@/store/Models/Ticket/ticketType.js';
+
+onBeforeMount(() => {
+    ticketTypeStore.whileLoading(async () => {
+        await ticketTypeStore.getTicketTypes();
+    });
+});
 
 const ticketTypeStore = useTicketTypeStore();
 const headers = ref([{

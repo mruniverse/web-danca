@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
     case "Login":
     case "Register":
       if (authStore.isAuthenticated() && !authStore.tokenIsExpired()) {
-        next({ name: "Home" });
+        next({ name: "Events" });
       } else {
         next();
       }

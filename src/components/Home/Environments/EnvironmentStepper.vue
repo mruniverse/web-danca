@@ -187,7 +187,6 @@ export default {
                             notify.success('Ambiente atualizado com sucesso!');
                             emit('closeDialog');
                         }).catch((error) => {
-                            console.log(error);
                             notify.error(error.message);
                         });
                     } else {

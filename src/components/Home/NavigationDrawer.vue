@@ -8,7 +8,7 @@
         <v-list nav>
             <v-list-item-group v-model="itemGroup" color="primary">
                 <div v-for="item in items" :key="item.title">
-                    <v-list-group v-if="item.items.length > 0" @click="pageStore.setPage(item.route)"
+                    <v-list-group v-if="item.items.length > 0" :value="item.active" @click="pageStore.setPage(item.route)"
                         :prepend-icon="item.icon" no-action>
                         <template v-slot:activator>
                             <v-list-item-content>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, reactive, ref, watchEffect, watch } from 'vue';
+import { nextTick, onMounted, reactive, ref, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
 import router from '@/router';
 
@@ -42,26 +42,32 @@ const pageStore = usePageStore();
 const homeRoutes = pageStore.getRoutesNames('Home');
 const itemGroup = ref([]);
 const items = [{
-    title: 'Minha conta',
-    route: 'Settings',
-    icon: 'mdi-account-circle-outline',
-    items: []
-}, {
+    active: ref(false),
     title: 'Meus Eventos',
     route: 'Events',
     icon: 'mdi-calendar-multiselect',
-    items: []
+    items: [
+        {title: 'Tipos de eventos', route: 'EventTypes', icon: 'mdi-calendar-star'},
+    ]
 }, {
+    active: ref(false),
     title: 'Lotes',
     route: 'Batches',
     icon: 'mdi-human-queue',
-    items: []
+    items: [
+        {title: 'Tipos de ingressos', route: 'TicketTypes', icon: 'mdi-ticket-confirmation'}
+    ]
 }, {
+    active: ref(false),
     title: 'Ambientes',
     route: 'Environments',
     icon: 'mdi-school-outline',
-    items: []
+    items: [
+        {title: 'Tipos', route: 'EnvironmentTypes', icon: 'mdi-school'},
+        {title: 'Características', route: 'EnvironmentFeatures', icon: 'mdi-cog-outline'}
+    ]
 }, {
+    active: ref(false),
     title: 'Usuários',
     route: 'Users',
     icon: 'mdi-account-multiple-outline',
@@ -81,7 +87,27 @@ watchEffect(async () => {
 });
 
 function fetchSelectedPage() {
-    itemGroup.value = homeRoutes.indexOf(router.currentRoute.name);
+    switch (router.currentRoute.name) {
+        case 'Events':
+        case 'EventTypes':
+            itemGroup.value = 0;
+            items[0].active.value = true;
+            break;
+        case 'Batches':
+        case 'TicketTypes':
+            itemGroup.value = 1;
+            items[1].active.value = true;
+            break;
+        case 'Environments':
+        case 'EnvironmentTypes':
+        case 'EnvironmentFeatures':
+            itemGroup.value = 2;
+            items[2].active.value = true;
+            break;
+        default:
+            itemGroup.value = homeRoutes.indexOf(router.currentRoute.name) - 2;
+            break;
+    }
 }
 </script>
     

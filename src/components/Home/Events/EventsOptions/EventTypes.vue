@@ -1,27 +1,23 @@
 <template>
-    <CRUDTableModal 
+    <CRUDTable 
         title="Tipos de eventos" 
-        :data="eventTypeStore.eventTypes" 
-        :headers="headers" 
+        :data="eventTypeStore.eventTypes"
+        :headers="headers"
+        :properties="eventTypeStore.properties"
+        :loading="eventTypeStore.loading"
         @add-new-item="newEventType"
         @update-item="updateEventType" 
         @delete-item-confirm="deleteEventType">
-        <v-overlay absolute :value="eventTypeStore.loading">
-            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </v-overlay>
-    </CRUDTableModal>
+    </CRUDTable>
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref } from 'vue';
-import CRUDTableModal from '@/components/CRUDTableModal.vue';
-import api from '@/plugins/axios';
-import { useEventStore } from '@/store/Models/Event/event.js';
+import { inject, onMounted, ref } from 'vue';
+import CRUDTable from '@/components/CRUDTable.vue';
 import { useEventTypeStore } from '@/store/Models/Event/eventType.js';
 
 const notify = inject('toast');
 const eventTypeStore = useEventTypeStore();
-const events = ref([]);
 const headers = ref([{
     text: 'Tipo',
     align: 'start',

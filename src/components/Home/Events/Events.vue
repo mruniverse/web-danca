@@ -5,9 +5,6 @@
     :headers="headers"
     @delete-item-confirm="eventStore.deleteEvent" 
     @update-item="eventStore.updateEvent">
-        <template v-slot:options>
-            <EventOptions></EventOptions>
-        </template>
         <template v-slot:add-button>
             <v-dialog 
             v-model="dialog" max-width="70%" 
@@ -36,7 +33,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
-import EventOptions from '@/components/Home/Events/EventsOptions/EventOptions.vue';
 import EventStepper from '@/components/Home/Events/EventStepper.vue';
 import { useEventStore } from '@/store/Models/Event/event.js';
 

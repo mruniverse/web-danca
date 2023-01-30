@@ -5,6 +5,16 @@ import api from "@/plugins/axios";
 export const useEventTypeStore = defineStore("eventTypeStore", () => {
   const loading = ref(false);
   const eventTypes = ref([]);
+  const properties = ref({
+    name: {
+      label: 'Nome',
+      type: 'text',
+    },
+    observation: {
+      label: 'Observação',
+      type: 'text',
+    }
+  });
 
 
   onBeforeMount(async () => {
@@ -75,5 +85,5 @@ export const useEventTypeStore = defineStore("eventTypeStore", () => {
     });
   }
 
-  return { addEventType, updateEventType, getEventTypes, deleteEventType, eventTypes, getEventTypeName, loading };
+  return { addEventType, updateEventType, getEventTypes, deleteEventType, eventTypes, getEventTypeName, loading, properties };
 });

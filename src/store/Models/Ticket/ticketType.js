@@ -6,6 +6,12 @@ export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
   const notify = inject('toast');
   const loading = ref(false);
   const ticketTypes = ref([]);
+  const properties = ref({
+    name: {
+      label: 'Nome',
+      type: 'text',
+    },
+  });
   const ticket = ref({
     lang: {
       name: '',
@@ -40,7 +46,7 @@ export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
     });
   }
 
-  async function updateTicketType(item, index) {
+  async function updateTicketType(index, item) {
     return whileLoading(async () => {
       return await api.put(`/tickets-types/${item.id}`, {
         lang: {
@@ -74,7 +80,7 @@ export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
     });
   }
 
-  function deleteTicketType(item, index) {
+  function deleteTicketType(index, item) {
     return whileLoading(async () => {
       return await api.delete(`/tickets-types/${item.id}`).then(response => {
         ticketTypes.value.splice(index, 1);
@@ -85,5 +91,5 @@ export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
     });
   }
 
-  return { addTicketType, updateTicketType, getTicketTypes, deleteTicketType, ticketTypes, getTicketTypeName, ticket, loading };
+  return { addTicketType, updateTicketType, getTicketTypes, deleteTicketType, ticketTypes, getTicketTypeName, ticket, loading, properties, whileLoading };
 });
