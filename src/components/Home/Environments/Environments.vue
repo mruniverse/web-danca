@@ -24,6 +24,7 @@
                 </template>
                 <EnvironmentStepper 
                 :dialog="dialog"
+                :edit="edit"
                 @toggleFullScreen="(value) => fullscreen = value" 
                 @closeDialog="closeDialog" 
                 title="Novo ambiente">
@@ -47,6 +48,7 @@ import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentT
 import { useStageStore } from '@/store/stage';
 
 const notify = inject('toast');
+const edit = ref(false);
 const userStore = useUserStore();
 const environmentTypeStore = useEnvironmentTypeStore();
 const environmentStore = useEnvironmentStore();
@@ -113,6 +115,7 @@ function editItem(item) {
     newEnvironment.value = environmentStore.environment;
     environmentStore.environment = item;
     stageStore.parseLayoutMap(item.layout_map);
+    edit.value = true;
     dialog.value = true;
 }
 

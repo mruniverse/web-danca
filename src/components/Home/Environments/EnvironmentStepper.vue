@@ -123,6 +123,10 @@ export default {
             type: Boolean,
             default: false
         },
+        edit: {
+            type: Boolean,
+            default: false
+        }
     },
 
     setup(props, { emit }) {
@@ -177,12 +181,23 @@ export default {
                 case 3:
                     stageStore.setConfigsFromNodes(stageStore.getOnScreenNodes());
                     environmentStore.environment.layout_map = stageStore.layout_map;
-                    environmentStore.addEnvironment(environmentStore.environment).then((response) => {
-                        notify.success('Ambiente criado com sucesso!');
-                        emit('closeDialog');
-                    }).catch((error) => {
-                        notify.error(error.message);
-                    });
+
+                    if (props.edit) {
+                        environmentStore.updateEnvironment(environmentStore.environment, environmentStore.environments.indexOf(environmentStore.environment)).then((response) => {
+                            notify.success('Ambiente atualizado com sucesso!');
+                            emit('closeDialog');
+                        }).catch((error) => {
+                            console.log(error);
+                            notify.error(error.message);
+                        });
+                    } else {
+                        environmentStore.addEnvironment(environmentStore.environment).then((response) => {
+                            notify.success('Ambiente criado com sucesso!');
+                            emit('closeDialog');
+                        }).catch((error) => {
+                            notify.error(error.message);
+                        });
+                    }
                     break;
                 default:
                     break;

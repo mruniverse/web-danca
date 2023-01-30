@@ -75,6 +75,7 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
       return await api.put(`/environment/${item.id}`, {
         lang: {
           name: item.lang.name,
+          description: 'Sem descrição',
         },
         environment_type_id: item.environment_type_id,
         owner_id: item.owner_id,
