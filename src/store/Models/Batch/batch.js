@@ -72,12 +72,6 @@ export const useBatchStore = defineStore("batchStore", () => {
     }
   });
 
-  onMounted(() => {
-    whileLoading(async () => {
-      await getBatches();
-    });
-  });
-
   async function whileLoading(callback) {
     loading.value = true;
     let newCallback = await callback();
@@ -131,17 +125,17 @@ export const useBatchStore = defineStore("batchStore", () => {
     });
   }
 
-  async function getBatches() {   
+  async function getBatches() {
     return whileLoading(async () => {
-      return await api.get('/batches').then(response => {
+      return await api.get('/batches').then(async (response) => {
+        await eventStore.getEvents();
+        await ticketTypeStore.getTicketTypes();
+
         const data = response.data.map((item) => {
-          var newItem = item;
-          eventStore.getEventName(item.event_id).then((event_name) => {
-            ticketTypeStore.getTicketTypeName(item.ticket_type_id).then((ticket_type_name) => {
-              newItem.event_name = event_name;
-              newItem.ticket_type_name = ticket_type_name;
-            });
-          });
+          let newItem = item;
+          newItem.name = item.lang.name;
+          newItem.event_name = eventStore.getEventName(item.event_id);
+          newItem.ticket_type_name = ticketTypeStore.getTicketTypeName(item.ticket_type_id);
           return newItem;
         }).reverse();
         batches.value = data;
@@ -162,5 +156,5 @@ export const useBatchStore = defineStore("batchStore", () => {
     });
   }
 
-  return { addBatch, updateBatch, getBatches, deleteBatch, batches, loading, batch, properties };
+  return { addBatch, updateBatch, getBatches, deleteBatch, batches, loading, batch, properties, whileLoading };
 });

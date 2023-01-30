@@ -182,10 +182,6 @@ export default {
             required: value => !!value || 'Obrigatório.'
         });
 
-        onMounted(() => {
-            console.log(props.data);
-        });
-
         function emitAndCloseDelete() {
             emit("delete-item-confirm", editedItem.value, editedIndex.value);
             closeDelete();

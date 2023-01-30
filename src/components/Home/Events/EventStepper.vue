@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { computed, inject, nextTick, onMounted, ref } from 'vue';
+import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEventTypeStore } from '@/store/Models/Event/eventType';
@@ -227,7 +227,6 @@ export default {
 
         function back(){
             step.value--;
-            emit('toggleFullScreen');
         }
 
         const getBase64 = (file) => {

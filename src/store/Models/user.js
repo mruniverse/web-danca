@@ -1,4 +1,4 @@
-import { inject, onBeforeMount, onMounted, ref } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
@@ -17,19 +17,11 @@ export const useUserStore = defineStore("userStore", () => {
     }
   });
 
-  onBeforeMount(() => {
-    whileLoading(async () => {
-      await getUsers();
-    });
-  });
-
   function getUserName(id) {
-    return new Promise((resolve, reject) => {
-      if(users.value.length === 0) reject('Vazio');
-      const found = users.value.find(user => user.id === id);
-      resolve(found ? found.name : 'Usuário não encontrado');
-    });
-  }
+    if (users.value.length === 0) return;
+    const found = users.value.find(user => user.id === id);
+    return found ? found.name : 'Usuário não encontrado';
+  };
 
   async function whileLoading(callback) {
     loading.value = true;
@@ -76,7 +68,7 @@ export const useUserStore = defineStore("userStore", () => {
     });
   }
 
-  function deleteUser(index, item) {
+  function deleteUser(item, index) {
     return whileLoading(async () => {
       return api.delete(`/user/${item.id}`).then(response => {
         users.value.splice(index, 1);
@@ -86,5 +78,5 @@ export const useUserStore = defineStore("userStore", () => {
     });
   };
 
-  return { addUser, updateUser, getUsers, deleteUser, users, getUserName, properties };
+  return { addUser, updateUser, getUsers, deleteUser, users, getUserName, properties, whileLoading, loading };
 });

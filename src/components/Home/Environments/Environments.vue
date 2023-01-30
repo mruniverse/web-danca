@@ -23,7 +23,8 @@
                     </v-btn>
                 </template>
                 <EnvironmentStepper 
-                @toggleFullScreen="fullscreen = !fullscreen" 
+                :dialog="dialog"
+                @toggleFullScreen="(value) => fullscreen = value" 
                 @closeDialog="closeDialog" 
                 title="Novo ambiente">
                 </EnvironmentStepper>
@@ -36,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, inject, nextTick, onBeforeMount, onMounted, ref, watch } from 'vue';
+import { computed, inject, onBeforeMount, ref, watch } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import EnvironmentOptions from '@/components/Home/Environments/EnvironmentsOptions/EnvironmentOptions.vue';
 import EnvironmentStepper from './EnvironmentStepper.vue';
@@ -66,6 +67,7 @@ const newEnvironment = ref({
     capacity: '',
     layout_map: null,
 });
+const step = ref(1);
 const environments = ref([]);
 const loading = computed(() => environmentStore.loading);
 const fullscreen = ref(false);

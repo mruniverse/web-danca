@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import EventOptions from '@/components/Home/Events/EventsOptions/EventOptions.vue';
 import EventStepper from '@/components/Home/Events/EventStepper.vue';
@@ -76,6 +76,12 @@ const headers = ref([{
     sortable: true,
     filterable: true
 }]);
+
+onBeforeMount(() => {
+    eventStore.whileLoading(async () => {
+      await eventStore.getEvents();
+    });
+});
 
 function addItem() {
     edit.value = false;

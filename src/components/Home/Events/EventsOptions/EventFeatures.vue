@@ -47,6 +47,7 @@ async function addItem(item) {
             }
         }).then(response => {
             events.value = [item, ...events.value];
+            notify.success('Item adicionado com sucesso!');
         }).catch(error => {
             notify.error(error.message);
         });
@@ -62,6 +63,7 @@ async function updateItem(itemIndex, item) {
             }
         }).then(response => {
             Object.assign(events.value[itemIndex], item)
+            notify.success('Item atualizado com sucesso!');
         }).catch(error => {
             notify.error(error.message);
         });
@@ -70,7 +72,7 @@ async function updateItem(itemIndex, item) {
 
 function getItems() {
     whileLoading(async () => {
-        api.get('/feature').then(response => {
+        await api.get('/feature').then(response => {
             loading.value = false;
             const data = response.data.map(item => {
                 return {
@@ -84,10 +86,11 @@ function getItems() {
     });
 }
 
-function deleteItem(item, index) {
+function deleteItem(index, item) {
     whileLoading(async () => {
-        api.delete(`/feature/${item.id}`).then(response => {
+        await api.delete(`/feature/${item.id}`).then(response => {
             events.value.splice(index, 1);
+            notify.success('Item removido com sucesso!');
         }).catch(error => {
             notify.error(error.message);
         });

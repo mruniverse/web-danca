@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import { useBatchStore } from '@/store/Models/Batch/batch.js';
 import BatchesOptions from './BatchesOptions.vue';
@@ -51,6 +51,12 @@ const headers = ref([{
     sortable: true,
     filterable: true
 }]);
+
+onBeforeMount(() => {
+    batchStore.whileLoading(async () => {
+        await batchStore.getBatches();
+    });
+});
 </script>
 
 <style lang="scss" scoped>

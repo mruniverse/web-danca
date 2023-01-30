@@ -1,10 +1,11 @@
-import { nextTick, onBeforeMount, onMounted, ref } from "vue";
+import { inject, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 
 export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () => {
   const loading = ref(false);
   const environmentTypes = ref([]);
+  const notify = inject("toast");
 
   function getEnvironmentTypeName(id) {
     if(environmentTypes.value.length === 0) return;
@@ -27,6 +28,9 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
         }
       }).then(response => {
         environmentTypes.value = [item, ...environmentTypes.value];
+        notify.success('Tipo de ambiente criado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -39,6 +43,9 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
         }
       }).then(response => {
         Object.assign(environmentTypes.value[itemIndex], item)
+        notify.success('Tipo de ambiente atualizado com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }
@@ -61,6 +68,9 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
     return whileLoading(async () => {
       return await api.delete(`/environment-types/${item.id}`).then(response => {
         environmentTypes.value.splice(index, 1);
+        notify.success('Tipo de ambiente excluído com sucesso!');
+      }).catch(error => {
+        notify.error(error.message);
       });
     });
   }

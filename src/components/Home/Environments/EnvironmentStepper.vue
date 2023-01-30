@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { computed, inject, nextTick, onMounted, ref } from 'vue';
+import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';
@@ -119,11 +119,15 @@ export default {
             type: String,
             default: 'Título'
         },
+        dialog: {
+            type: Boolean,
+            default: false
+        },
     },
 
     setup(props, { emit }) {
         const notify = inject('toast');
-        const address = ref('');
+        const dialog = computed(() => props.dialog);
         const validAddress = ref(false);
         const stageStore = useStageStore();
         const environmentStore = useEnvironmentStore();
@@ -141,8 +145,21 @@ export default {
 
         function back(){
             step.value--;
-            emit('toggleFullScreen');
         }
+
+        watch(step, (value) => {
+            if(value === 1){
+                emit('toggleFullScreen', false);
+            } else {
+                emit('toggleFullScreen', true);
+            }
+        });
+
+        watch(dialog, (value) => {
+            if (!value) {
+                step.value = 1;
+            }
+        });
 
         function submit() {
             switch (step.value) {

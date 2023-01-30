@@ -26,22 +26,10 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
     layout_map: null,
   });
 
-  onBeforeMount(async () => {
-    whileLoading(async () => {
-      await getEnvironments();
-    });
-  });
-
-  function getUserName(owner_id){
-    return userStore.getUserName(owner_id);
-  }
-
   function getEnvironmentName(environment_id) {
-    return new Promise((resolve, reject) => {
-      if (environments.value.length === 0) reject('Vazio');
-      const found = environments.value.find(environment => environment.id === environment_id);
-      resolve(found ? found.lang.name : 'Ambiente não encontrado');
-    });
+    if (environments.value.length === 0) return;
+    const found = environments.value.find(environment => environment.id === environment_id);
+    return found ? found.lang.name : 'Ambiente não encontrado';
   }
 
   function getEnvironmentTypeName(environment_type_id){
@@ -75,7 +63,7 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
       }).then(response => {
         environments.value = [{
           ...item,
-          user_name: getUserName(item.owner_id),
+          user_name: userStore.getUserName(item.owner_id),
           environment_type_name: getEnvironmentTypeName(item.environment_type_id),
         }, ...environments.value];
       });
@@ -116,7 +104,7 @@ export const useEnvironmentStore = defineStore("environmentStore", () => {
             },
             environment_type_id: item.environment_type_id,
             owner_id: item.owner_id,
-            user_name: getUserName(item.owner_id),
+            user_name: userStore.getUserName(item.owner_id),
             environment_type_name: getEnvironmentTypeName(item.environment_type_id),
             country: item.country,
             number: item.number,

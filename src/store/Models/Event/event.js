@@ -27,18 +27,10 @@ export const useEventStore = defineStore("eventStore", () => {
     }
   });
 
-  onBeforeMount(() => {
-    whileLoading(async () => {
-      await getEvents();
-    });
-  });
-
-  async function getEventName(id) {
-    return new Promise((resolve, reject) => {
-      if(events.value.length === 0) return;
-      const found = events.value.find(event => event.id === id);
-      resolve(found ? found.lang.name : 'Evento não encontrado');
-    });
+  function getEventName(id) {
+    if (events.value.length === 0) return;
+    const found = events.value.find(event => event.id === id);
+    return found ? found.lang.name : 'Evento não encontrado';
   }
 
   async function whileLoading(callback) {
@@ -76,26 +68,25 @@ export const useEventStore = defineStore("eventStore", () => {
 
   async function getEvents() {
     return whileLoading(async () => {
+      await environmentStore.getEnvironments();
+      await userStore.getUsers();
+      
       return await api.get('/events').then(response => {
         events.value = response.data.map((item) => {
           let environment_name = environmentStore.getEnvironmentName(item.environment_id);
           let planner_name = userStore.getUserName(item.planner_id);
-          var newItem = item;
-
-          Promise.all([environment_name, planner_name]).then((values) => {
-            console.log(values);
-            
-            newItem.image = null;
-            newItem.title = item.lang.name;
-            newItem.environment_name = values[0];
-            newItem.planner_name = values[1];
-            newItem.initial_datetime = new Date(item.initial_datetime).toISOString();
-            newItem.initial_sales_ticket = new Date(item.initial_sales_ticket).toISOString();
-            newItem.final_datetime = new Date(item.final_datetime).toISOString();
-            newItem.final_datetime_formated = new Date(item.final_datetime).toLocaleDateString();
-            newItem.final_sales_ticket = new Date(item.final_sales_ticket).toISOString();
-            newItem.final_sales_ticket_formated = new Date(item.final_sales_ticket).toLocaleDateString();
-          });
+          
+          let newItem = item;
+          newItem.image = null;
+          newItem.title = item.lang.name;
+          newItem.environment_name = environment_name;
+          newItem.planner_name = planner_name;
+          newItem.initial_datetime = new Date(item.initial_datetime).toISOString();
+          newItem.initial_sales_ticket = new Date(item.initial_sales_ticket).toISOString();
+          newItem.final_datetime = new Date(item.final_datetime).toISOString();
+          newItem.final_datetime_formated = new Date(item.final_datetime).toLocaleDateString();
+          newItem.final_sales_ticket = new Date(item.final_sales_ticket).toISOString();
+          newItem.final_sales_ticket_formated = new Date(item.final_sales_ticket).toLocaleDateString();
 
           return newItem;
         }).reverse();

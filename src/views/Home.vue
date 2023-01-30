@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {reactive} from 'vue';
+import {onBeforeMount, reactive} from 'vue';
 import NavigationDrawer from '@/components/Home/NavigationDrawer.vue';
 import Notification from '@/components/Home/Notification.vue';
 import MyAccount from '@/components/Home/MyAccountDrawer.vue';
