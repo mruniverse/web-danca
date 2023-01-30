@@ -16,7 +16,7 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
   function getEnvironmentTypeName(id) {
     if(environmentTypes.value.length === 0) return;
     const found = environmentTypes.value.find(environmentType => environmentType.id === id);
-    return found ? found.name : 'Usuário não encontrado';
+    return found ? found.name : 'Indisponível';
   }
 
   async function whileLoading(callback) {
