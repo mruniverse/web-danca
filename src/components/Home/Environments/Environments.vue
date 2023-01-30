@@ -5,9 +5,6 @@
     :headers="headers" 
     @delete-item-confirm="deleteEnvironment" 
     @update-item="environmentStore.updateEnvironment">
-        <template v-slot:options>
-            <EnvironmentOptions></EnvironmentOptions>
-        </template>
         <template v-slot:add-button>
             <v-dialog 
             v-model="dialog"
