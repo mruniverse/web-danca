@@ -20,7 +20,7 @@
             </v-list>
         </template>
         <v-list shaped>
-            <v-list-item link @click="pageStore.setPage('Settings')">
+            <v-list-item link @click="pageStore.setPage('Events')">
                 <v-list-item-title>Minha conta</v-list-item-title>
                 <v-icon>mdi-account-outline</v-icon>
             </v-list-item>
