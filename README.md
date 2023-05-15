@@ -1,19 +1,42 @@
-# web-danca-vue2
+# Nuxt 3 Minimal Starter
 
-## Project setup
-```
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Setup
+
+Make sure to install the dependencies:
+
+```bash
+# yarn
 yarn install
+
+# npm
+npm install
+
+# pnpm
+pnpm install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+## Development Server
+
+Start the development server on `http://localhost:3000`
+
+```bash
+npm run dev
 ```
 
-### Compiles and minifies for production
-```
-yarn build
+## Production
+
+Build the application for production:
+
+```bash
+npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Locally preview production build:
+
+```bash
+npm run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
