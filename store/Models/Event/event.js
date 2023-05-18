@@ -1,6 +1,5 @@
 import { inject, nextTick, onBeforeMount, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
 import { useUserStore } from "../user";
 import { useEnvironmentStore } from "../Environment/environment";
 

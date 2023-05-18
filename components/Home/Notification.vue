@@ -13,12 +13,12 @@
             </v-badge>
         </template>
         <v-list shaped>
-            <v-list-item-group color="primary">
+            <v-list-item color="primary">
                 <v-list-item link disabled>
                     <v-list-item-title>Você não tem notificações</v-list-item-title>
                     <v-icon class="ml-2">mdi-emoticon-happy-outline</v-icon>
                 </v-list-item>
-            </v-list-item-group>
+            </v-list-item>
         </v-list>
     </v-menu>
 </template>

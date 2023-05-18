@@ -18,7 +18,6 @@
 <script setup>
 import { inject, onMounted, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
-import api from '@/plugins/axios';
 
 const notify = inject('toast');
 const environments = ref([]);

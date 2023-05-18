@@ -9,31 +9,29 @@
                     <p class="login-title-text">Entre com e-mail e senha</p>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field 
-                    v-model="state.email" 
-                    append-icon="mdi-email-outline" 
-                    label="E-mail" outlined
-                    class="login-input-style" 
-                    @blur="v$.email.$touch"
-                    :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
+                    <v-text-field class="custom-text-field" v-model="state.email" append-inner-icon="mdi-email-outline"
+                        label="E-mail" variant="outlined" @blur="v$.email.$touch" density="compact"
+                        :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field v-model="state.password" label="Senha" outlined
+                    <v-text-field v-model="state.password" label="Senha" variant="outlined"
                         :style="{ 'font-size': passwordVisibility ? '22px' : '' }"
-                        :type="passwordVisibility ? 'password' : 'text'"
-                        :append-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
+                        :type="passwordVisibility ? 'password' : 'text'" density="compact"
+                        :append-inner-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
                         @click:append="() => (passwordVisibility = !passwordVisibility)" @blur="v$.password.$touch"
                         :error-messages="v$.password.$error ? v$.password.$errors[0].$message : ''">
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
                     <v-col align-self="end">
-                        <a>Esqueci a senha</a>
+                        <nuxt-link to="/login">
+                            <a>Esqueci a senha</a>
+                        </nuxt-link>
                     </v-col>
                     <v-col align="end">
-                        <v-btn @click="submit()" style="border-radius: 13px;" elevation="0" color="#2887DA" dark> Entrar
-                        </v-btn>
+                        <v-btn @click="submit()" style="border-radius: 13px;" elevation="0" color="#2887DA" theme="dark">
+                            Entrar </v-btn>
                     </v-col>
                 </v-row>
                 <v-row no-gutters class="mt-5">
@@ -41,7 +39,7 @@
                 </v-row>
                 <v-row no-gutters justify="center" class="mt-10 mb-n5">
                     <p class="have-you-registered-text">É novo no Web Dança?</p>
-                    <a @click="$router.push({ name: 'Register' })" class="px-2">Cadastre-se</a>
+                    <nuxt-link to="/register" class="px-2">Cadastre-se</nuxt-link>
                 </v-row>
             </v-col>
         </v-row>

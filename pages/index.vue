@@ -21,9 +21,10 @@ import TopBar from '@/components/Main/TopBar.vue';
 import Carousel from '@/components/Main/Carousel.vue';
 import EventsList from '@/components/Main/EventsList.vue';
 import { useEventStore } from '@/store/Models/Event/event.js';
+import { useDisplay } from 'vuetify';
 
-const notify = inject('toast');
 const eventStore = useEventStore();
+const { width, mobile } = useDisplay()
 const slides = ref([{
     title: 'Slide apenas teste 1',
     image: '/temp/1.jpg',
@@ -70,7 +71,7 @@ const cards = ref([{
 
 const containerStyle = computed({
     get() {
-        return this.$vuetify.breakpoint.width > 1280 ? 'container-style' : '';
+        return width > 1280 ? 'container-style' : '';
     }
 });
 

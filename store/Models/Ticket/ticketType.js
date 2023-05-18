@@ -1,6 +1,5 @@
 import { inject, onBeforeMount, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
 
 export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
   const notify = inject('toast');

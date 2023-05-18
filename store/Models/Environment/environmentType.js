@@ -1,6 +1,5 @@
 import { inject, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
 
 export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () => {
   const loading = ref(false);

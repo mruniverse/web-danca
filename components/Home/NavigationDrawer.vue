@@ -6,7 +6,7 @@
             </v-list-item>
         </v-list>
         <v-list nav>
-            <v-list-item-group v-model="itemGroup" color="primary">
+            <v-list-item v-model="itemGroup" color="primary">
                 <div v-for="item in items" :key="item.title">
                     <v-list-group v-if="item.items.length > 0" :value="item.active" @click="pageStore.setPage(item.route)"
                         :prepend-icon="item.icon" no-action>
@@ -28,7 +28,7 @@
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </div>
-            </v-list-item-group>
+            </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -36,8 +36,8 @@
 <script setup>
 import { nextTick, onMounted, reactive, ref, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
-import router from '@/router';
 
+const route = useRoute();
 const pageStore = usePageStore();
 const homeRoutes = pageStore.getRoutesNames('Home');
 const itemGroup = ref([]);
@@ -87,7 +87,7 @@ watchEffect(async () => {
 });
 
 function fetchSelectedPage() {
-    switch (router.currentRoute.name) {
+    switch (route.currentRoute.name) {
         case 'Events':
         case 'EventTypes':
             itemGroup.value = 0;
@@ -105,7 +105,7 @@ function fetchSelectedPage() {
             items[2].active.value = true;
             break;
         default:
-            itemGroup.value = homeRoutes.indexOf(router.currentRoute.name) - 2;
+            itemGroup.value = homeRoutes.indexOf(route.currentRoute.name) - 2;
             break;
     }
 }

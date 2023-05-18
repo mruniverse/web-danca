@@ -1,14 +1,14 @@
 <template>
     <v-navigation-drawer width="300" class="custom-box-shadow" floating :mini-variant="stageStore.expanded" permanent>
         <v-list>
-            <v-list-item-group color="primary" v-model="state.selectedItem">
+            <v-list-item color="primary" v-model="state.selectedItem">
                 <v-list-item link @click="stageStore.togglePanel()">
                     <v-list-item-icon>
                         <v-icon>mdi-menu</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>Minimizar</v-list-item-title>
                 </v-list-item>
-            </v-list-item-group>
+            </v-list-item>
             <v-expansion-panels v-if="!stageStore.expanded" v-model="state.expandedPanels" multiple flat tile>
                 <NewSeatPanel></NewSeatPanel>
                 <SeatsNames></SeatsNames>
