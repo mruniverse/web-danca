@@ -12,5 +12,10 @@ export default defineNuxtConfig({
       "process.env.DEBUG": false,
     },
   },
+  devServer: {
+    port: 3005,
+    server: 'http',
+    headers: { "Access-Control-Allow-Origin": "*" }
+  },
   modules: ["@pinia/nuxt"],
 });

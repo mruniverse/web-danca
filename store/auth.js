@@ -6,8 +6,12 @@ export const useAuthStore = defineStore("authStore", () => {
   const password = ref("");
   const expires_in = ref(86400);
   const created_at = ref(nuxtStorage.localStorage.getData("created_at") || "");
-  const access_token = ref(nuxtStorage.localStorage.getData("access_token") || "");
-  const refresh_token = ref(nuxtStorage.localStorage.getData("refresh_token") || "");
+  const access_token = ref(
+    nuxtStorage.localStorage.getData("access_token") || ""
+  );
+  const refresh_token = ref(
+    nuxtStorage.localStorage.getData("refresh_token") || ""
+  );
   const email = ref("");
   const login = ref(true);
   const register = ref(false);
@@ -38,31 +42,27 @@ export const useAuthStore = defineStore("authStore", () => {
   }
 
   function tokenIsExpired() {
-    return (getTimestampInSeconds() - getCreatedAt()) > getExpiresIn();
+    return getTimestampInSeconds() - getCreatedAt() > getExpiresIn();
   }
 
   async function authenticate(data) {
     password.value = data.password;
     email.value = data.email;
 
-    return await api.post("auth/authenticate", {}, {
-      auth: {
-        username: email.value,
-        password: password.value,
+    response = await useFetch("http://new.webdanca.com:8084/v1/auth/authenticate", {
+      method: "POST",
+      body: {
+        auth: {
+          username: email.value,
+          password: password.value,
+        },
       },
-    }).then((response) => {
-      access_token.value = response.data.access_token;
-      refresh_token.value = response.data.refresh_token;
-      created_at.value = getTimestampInSeconds();
-      nuxtStorage.localStorage.setData("access_token", response.data.access_token);
-      nuxtStorage.localStorage.setData("refresh_token", response.data.refresh_token);
-      nuxtStorage.localStorage.setData("created_at", created_at.value);
-      
-      route.push({ name: "events" });
-    })
+    });
+
+    console.log(response);
   }
 
-  function logout(){
+  function logout() {
     access_token.value = "";
     refresh_token.value = "";
     created_at.value = "";
@@ -72,11 +72,11 @@ export const useAuthStore = defineStore("authStore", () => {
     route.push({ name: "login" });
   }
 
-  function isAuthenticated(){
+  function isAuthenticated() {
     return access_token.value !== "";
   }
 
-  function getAccessToken(){
+  function getAccessToken() {
     return access_token.value;
   }
 
@@ -90,5 +90,19 @@ export const useAuthStore = defineStore("authStore", () => {
     register.value = true;
   }
 
-  return { password, email, login, register, showlogin, showRegister, authenticate, isAuthenticated, logout, getAccessToken, tokenIsExpired, getCreatedAt, getTimestampInSeconds };
+  return {
+    password,
+    email,
+    login,
+    register,
+    showlogin,
+    showRegister,
+    authenticate,
+    isAuthenticated,
+    logout,
+    getAccessToken,
+    tokenIsExpired,
+    getCreatedAt,
+    getTimestampInSeconds,
+  };
 });

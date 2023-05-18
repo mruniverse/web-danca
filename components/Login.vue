@@ -47,12 +47,13 @@
 </template>
 
 <script setup>
-import { inject, onMounted, reactive, ref } from 'vue';
+import { inject, reactive, ref } from 'vue';
 import { useAuthStore } from '@/store/auth.js';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required, email } from '@vuelidate/validators';
+import { useToast } from "vue-toastification";
 
-const notify = inject('toast');
+const toast = useToast();
 const authStore = useAuthStore();
 const passwordVisibility = ref('password');
 const loading = ref(false);
@@ -80,7 +81,7 @@ async function submit() {
     } else {
         loading.value = true;
         await authStore.authenticate(state).catch((error) => {
-            notify.error(error.response.data.message);
+            toast.error(error.response.data.message);
         });
         loading.value = false;
     }
