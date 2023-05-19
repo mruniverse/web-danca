@@ -22,8 +22,6 @@
 </template>
 
 <script setup>
-import Notification from '@/components/Home/Notification.vue';
-import MyAccount from '@/components/Home/MyAccountDrawer.vue';
 
 </script>
 

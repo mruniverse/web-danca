@@ -16,7 +16,7 @@
                 <NewTextPanel></NewTextPanel>
             </v-expansion-panels>
         </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer>  
 </template>
 
 <script setup>

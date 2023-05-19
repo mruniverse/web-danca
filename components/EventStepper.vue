@@ -148,17 +148,14 @@
 
 <script>
 import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
-import Stage from '../StageComponents/Stage.vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEventTypeStore } from '@/store/Models/Event/eventType';
 import { useStageStore } from '@/store/stage';
 import { useEventStore } from '@/store/Models/Event/event';
 import { useEnvironmentStore } from '@/store/Models/Environment/environment';
-import EventDescription from '@/components/Main/EventDescription.vue';
 
 export default {
     name: 'EventStepper',
-    components: { Stage, EventDescription },
     props: {
         title: {
             type: String,

@@ -21,20 +21,14 @@
                 </v-col>
             </v-row>
             <v-row no-gutters justify="center" class="px-4 py-4">
-                <KeepAlive>
-                    <router-view></router-view>
-                </KeepAlive>
+                <slot></slot>
             </v-row>
         </v-col>
     </v-row>
 </template>
 
 <script setup>
-import {onBeforeMount, reactive} from 'vue';
-import NavigationDrawer from '@/components/Home/NavigationDrawer.vue';
-import Notification from '@/components/Home/Notification.vue';
-import MyAccount from '@/components/Home/MyAccountDrawer.vue';
-import HomeButton from '@/components/Home/HomeButton.vue';
+import {reactive} from 'vue';
 
 const state = reactive({
     pages: [

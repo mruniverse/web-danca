@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { inject, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useAuthStore } from '@/store/auth.js';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required, email } from '@vuelidate/validators';
@@ -80,10 +80,14 @@ async function submit() {
         return;
     } else {
         loading.value = true;
-        await authStore.authenticate(state).catch((error) => {
-            toast.error(error.response.data.message);
-        });
+        const { error, errorMessage, data } = await authStore.authenticate(state);
         loading.value = false;
+
+        if (error) {
+            return toast.error(errorMessage);
+        }
+
+        navigateTo("/home/events");
     }
 }
 </script>   

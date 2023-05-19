@@ -2,35 +2,34 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const usePageStore = defineStore("pageStore", () => {
-  const page = ref('');
-  const serach = ref('');
-  const route = useRoute();
+	const page = ref("");
+	const serach = ref("");
+	const route = useRoute();
 
-  function setPage(data) {
-    if(data === route.currentRoute.name) return;
-    page.value = data;
-    route.push({ name: data });
+	function setPage(data) {
+		if (data === route.currentRoute.name) return;
+		page.value = data;
+		navigateTo(`/home/${data}`);
+	}
 
-  }
+	function getPage() {
+		return page.value;
+	}
 
-  function getPage() {
-    return page.value;
-  }
+	function setSerach(data) {
+		serach.value = data;
+	}
 
-  function setSerach(data) {
-    serach.value = data;
-  }
+	function getSerach() {
+		return serach.value;
+	}
 
-  function getSerach() {
-    return serach.value;
-  }
- 
-  function getRoutesNames(routeInstance) {
-    const routeComponent = route.options.routes.filter(route => route.name === routeInstance)[0];
-    const routesNames = routeComponent.children.map((child) => child.name);
+	function getRoutesNames(routeInstance) {
+		const routeComponent = route.options.routes.filter((route) => route.name === routeInstance)[0];
+		const routesNames = routeComponent.children.map((child) => child.name);
 
-    return routesNames;
-  }
+		return routesNames;
+	}
 
-  return { setPage, getPage, setSerach, getSerach, getRoutesNames };
+	return { setPage, getPage, setSerach, getSerach, getRoutesNames };
 });

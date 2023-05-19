@@ -2,7 +2,7 @@
     <v-navigation-drawer class="custom-box-shadow" permanent :expand-on-hover="state.expanded" floating>
         <v-list>
             <v-list-item class="logo">
-                <v-img max-width="180" src="@/assets/Logo Horizontal.svg"></v-img>
+                <v-img max-width="180" src="~/assets/images/logo-horizontal.svg"></v-img>
             </v-list-item>
         </v-list>
         <v-list nav>
@@ -11,20 +11,20 @@
                     <v-list-group v-if="item.items.length > 0" :value="item.active" @click="pageStore.setPage(item.route)"
                         :prepend-icon="item.icon" no-action>
                         <template v-slot:activator>
-                            <v-list-item-content>
+                            <v-list-item>
                                 <v-list-item-title v-text="item.title"></v-list-item-title>
-                            </v-list-item-content>
+                            </v-list-item>
                         </template>
                         <v-list-item v-for="child in item.items" :key="child.title">
-                            <v-list-item-content @click="pageStore.setPage(child.route)">
+                            <v-list-item @click="pageStore.setPage(child.route)">
                                 <v-list-item-title v-text="child.title"></v-list-item-title>
-                            </v-list-item-content>
+                            </v-list-item>
                         </v-list-item>
                     </v-list-group>
                     <v-list-item v-else link @click="pageStore.setPage(item.route)">
-                        <v-list-item-icon>
+                        <v-list-item>
                             <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-item-icon>
+                        </v-list-item>
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </div>
