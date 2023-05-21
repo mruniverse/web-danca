@@ -1,5 +1,6 @@
 import { computed, onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
+import api from "@/plugins/axios";
 import { useUserStore } from "../user";
 import { useEnvironmentTypeStore } from "../Environment/environmentType";
 

@@ -299,11 +299,11 @@ export default {
     border-radius: 13px;
 }
 
-.v-dialog__content--active:deep .v-dialog.custom-dialog {
+.v-dialog__content--active::v-deep .v-dialog.custom-dialog {
     border-radius: 16px;
 }
 
-.custom-field.v-text-field--outlined:deep(fieldset) {
+.custom-field.v-text-field--outlined::v-deep(fieldset) {
     top: -2px;
     height: 48px;
     background: var(--v-background-color);
@@ -313,13 +313,13 @@ export default {
     transition: border 0.1s linear 0s;
 }
 
-.custom-field.v-input--is-focused.v-text-field--outlined:deep(fieldset) {
+.custom-field.v-input--is-focused.v-text-field--outlined::v-deep(fieldset) {
     border: 2px solid #2886DA;
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
     transition: border 0.1s linear 0s;
 }
 
-.custom-field.error--text.v-text-field--outlined:deep(fieldset) {
+.custom-field.error--text.v-text-field--outlined::v-deep(fieldset) {
     border: 2px solid #ff5252;
 }
 </style>

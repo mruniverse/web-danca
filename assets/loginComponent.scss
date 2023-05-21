@@ -1,45 +1,42 @@
 .login-sheet-style {
-  height: 50vh;
-  width: 50vw;
-  max-height: 500px;
-  max-width: 700px;
-  min-width: 400px;
-  min-height: 400px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
+    height: 50vh;
+    width: 50vw;
+    max-height: 500px;
+    max-width: 700px;
+    min-width: 400px;
+    min-height: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
 }
 
 .login-title-text {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 28px;
-  margin-bottom: 22px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
 }
 
-.v-input.v-text-field:deep(.v-field__outline__start) {
-  border-radius: 13px 0 0 13px;
-  border-width: 2px 0px 2px 2px;
+.v-text-field--outlined::v-deep(fieldset) {
+    top: -2px;
+    height: 48px;
+    background: var(--v-background-color);
+    border: 1px solid #ECECF7;
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+    border-radius: 8px;
+    transition: border 0.1s linear 0s;
 }
 
-.v-input.v-text-field:deep(.v-field__outline__notch)::before {
-  border-radius: 0;
-  border-width: 2px 0 0 0;
-}
-.v-input.v-text-field:deep(.v-field__outline__notch)::after {
-  border-radius: 0;
-  border-width: 0 0 2px 0;
+.v-input--is-focused.v-text-field--outlined::v-deep(fieldset) {
+    border: 2px solid #2886DA;
+    box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
+    transition: border 0.1s linear 0s;
 }
 
-.v-input.v-text-field:deep(.v-field__outline__end) {
-  border-radius: 0 13px 13px 0;
-  border-width: 2px 2px 2px 0px;
-}
-
-.v-input.v-text-field:deep(.v-field__input) {
-  border-radius: 13px 0 0 13px;
-  min-height: 40px;
+.error--text.v-text-field--outlined::v-deep(fieldset) {
+    border: 2px solid #ff5252;
 }
 
 .have-you-registered-text {
-  color: #8888ac;
+    color: #8888AC;
 }
+
+

@@ -21,14 +21,16 @@
                 </v-col>
             </v-row>
             <v-row no-gutters justify="center" class="px-4 py-4">
-                <slot></slot>
+                <KeepAlive>
+                    <router-view></router-view>
+                </KeepAlive>
             </v-row>
         </v-col>
     </v-row>
 </template>
 
 <script setup>
-import {reactive} from 'vue';
+import {onBeforeMount, reactive} from 'vue';
 
 const state = reactive({
     pages: [
@@ -49,8 +51,8 @@ function showMenuBar() {
 };
 
 function getCurrentPage() {
-    const currentPage = state.pages.find((page) => page.page === router.currentRoute.name);
-    return currentPage ? currentPage.text : router.currentRoute.name;
+    const currentPage = state.pages.find((page) => page.page === this.$route.name);
+    return currentPage ? currentPage.text : this.$route.name;
 }
 </script>
 

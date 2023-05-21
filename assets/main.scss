@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Ubuntu");
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
 
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
@@ -26,9 +26,39 @@
   --vt-c-shadows-1: rgba(121, 121, 121, 0.103);
 }
 
-.main {
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white-custom);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+
+  --section-gap: 160px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: var(--vt-c-black);
+    --color-background-soft: var(--vt-c-black-soft);
+    --color-background-mute: var(--vt-c-black-mute);
+
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+
+    --color-heading: var(--vt-c-text-dark-1);
+    --color-text: var(--vt-c-text-dark-2);
+  }
+}
+
+.v-application--wrap {
   min-height: 100vh;
   color: var(--color-text);
+  background: var(--v-background-base);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-family: Ubuntu;
@@ -39,21 +69,21 @@
 }
 
 .v-ripple__container {
-  display: none !important;
+  display:none !important;
 }
 
-.btn-larger.v-btn:not(.v-btn--round).v-size--default {
+.btn-larger.v-btn:not(.v-btn--round).v-size--default{
   height: 48px;
   border-radius: 13px;
   box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
 }
 
-.btn-custom.v-btn:not(.v-btn--round).v-size--default {
+.btn-custom.v-btn:not(.v-btn--round).v-size--default{
   border-radius: 13px;
   box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
 }
 
-.v-text-field.v-text-field--enclosed .v-text-field__details {
+.v-text-field.v-text-field--enclosed .v-text-field__details{
   margin-bottom: 0;
 }
 
@@ -67,7 +97,7 @@
 .v-input.v-text-field--outlined.v-select {
   height: 48px;
   background: var(--v-textField-base);
-  border: 1px solid #ececf7;
+  border: 1px solid #ECECF7;
   box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
   border-radius: 13px;
   transition: border 0.1s linear 0s;
@@ -77,25 +107,16 @@
   top: 14px;
 }
 
-.v-text-field--outlined > .v-input__control > .v-input__slot,
-.v-text-field--outlined fieldset {
+.v-text-field--outlined > .v-input__control > .v-input__slot, .v-text-field--outlined fieldset {
   min-height: 48px;
   border-width: 0;
 }
 
-.v-text-field--full-width .v-input__prepend-outer,
-.v-text-field--full-width .v-input__prepend-inner,
-.v-text-field--full-width .v-input__append-inner,
-.v-text-field--full-width .v-input__append-outer,
-.v-text-field--enclosed .v-input__prepend-outer,
-.v-text-field--enclosed .v-input__prepend-inner,
-.v-text-field--enclosed .v-input__append-inner,
-.v-text-field--enclosed .v-input__append-outer {
+.v-text-field--full-width .v-input__prepend-outer, .v-text-field--full-width .v-input__prepend-inner, .v-text-field--full-width .v-input__append-inner, .v-text-field--full-width .v-input__append-outer, .v-text-field--enclosed .v-input__prepend-outer, .v-text-field--enclosed .v-input__prepend-inner, .v-text-field--enclosed .v-input__append-inner, .v-text-field--enclosed .v-input__append-outer {
   margin-top: 14px;
 }
 
-.v-pagination__navigation,
-.v-pagination__item {
+.v-pagination__navigation, .v-pagination__item{
   border-radius: 10px;
   box-shadow: 0px 4px 4px 4px var(--vt-c-shadows-1);
 }

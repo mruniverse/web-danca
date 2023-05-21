@@ -2,33 +2,33 @@
     <v-navigation-drawer class="custom-box-shadow" permanent :expand-on-hover="state.expanded" floating>
         <v-list>
             <v-list-item class="logo">
-                <v-img max-width="180" src="~/assets/images/logo-horizontal.svg"></v-img>
+                <v-img max-width="180" src="@/assets/Logo Horizontal.svg"></v-img>
             </v-list-item>
         </v-list>
         <v-list nav>
-            <v-list-item v-model="itemGroup" color="primary">
+            <v-list-item-group v-model="itemGroup" color="primary">
                 <div v-for="item in items" :key="item.title">
                     <v-list-group v-if="item.items.length > 0" :value="item.active" @click="pageStore.setPage(item.route)"
                         :prepend-icon="item.icon" no-action>
                         <template v-slot:activator>
-                            <v-list-item>
+                            <v-list-item-content>
                                 <v-list-item-title v-text="item.title"></v-list-item-title>
-                            </v-list-item>
+                            </v-list-item-content>
                         </template>
                         <v-list-item v-for="child in item.items" :key="child.title">
-                            <v-list-item @click="pageStore.setPage(child.route)">
+                            <v-list-item-content @click="pageStore.setPage(child.route)">
                                 <v-list-item-title v-text="child.title"></v-list-item-title>
-                            </v-list-item>
+                            </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
                     <v-list-item v-else link @click="pageStore.setPage(item.route)">
-                        <v-list-item>
+                        <v-list-item-icon>
                             <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-item>
+                        </v-list-item-icon>
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </div>
-            </v-list-item>
+            </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -37,7 +37,6 @@
 import { nextTick, onMounted, reactive, ref, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
 
-const route = useRoute();
 const pageStore = usePageStore();
 const homeRoutes = pageStore.getRoutesNames('Home');
 const itemGroup = ref([]);
@@ -47,7 +46,7 @@ const items = [{
     route: 'Events',
     icon: 'mdi-calendar-multiselect',
     items: [
-        {title: 'Tipos de eventos', route: 'EventTypes', icon: 'mdi-calendar-star'},
+        { title: 'Tipos de eventos', route: 'EventTypes', icon: 'mdi-calendar-star' },
     ]
 }, {
     active: ref(false),
@@ -55,7 +54,7 @@ const items = [{
     route: 'Batches',
     icon: 'mdi-human-queue',
     items: [
-        {title: 'Tipos de ingressos', route: 'TicketTypes', icon: 'mdi-ticket-confirmation'}
+        { title: 'Tipos de ingressos', route: 'TicketTypes', icon: 'mdi-ticket-confirmation' }
     ]
 }, {
     active: ref(false),
@@ -63,8 +62,8 @@ const items = [{
     route: 'Environments',
     icon: 'mdi-school-outline',
     items: [
-        {title: 'Tipos', route: 'EnvironmentTypes', icon: 'mdi-school'},
-        {title: 'Características', route: 'EnvironmentFeatures', icon: 'mdi-cog-outline'}
+        { title: 'Tipos', route: 'EnvironmentTypes', icon: 'mdi-school' },
+        { title: 'Características', route: 'EnvironmentFeatures', icon: 'mdi-cog-outline' }
     ]
 }, {
     active: ref(false),
@@ -87,7 +86,7 @@ watchEffect(async () => {
 });
 
 function fetchSelectedPage() {
-    switch (route.currentRoute.name) {
+    switch (this.$route.name) {
         case 'Events':
         case 'EventTypes':
             itemGroup.value = 0;
@@ -105,7 +104,7 @@ function fetchSelectedPage() {
             items[2].active.value = true;
             break;
         default:
-            itemGroup.value = homeRoutes.indexOf(route.currentRoute.name) - 2;
+            itemGroup.value = homeRoutes.indexOf(this.$route.name) - 2;
             break;
     }
 }

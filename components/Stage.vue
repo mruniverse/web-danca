@@ -30,16 +30,12 @@
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import Konva from 'konva';
-import controlPannel from '@/components/Home/StageComponents/ControlPanelComponents/controlPanel.vue';
 import { useStageStore } from '@/store/stage';
 
 export default {
     name: 'Stage',
-    components: {
-        controlPannel,
-    },
     props: {
         hideControlPannel: {
             type: Boolean,

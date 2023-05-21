@@ -12,9 +12,7 @@
 </template>
 
 <script>
-import EventDescription from '@/components/Main/EventDescription.vue';
 import { computed, ref } from 'vue';
-import { useDisplay } from 'vuetify';
 
 export default {
     name: 'EventDescriptionModal',
@@ -26,11 +24,8 @@ export default {
         description: String
     },
 
-    components: { EventDescription },
-
     setup() {
         const eventDescriptionStatus = ref(false);
-        const { width, mobile } = useDisplay()
 
         function setDialog(status) {
             eventDescriptionStatus.value = status;
@@ -44,7 +39,7 @@ export default {
 
         const isExtraSmall = computed({
             get() {
-                return width <= 600 ? true : false;
+                return this.$vuetify.breakpoint.width <= 600 ? true : false;
             }
         });
 
@@ -54,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-dialog__content--active:deep .v-dialog.custom-dialog {
+.v-dialog__content--active::v-deep .v-dialog.custom-dialog {
     border-radius: 16px;
     max-width: 80%;
     max-height: 80%;

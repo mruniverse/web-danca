@@ -2,7 +2,7 @@
     --v-select-height: 40px;
 }
 
-.v-input.v-text-field--outlined.v-select:deep(fieldset) {
+.v-input.v-text-field--outlined.v-select::v-deep(fieldset) {
     height: var(--v-select-height);
     background: var(--v-textField-base);
     border: 1px solid #ECECF7;
@@ -15,14 +15,13 @@
     top: 14px;
 }
 
-
-.v-text-field--full-width .v-input__prepend-outer, .v-text-field--full-width .v-input__prepend-inner, .v-text-field--full-width .v-input__append-inner, .v-text-field--full-width .v-input__append-outer, .v-text-field--enclosed .v-input__prepend-outer, .v-text-field--enclosed .v-input__prepend-inner, .v-text-field--enclosed .v-input__append-inner, .v-text-field--enclosed .v-input__append-outer {
-    margin-top: 14px;
-}
-
 .v-text-field--outlined > .v-input__control > .v-input__slot, .v-text-field--outlined {
     min-height: var(--v-select-height);
     border-width: 0;
+}
+
+.v-text-field--full-width .v-input__prepend-outer, .v-text-field--full-width .v-input__prepend-inner, .v-text-field--full-width .v-input__append-inner, .v-text-field--full-width .v-input__append-outer, .v-text-field--enclosed .v-input__prepend-outer, .v-text-field--enclosed .v-input__prepend-inner, .v-text-field--enclosed .v-input__append-inner, .v-text-field--enclosed .v-input__append-outer {
+    margin-top: 14px;
 }
 
 .v-input--is-focused.v-text-field--outlined {

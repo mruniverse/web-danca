@@ -1,5 +1,4 @@
-import VueKonva from "vue-konva";
+import Vue from 'vue';
+import VueKonva from 'vue-konva';
 
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueKonva);
-});
+Vue.use(VueKonva);

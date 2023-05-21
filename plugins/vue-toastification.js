@@ -1,10 +1,12 @@
+import { createApp } from "vue-demi";
 import Toast from "vue-toastification";
+import App from '@/App.vue'
 import "vue-toastification/dist/index.css";
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const options = {
-    // You can set your default options here
-  };
+const app = createApp(App)
 
-  nuxtApp.vueApp.use(Toast, options);
-});
+const options = {
+    // You can set your default options here
+};
+
+app.use(Toast, options);

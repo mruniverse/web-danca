@@ -9,29 +9,31 @@
                     <p class="login-title-text">Entre com e-mail e senha</p>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field class="custom-text-field" v-model="state.email" append-inner-icon="mdi-email-outline"
-                        label="E-mail" variant="outlined" @blur="v$.email.$touch" density="compact"
-                        :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
+                    <v-text-field 
+                    v-model="state.email" 
+                    append-icon="mdi-email-outline" 
+                    label="E-mail" outlined
+                    class="login-input-style" 
+                    @blur="v$.email.$touch"
+                    :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''">
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
-                    <v-text-field v-model="state.password" label="Senha" variant="outlined"
+                    <v-text-field v-model="state.password" label="Senha" outlined
                         :style="{ 'font-size': passwordVisibility ? '22px' : '' }"
-                        :type="passwordVisibility ? 'password' : 'text'" density="compact"
-                        :append-inner-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
+                        :type="passwordVisibility ? 'password' : 'text'"
+                        :append-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
                         @click:append="() => (passwordVisibility = !passwordVisibility)" @blur="v$.password.$touch"
                         :error-messages="v$.password.$error ? v$.password.$errors[0].$message : ''">
                     </v-text-field>
                 </v-row>
                 <v-row no-gutters>
                     <v-col align-self="end">
-                        <nuxt-link to="/login">
-                            <a>Esqueci a senha</a>
-                        </nuxt-link>
+                        <a>Esqueci a senha</a>
                     </v-col>
                     <v-col align="end">
-                        <v-btn @click="submit()" style="border-radius: 13px;" elevation="0" color="#2887DA" theme="dark">
-                            Entrar </v-btn>
+                        <v-btn @click="submit()" style="border-radius: 13px;" elevation="0" color="#2887DA" dark> Entrar
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <v-row no-gutters class="mt-5">
@@ -39,7 +41,7 @@
                 </v-row>
                 <v-row no-gutters justify="center" class="mt-10 mb-n5">
                     <p class="have-you-registered-text">É novo no Web Dança?</p>
-                    <nuxt-link to="/register" class="px-2">Cadastre-se</nuxt-link>
+                    <a @click="$router.push({ name: 'Register' })" class="px-2">Cadastre-se</a>
                 </v-row>
             </v-col>
         </v-row>
@@ -47,13 +49,12 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { inject, onMounted, reactive, ref } from 'vue';
 import { useAuthStore } from '@/store/auth.js';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required, email } from '@vuelidate/validators';
-import { useToast } from "vue-toastification";
 
-const toast = useToast();
+const notify = inject('toast');
 const authStore = useAuthStore();
 const passwordVisibility = ref('password');
 const loading = ref(false);
@@ -80,14 +81,10 @@ async function submit() {
         return;
     } else {
         loading.value = true;
-        const { error, errorMessage, data } = await authStore.authenticate(state);
+        await authStore.authenticate(state).catch((error) => {
+            notify.error(error.response.data.message);
+        });
         loading.value = false;
-
-        if (error) {
-            return toast.error(errorMessage);
-        }
-
-        navigateTo("/home/events");
     }
 }
 </script>   

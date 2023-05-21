@@ -1,10 +1,10 @@
 <template>
     <v-col class="fill-height pa-0">
         <v-row no-gutters class="logo">
-            <img width="200" src="~/assets/images/logo-horizontal.svg" />
+            <img width="200" src="@/assets/Logo Horizontal.svg" />
         </v-row>
         <v-row no-gutters class="login-sheet" justify="center">
-            <Login></Login>
+            <router-view></router-view>
         </v-row>
     </v-col>
 </template>

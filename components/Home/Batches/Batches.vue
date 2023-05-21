@@ -56,7 +56,7 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-.v-dialog__content--active:deep .v-dialog.custom-dialog {
+.v-dialog__content--active::v-deep .v-dialog.custom-dialog {
     border-radius: 16px;
 }
 </style>

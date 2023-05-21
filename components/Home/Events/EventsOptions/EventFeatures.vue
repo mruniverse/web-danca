@@ -11,6 +11,7 @@
 <script setup>
 import { inject, onMounted, ref } from 'vue';
 import CRUDTableModal from '@/components/CRUDTableModal.vue';
+import api from '@/plugins/axios';
 
 const notify = inject('toast');
 const events = ref([]);

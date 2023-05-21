@@ -23,17 +23,10 @@
 
 <script>
 import { ref } from 'vue';
-import EventCard from '@/components/Main/EventCard.vue';
-import ScrollShadow from '@/components/ScrollShadow.vue';
 
 export default {
     name: 'EventsList',
 
-    components: {
-        EventCard,
-        ScrollShadow
-    },
-    
     props: {
         cards: {
             type: Array,

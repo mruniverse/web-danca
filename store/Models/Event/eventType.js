@@ -1,5 +1,6 @@
 import { onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
+import api from "@/plugins/axios";
 
 export const useEventTypeStore = defineStore("eventTypeStore", () => {
   const loading = ref(false);

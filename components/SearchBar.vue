@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-text-field--outlined:deep(fieldset) {
+.v-text-field--outlined::v-deep(fieldset) {
     background: var(--v-textField-base);
     border: 1px solid #ECECF7;
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
@@ -41,13 +41,13 @@ export default {
     transition: border 0.1s linear 0s;
 }
 
-.v-input--is-focused.v-text-field--outlined:deep(fieldset) {
+.v-input--is-focused.v-text-field--outlined::v-deep(fieldset) {
     border: 2px solid #2886DA;
     box-shadow: 0px 4px 4px var(--vt-c-shadows-1);
     transition: border 0.1s linear 0s;
 }
 
-.error--text.v-text-field--outlined:deep(fieldset) {
+.error--text.v-text-field--outlined::v-deep(fieldset) {
     border: 2px solid #ff5252;
 }
 </style>

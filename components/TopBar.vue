@@ -3,7 +3,7 @@
         <v-row no-gutters align="center">
             <v-col class="ml-4">
                 <v-row no-gutters align="center">
-                    <img class="logo" width="100" src="~/assets/images/logo-horizontal.svg" />
+                    <img class="logo" width="100" src="@/assets/Logo Horizontal.svg" />
                     <v-divider vertical class="ml-8 mr-4"></v-divider>
                 </v-row>
             </v-col>
@@ -20,10 +20,6 @@
         </v-row>
     </v-sheet>
 </template>
-
-<script setup>
-
-</script>
 
 <style lang="scss" scoped>
 .logo {

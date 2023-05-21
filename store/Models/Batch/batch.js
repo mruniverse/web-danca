@@ -1,5 +1,6 @@
 import { computed, inject, nextTick, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
+import api from "@/plugins/axios";
 import { useEventStore } from "../Event/event";
 import { useTicketTypeStore } from "../Ticket/ticketType";
 
