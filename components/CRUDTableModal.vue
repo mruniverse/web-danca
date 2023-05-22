@@ -230,7 +230,8 @@ export default {
 
         const isExtraSmall = computed({
             get() {
-                return this.$vuetify.breakpoint.width <= 600 ? true : false;
+                // return this.$vuetify.breakpoint.width <= 600 ? true : false;
+                return false;
             }
         });
 

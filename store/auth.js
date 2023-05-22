@@ -1,13 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from '@/plugins/axios';
+import nuxtStorage from 'nuxt-storage';
 
 export const useAuthStore = defineStore("authStore", () => {
   const password = ref("");
   const expires_in = ref(86400);
-  const created_at = ref(localStorage.getItem("created_at") || "");
-  const access_token = ref(localStorage.getItem("access_token") || "");
-  const refresh_token = ref(localStorage.getItem("refresh_token") || "");
+  const created_at = ref(nuxtStorage.localStorage.getData("created_at") || "");
+  const access_token = ref(nuxtStorage.localStorage.getData("access_token") || "");
+  const refresh_token = ref(nuxtStorage.localStorage.getData("refresh_token") || "");
   const email = ref("");
   const login = ref(true);
   const register = ref(false);
@@ -53,9 +54,9 @@ export const useAuthStore = defineStore("authStore", () => {
       access_token.value = response.data.access_token;
       refresh_token.value = response.data.refresh_token;
       created_at.value = getTimestampInSeconds();
-      localStorage.setItem("access_token", response.data.access_token);
-      localStorage.setItem("refresh_token", response.data.refresh_token);
-      localStorage.setItem("created_at", created_at.value);
+      nuxtStorage.localStorage.setData("access_token", response.data.access_token);
+      nuxtStorage.localStorage.setData("refresh_token", response.data.refresh_token);
+      nuxtStorage.localStorage.setData("created_at", created_at.value);
       
       this.$route.push({ name: "Events" });
     })
@@ -65,9 +66,9 @@ export const useAuthStore = defineStore("authStore", () => {
     access_token.value = "";
     refresh_token.value = "";
     created_at.value = "";
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("created_at");
+    nuxtStorage.localStorage.removeItem("access_token");
+    nuxtStorage.localStorage.removeItem("refresh_token");
+    nuxtStorage.localStorage.removeItem("created_at");
     this.$route.push({ name: "Login" });
   }
 

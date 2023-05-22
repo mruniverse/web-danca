@@ -112,7 +112,6 @@ import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 
 export default {
     name: 'EnvironmentStepper',
-    components: { Stage },
     props: {
         title: {
             type: String,

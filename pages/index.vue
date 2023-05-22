@@ -67,7 +67,8 @@ const cards = ref([{
 
 const containerStyle = computed({
     get() {
-        return this.$vuetify.breakpoint.width > 1280 ? 'container-style' : '';
+        // return this.$vuetify.breakpoint.width > 1280 ? 'container-style' : '';
+        return '';
     }
 });
 
