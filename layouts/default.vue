@@ -6,10 +6,9 @@
 
 <script>
 import { useThemeStore } from "@/store/theme";
-import { onBeforeMount, provide } from "vue";
+import { onBeforeMount } from "vue";
 import api from "@/plugins/axios";
 import { useAuthStore } from "@/store/auth";
-import { useToast } from "vue-toastification/composition";
 import { useVuetify } from "@/plugins/vuetify";
 
 export default {
@@ -18,10 +17,7 @@ export default {
   setup() {
     const authStore = useAuthStore();
     const themeStore = useThemeStore();
-    const toast = useToast();
     const vuetify = useVuetify();
-
-    provide("toast", toast);
 
     onBeforeMount(() => {
       setupTheme();
