@@ -1,11 +1,15 @@
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { defineStore } from "pinia";
-import nuxtStorage from 'nuxt-storage';
+import nuxtStorage from "nuxt-storage";
 import { useVuetify } from "@/plugins/vuetify";
 
 export const useThemeStore = defineStore("themeStore", () => {
   const dark = ref(false);
   const vuetify = useVuetify();
+
+  onMounted(() => {
+    setThemeDark(getThemeDark());
+  });
 
   function setThemeDark(theme) {
     dark.value = theme;
@@ -15,10 +19,12 @@ export const useThemeStore = defineStore("themeStore", () => {
 
   function getThemeDark() {
     let value = nuxtStorage.localStorage.getData("themeDark");
-    if(value !== null) {
+    if (value !== null) {
       dark.value = value;
       return dark.value;
     }
+
+    return false;
   }
 
   return { dark, setThemeDark, getThemeDark };

@@ -16,10 +16,11 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useEventStore } from '@/store/Models/Event/event.js';
+import { useToast } from '@/plugins/toast.js';
 
-const notify = inject('toast');
+const notify = useToast();
 const eventStore = useEventStore();
 const slides = ref([{
     title: 'Slide apenas teste 1',

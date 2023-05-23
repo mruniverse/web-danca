@@ -9,11 +9,12 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import CRUDTableModal from '@/components/CRUDTableModal.vue';
 import api from '@/plugins/axios';
+import { useToast } from '@/plugins/toast.js';
 
-const notify = inject('toast');
+const notify = useToast();
 const events = ref([]);
 const loading = ref(false);
 const headers = ref([{

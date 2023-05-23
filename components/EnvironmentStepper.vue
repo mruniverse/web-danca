@@ -104,11 +104,12 @@
 </template>
 
 <script>
-import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';
 import { useStageStore } from '@/store/stage';
 import { useEnvironmentStore } from '@/store/Models/Environment/environment';
+import { useToast } from '@/plugins/toast.js';
 
 export default {
     name: 'EnvironmentStepper',
@@ -128,7 +129,7 @@ export default {
     },
 
     setup(props, { emit }) {
-        const notify = inject('toast');
+        const notify = useToast();
         const dialog = computed(() => props.dialog);
         const validAddress = ref(false);
         const stageStore = useStageStore();

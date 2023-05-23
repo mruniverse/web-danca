@@ -1,11 +1,12 @@
-import { computed, inject, nextTick, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { useEventStore } from "../Event/event";
 import { useTicketTypeStore } from "../Ticket/ticketType";
+import { useToast } from '@/plugins/toast.js';
 
 export const useBatchStore = defineStore("batchStore", () => {
-  const notify = inject('toast');
+  const notify = useToast();
   const loading = ref(false);
   const eventStore = useEventStore();
   const ticketTypeStore = useTicketTypeStore();

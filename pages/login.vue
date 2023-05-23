@@ -2,7 +2,7 @@
   <v-app class="main">
     <v-col class="fill-height pa-0">
       <v-row no-gutters class="logo">
-        <img width="200" src="@/assets/Logo Horizontal.svg" />
+        <img width="200" src="@/assets/logo-horizontal.svg" />
       </v-row>
       <v-row no-gutters class="login-sheet" justify="center">
         <v-sheet class="login-sheet-style d-flex align-center">
@@ -93,7 +93,7 @@ import { reactive, ref } from "vue";
 import { useAuthStore } from "@/store/auth.js";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required, email } from "@vuelidate/validators";
-import { useToast } from "vue-toastification/composition";
+import { useToast } from "@/plugins/toast.js";
 
 const toast = useToast();
 const authStore = useAuthStore();
@@ -125,6 +125,7 @@ async function submit() {
   } else {
     loading.value = true;
     await authStore.authenticate(state).catch((error) => {
+      console.log(error);
       toast.error(error.response.data.message);
     });
     loading.value = false;

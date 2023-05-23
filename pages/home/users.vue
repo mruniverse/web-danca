@@ -10,6 +10,12 @@
     </CRUDTable>
 </template>
 
+<script>
+export default {
+  layout: "home",
+}
+</script>
+
 <script setup>
 import CRUDTable from '@/components/CRUDTable.vue';
 import { onBeforeMount, ref } from 'vue';

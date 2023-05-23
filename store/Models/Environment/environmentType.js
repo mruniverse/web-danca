@@ -1,8 +1,10 @@
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
+import { useToast } from '@/plugins/toast.js';
 
 export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () => {
+  const notify = useToast();
   const loading = ref(false);
   const environmentTypes = ref([]);
   const properties = ref({
@@ -11,8 +13,8 @@ export const useEnvironmentTypeStore = defineStore("environmentTypeStore", () =>
       type: "text",
     },
   });
-  const notify = inject("toast");
 
+  
   function getEnvironmentTypeName(id) {
     if(environmentTypes.value.length === 0) return;
     const found = environmentTypes.value.find(environmentType => environmentType.id === id);

@@ -16,11 +16,8 @@
 </template>
 
 <script>
-import TicketTypes from '@/components/Home/Batches/Tickets/TicketTypes.vue';
-
 export default {
     name: "BatchesOptions",
-    components: { TicketTypes }
 }
 </script>
 

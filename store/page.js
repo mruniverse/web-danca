@@ -1,15 +1,16 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { useRouter, useRoute } from '@/plugins/router';
 
 export const usePageStore = defineStore("pageStore", () => {
   const page = ref('');
   const serach = ref('');
+  const router = useRouter();
+  const route = useRoute();
 
   function setPage(data) {
-    if(data === router.currentRoute.name) return;
+    if(data === route.name) return;
     page.value = data;
-    this.$route.push({ name: data });
-
   }
 
   function getPage() {
@@ -24,12 +25,5 @@ export const usePageStore = defineStore("pageStore", () => {
     return serach.value;
   }
  
-  function getRoutesNames(routeInstance) {
-    const routerComponent = router.options.routes.filter(route => route.name === routeInstance)[0];
-    const routesNames = routerComponent.children.map((child) => child.name);
-
-    return routesNames;
-  }
-
-  return { setPage, getPage, setSerach, getSerach, getRoutesNames };
+  return { setPage, getPage, setSerach, getSerach };
 });

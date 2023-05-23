@@ -1,11 +1,12 @@
-import { inject, nextTick, onBeforeMount, onMounted, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { useUserStore } from "../user";
 import { useEnvironmentStore } from "../Environment/environment";
+import { useToast } from '@/plugins/toast.js';
 
 export const useEventStore = defineStore("eventStore", () => {
-  const notify = inject("toast");
+  const notify = useToast();
   const userStore = useUserStore();
   const environmentStore = useEnvironmentStore();
   const loading = ref(false);

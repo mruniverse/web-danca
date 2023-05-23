@@ -11,12 +11,19 @@
     </CRUDTable>
 </template>
 
+<script>
+export default {
+  layout: "home",
+}
+</script>
+
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
 import { useEventTypeStore } from '@/store/Models/Event/eventType.js';
+import { useToast } from '@/plugins/toast.js';
 
-const notify = inject('toast');
+const notify = useToast();
 const eventTypeStore = useEventTypeStore();
 const headers = ref([{
     text: 'Tipo',

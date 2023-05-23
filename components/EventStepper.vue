@@ -147,12 +147,13 @@
 </template>
 
 <script>
-import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/store/Models/user';
 import { useEventTypeStore } from '@/store/Models/Event/eventType';
 import { useStageStore } from '@/store/stage';
 import { useEventStore } from '@/store/Models/Event/event';
 import { useEnvironmentStore } from '@/store/Models/Environment/environment';
+import { useToast } from '@/plugins/toast.js';
 
 export default {
     name: 'EventStepper',
@@ -168,7 +169,7 @@ export default {
     },
 
     setup(props, { emit }) {
-        const notify = inject('toast');
+        const notify = useToast();
         const datetimeRange = ref([]);
         const salesRange = ref([]);
         const validAddress = ref(false);

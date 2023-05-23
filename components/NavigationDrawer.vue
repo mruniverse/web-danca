@@ -2,13 +2,13 @@
     <v-navigation-drawer class="custom-box-shadow" permanent :expand-on-hover="state.expanded" floating>
         <v-list>
             <v-list-item class="logo">
-                <v-img max-width="180" src="@/assets/Logo Horizontal.svg"></v-img>
+                <img max-width="180" src="@/assets/logo-horizontal.svg"></img>
             </v-list-item>
         </v-list>
         <v-list nav>
             <v-list-item-group v-model="itemGroup" color="primary">
                 <div v-for="item in items" :key="item.title">
-                    <v-list-group v-if="item.items.length > 0" :value="item.active" @click="pageStore.setPage(item.route)"
+                    <v-list-group v-if="item.items.length > 0" :value="item.active" @click="setPage(item.route)"
                         :prepend-icon="item.icon" no-action>
                         <template v-slot:activator>
                             <v-list-item-content>
@@ -16,12 +16,12 @@
                             </v-list-item-content>
                         </template>
                         <v-list-item v-for="child in item.items" :key="child.title">
-                            <v-list-item-content @click="pageStore.setPage(child.route)">
+                            <v-list-item-content @click="setPage(child.route)">
                                 <v-list-item-title v-text="child.title"></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
-                    <v-list-item v-else link @click="pageStore.setPage(item.route)">
+                    <v-list-item v-else link @click="setPage(item.route)">
                         <v-list-item-icon>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-icon>
@@ -36,39 +36,41 @@
 <script setup>
 import { nextTick, onMounted, reactive, ref, watchEffect } from 'vue';
 import { usePageStore } from '@/store/page';
+import { useRoute, useRouter } from '@/plugins/router';
 
+const route = useRoute();
+const router = useRouter();
 const pageStore = usePageStore();
-const homeRoutes = pageStore.getRoutesNames('Home');
 const itemGroup = ref([]);
 const items = [{
     active: ref(false),
     title: 'Meus Eventos',
-    route: 'Events',
+    route: 'events',
     icon: 'mdi-calendar-multiselect',
     items: [
-        { title: 'Tipos de eventos', route: 'EventTypes', icon: 'mdi-calendar-star' },
+        { title: 'Tipos de eventos', route: '/home/event-types', icon: 'mdi-calendar-star' },
     ]
 }, {
     active: ref(false),
     title: 'Lotes',
-    route: 'Batches',
+    route: 'batches',
     icon: 'mdi-human-queue',
     items: [
-        { title: 'Tipos de ingressos', route: 'TicketTypes', icon: 'mdi-ticket-confirmation' }
+        { title: 'Tipos de ingressos', route: 'ticket-types', icon: 'mdi-ticket-confirmation' }
     ]
 }, {
     active: ref(false),
     title: 'Ambientes',
-    route: 'Environments',
+    route: 'environments',
     icon: 'mdi-school-outline',
     items: [
-        { title: 'Tipos', route: 'EnvironmentTypes', icon: 'mdi-school' },
-        { title: 'Características', route: 'EnvironmentFeatures', icon: 'mdi-cog-outline' }
+        { title: 'Tipos', route: 'environment-types', icon: 'mdi-school' },
+        { title: 'Características', route: 'environment-features', icon: 'mdi-cog-outline' }
     ]
 }, {
     active: ref(false),
     title: 'Usuários',
-    route: 'Users',
+    route: 'users',
     icon: 'mdi-account-multiple-outline',
     items: []
 }];
@@ -85,8 +87,13 @@ watchEffect(async () => {
     fetchSelectedPage();
 });
 
+function setPage(page) {
+    pageStore.setPage(page);
+    router.push(page);
+}
+
 function fetchSelectedPage() {
-    switch (this.$route.name) {
+    switch (route.name) {
         case 'Events':
         case 'EventTypes':
             itemGroup.value = 0;
@@ -104,7 +111,6 @@ function fetchSelectedPage() {
             items[2].active.value = true;
             break;
         default:
-            itemGroup.value = homeRoutes.indexOf(this.$route.name) - 2;
             break;
     }
 }

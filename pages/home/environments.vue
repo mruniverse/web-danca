@@ -1,49 +1,39 @@
 <template>
-    <CRUDTable 
-    :loading="loading" 
-    :data="environments" 
-    :headers="headers" 
-    @delete-item-confirm="deleteEnvironment" 
-    @update-item="environmentStore.updateEnvironment">
+    <CRUDTable :loading="loading" :data="environments" :headers="headers" @delete-item-confirm="deleteEnvironment"
+        @update-item="environmentStore.updateEnvironment">
         <template v-slot:add-button>
-            <v-dialog 
-            v-model="dialog"
-            max-width="70%" 
-            :fullscreen="fullscreen" 
-            :content-class="fullscreen ? '' : 'custom-dialog'" 
-            scrollable>
-                <template v-slot:activator="{on, attrs}">
-                    <v-btn 
-                    class="btn-larger subtitle-2 font-weight-bold" 
-                    color="primary" dark @click="addItem()"> 
-                        Novo ambiente 
-                    </v-btn>
+            <v-dialog v-model="dialog" max-width="70%" :fullscreen="fullscreen"
+                :content-class="fullscreen ? '' : 'custom-dialog'" scrollable>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn class="btn-larger subtitle-2 font-weight-bold" color="primary" dark @click="addItem()"> Novo
+                        ambiente </v-btn>
                 </template>
-                <EnvironmentStepper 
-                :dialog="dialog"
-                :edit="edit"
-                @toggleFullScreen="(value) => fullscreen = value" 
-                @closeDialog="closeDialog" 
-                title="Novo ambiente">
+                <EnvironmentStepper :dialog="dialog" :edit="edit" @toggleFullScreen="(value) => fullscreen = value"
+                    @closeDialog="closeDialog" title="Novo ambiente">
                 </EnvironmentStepper>
             </v-dialog>
         </template>
-        <template v-slot:edit="{item}">
+        <template v-slot:edit="{ item }">
             <v-icon color="primary lighten-1" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         </template>
     </CRUDTable>
 </template>
 
+<script>
+export default {
+    layout: "home",
+}
+</script>
+
 <script setup>
-import { computed, inject, onBeforeMount, ref, watch } from 'vue';
-import CRUDTable from '@/components/CRUDTable.vue';
-import EnvironmentStepper from './EnvironmentStepper.vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useEnvironmentStore } from '@/store/Models/Environment/environment';
 import { useUserStore } from '@/store/Models/user';
 import { useEnvironmentTypeStore } from '@/store/Models/Environment/environmentType';
 import { useStageStore } from '@/store/stage';
+import { useToast } from '@/plugins/toast.js';
 
-const notify = inject('toast');
+const notify = useToast();
 const edit = ref(false);
 const userStore = useUserStore();
 const environmentTypeStore = useEnvironmentTypeStore();

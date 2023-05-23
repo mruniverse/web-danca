@@ -3,7 +3,7 @@
         <v-row no-gutters align="center">
             <v-col class="ml-4">
                 <v-row no-gutters align="center">
-                    <img class="logo" width="100" src="@/assets/Logo Horizontal.svg" />
+                    <img class="logo" width="100" src="@/assets/logo-horizontal.svg" />
                     <v-divider vertical class="ml-8 mr-4"></v-divider>
                 </v-row>
             </v-col>

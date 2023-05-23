@@ -1,0 +1,73 @@
+<template>
+  <v-app class="main">
+    <v-row no-gutters class="fill-height">
+      <v-col cols="auto">
+        <NavigationDrawer />
+      </v-col>
+      <v-col style="overflow: auto">
+        <v-row no-gutters v-if="showMenuBar()">
+          <v-col cols="auto" class="pa-4">
+            <div class="pl-2 text-title-custom">
+              {{ getCurrentPage() }}
+            </div>
+          </v-col>
+          <v-col class="pa-4">
+            <v-row no-gutters justify="end" align="center">
+              <HomeButton></HomeButton>
+              <div class="mx-2"></div>
+              <Notification></Notification>
+              <div class="mx-2"></div>
+              <MyAccount></MyAccount>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row no-gutters justify="center" class="px-4 py-4">
+          <Nuxt />
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-app>
+</template>
+
+<script setup>
+import { reactive } from "vue";
+import { useRoute } from "@/plugins/router";
+
+const route = useRoute();
+const state = reactive({
+  pages: [
+    { page: "Settings", text: "Minha conta" },
+    { page: "Events", text: "Meus Eventos" },
+    { page: "EventTypes", text: "Tipos de Eventos" },
+    { page: "Batches", text: "Lotes" },
+    { page: "TicketTypes", text: "Tipos de Ingressos" },
+    { page: "Environments", text: "Meus Ambientes" },
+    { page: "EnvironmentTypes", text: "Tipos de Ambientes" },
+    { page: "EnvironmentFeatures", text: "Características dos Ambientes" },
+    { page: "Users", text: "Usuários" },
+  ],
+});
+
+function showMenuBar() {
+  return getCurrentPage() !== "NewEnvironment";
+}
+
+function getCurrentPage() {
+  const currentPage = state.pages.find((page) => page.page === route.name);
+  return currentPage ? currentPage.text : route.name;
+}
+</script>
+
+<style lang="scss" scoped>
+.text-title-custom {
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--v-secondary-base);
+}
+
+.v-btn:not(.v-btn--round).v-size--default {
+  height: 42px;
+  box-shadow: 0 0 0 0;
+  border-radius: 13px;
+}
+</style>
