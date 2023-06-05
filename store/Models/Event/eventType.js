@@ -1,8 +1,9 @@
 import { onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 
 export const useEventTypeStore = defineStore("eventTypeStore", () => {
+  const api = useAxios();
   const loading = ref(false);
   const eventTypes = ref([]);
   const properties = ref({

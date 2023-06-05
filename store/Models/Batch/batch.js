@@ -1,11 +1,12 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import { useEventStore } from "../Event/event";
 import { useTicketTypeStore } from "../Ticket/ticketType";
 import { useToast } from '@/plugins/toast.js';
 
 export const useBatchStore = defineStore("batchStore", () => {
+  const api = useAxios();
   const notify = useToast();
   const loading = ref(false);
   const eventStore = useEventStore();

@@ -1,9 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import { useToast } from '@/plugins/toast.js';
 
 export const useTicketTypeStore = defineStore("ticketTypeStore", () => {
+  const api = useAxios();
   const notify = useToast();
   const loading = ref(false);
   const ticketTypes = ref([]);

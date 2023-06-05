@@ -1,7 +1,6 @@
-const axios = require("axios").default;
+import { getCurrentInstance } from 'vue';
 
-const api = axios.create({
-  baseURL: "http://new.webdanca.com:8084/v1/",
-});
-
-export default api;
+export const useAxios = () => {
+  const vm = getCurrentInstance();
+  return vm.proxy?.$axios || undefined;
+};

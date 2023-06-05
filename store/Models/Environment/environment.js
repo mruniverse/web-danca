@@ -1,10 +1,11 @@
 import { computed, onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import { useUserStore } from "../user";
 import { useEnvironmentTypeStore } from "../Environment/environmentType";
 
 export const useEnvironmentStore = defineStore("environmentStore", () => {
+  const api = useAxios();
   const loading = ref(false);
   const environments = ref([]);
   const userStore = useUserStore();

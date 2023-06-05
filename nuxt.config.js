@@ -27,7 +27,7 @@ export default {
   css: ["@/assets/main.scss"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "@/plugins/vue-toastification.js", mode: 'client' }],
+  plugins: [{ src: "@/plugins/vue-toastification.js", mode: "client" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -35,7 +35,11 @@ export default {
   buildModules: ["@nuxtjs/vuetify", "@pinia/nuxt"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ["@nuxtjs/axios", "@nuxtjs/proxy"],
+
+  axios: {
+    baseURL: "http://new.webdanca.com:8084/v1/", // Used as fallback if no runtime config is provided
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

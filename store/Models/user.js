@@ -1,9 +1,10 @@
 import { onBeforeMount, ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import { useToast } from '@/plugins/toast.js';
 
 export const useUserStore = defineStore("userStore", () => {
+  const api = useAxios();
   const notify = useToast();
   const loading = ref(false);
   const users = ref([]);

@@ -1,33 +1,15 @@
 <template>
-  <v-menu
-    content-class="menu-style"
-    transition="slide-y-transition"
-    bottom
-    offset-y
-    :close-on-content-click="state.closeOnContentClick"
-  >
+  <v-menu content-class="menu-style" transition="slide-y-transition" bottom offset-y
+    :close-on-content-click="state.closeOnContentClick">
     <template v-slot:activator="{ on, attrs }">
-      <v-list
-        class="pa-0"
-        rounded
-        :max-width="dense ? 53 : 300"
-        color="transparent"
-      >
+      <v-list class="pa-0" rounded :max-width="dense ? 53 : 300" color="transparent">
         <v-list-item class="pa-0" v-bind="attrs" v-on="on">
-          <v-btn
-            :height="dense ? 50 : 60"
-            min-width="40"
-            :width="dense ? 53 : 65"
-            :class="dense ? `button-dense` : `button`"
-            color="primary"
-          >
-            <v-icon size="28" color="var(--color-background)"
-              >mdi-account-outline</v-icon
-            >
+          <v-btn :height="dense ? 50 : 60" min-width="40" :width="dense ? 53 : 65"
+            :class="dense ? `button-dense` : `button`" color="primary">
+            <v-icon size="28" color="var(--color-background)">mdi-account-outline</v-icon>
           </v-btn>
           <v-list-item-content v-if="!dense" class="ml-4">
-            <v-list-item-title class="title">{{
-              authStore.username
+            <v-list-item-title class="title">{{ authStore.username
             }}</v-list-item-title>
             <v-list-item-subtitle>{{ authStore.email }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -87,12 +69,9 @@ export default {
       closeOnContentClick: true,
     });
 
-    onMounted(() => {
-      themeDark.value = themeStore.getThemeDark();
-    });
-
     watch(themeDark, (value) => {
-      themeStore.setThemeDark(value);
+      if (value === 0) themeStore.setThemeDark(false);
+      else themeStore.setThemeDark(true);
       state.closeOnContentClick = false;
       setTimeout(() => {
         state.closeOnContentClick = true;

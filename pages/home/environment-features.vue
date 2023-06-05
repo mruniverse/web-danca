@@ -24,9 +24,10 @@ export default {
 <script setup>
 import { onMounted, ref } from 'vue';
 import CRUDTable from '@/components/CRUDTable.vue';
-import api from '@/plugins/axios';
+import { useAxios } from "@/plugins/axios";
 import { useToast } from '@/plugins/toast.js';
 
+const api = useAxios();
 const notify = useToast();
 const environments = ref([]);
 const loading = ref(false);

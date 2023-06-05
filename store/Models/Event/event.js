@@ -1,11 +1,12 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import { useUserStore } from "../user";
 import { useEnvironmentStore } from "../Environment/environment";
 import { useToast } from '@/plugins/toast.js';
 
 export const useEventStore = defineStore("eventStore", () => {
+  const api = useAxios();
   const notify = useToast();
   const userStore = useUserStore();
   const environmentStore = useEnvironmentStore();

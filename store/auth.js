@@ -1,6 +1,6 @@
 import { ref, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
-import api from "@/plugins/axios";
+import { useAxios } from "@/plugins/axios";
 import nuxtStorage from "nuxt-storage";
 import { useRouter } from "@/plugins/router";
 
@@ -18,9 +18,10 @@ export const useAuthStore = defineStore("authStore", () => {
   const login = ref(true);
   const register = ref(false);
   const router = useRouter();
+  const api = useAxios();
 
   onBeforeMount(() => {
-    api.defaults.headers.common["Authorization"] = `Bearer ${getAccessToken()}`;
+    api.setHeader('Authorization', `Bearer ${getAccessToken()}`);
   });
 
   /**

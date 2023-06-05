@@ -1,7 +1,6 @@
 <template>
-    <CRUDTableModal title="Caracteristicas de ambientes" :data="events" :headers="headers"
-        :loading-update="loading" @add-new-item="addItem" @update-item="updateItem"
-        @delete-item-confirm="deleteItem">
+    <CRUDTableModal title="Caracteristicas de ambientes" :data="events" :headers="headers" :loading-update="loading"
+        @add-new-item="addItem" @update-item="updateItem" @delete-item-confirm="deleteItem">
         <v-overlay absolute :value="loading">
             <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </v-overlay>
@@ -11,9 +10,10 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import CRUDTableModal from '@/components/CRUDTableModal.vue';
-import api from '@/plugins/axios';
+import { useAxios } from "@/plugins/axios"; 
 import { useToast } from '@/plugins/toast.js';
 
+const api = useAxios();
 const notify = useToast();
 const events = ref([]);
 const loading = ref(false);
