@@ -24,7 +24,7 @@
             </v-card>
         </v-col>
         <v-col cols="auto" align="right" class="px-0 fill-height">
-            <controlPannel v-show="!hideControlPannel"></controlPannel>
+            <control-panel v-show="!hideControlPannel"></control-panel>
         </v-col>
     </v-row>
 </template>
