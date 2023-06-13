@@ -28,10 +28,6 @@ export const useAuthStore = defineStore("authStore", () => {
     return Math.floor(new Date().getTime() / 1000);
   }
 
-  function tokenIsExpired() {
-    return getTimestampInSeconds() - getCreatedAt > expires_in.value;
-  }
-
   function getAccessToken() {
     return cookies.get("access_token");
   }
@@ -76,10 +72,6 @@ export const useAuthStore = defineStore("authStore", () => {
     cookies.removeAll();
   }
 
-  function isAuthenticated() {
-    return getAccessToken() !== "";
-  }
-
   function showLogin() {
     login.value = true;
     register.value = false;
@@ -98,9 +90,7 @@ export const useAuthStore = defineStore("authStore", () => {
     showLogin,
     showRegister,
     authenticate,
-    isAuthenticated,
     logout,
-    tokenIsExpired,
     getTimestampInSeconds,
   };
 });
