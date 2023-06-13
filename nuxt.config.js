@@ -1,7 +1,13 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
+  ssr: true,
+  target: "server",
+
+  router: {
+    middleware: "auth",
+  },
+
   head: {
     titleTemplate: "%s - web-danca",
     title: "web-danca",
@@ -14,7 +20,7 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.svg" }],
   },
 
   server: {
@@ -35,7 +41,7 @@ export default {
   buildModules: ["@nuxtjs/vuetify", "@pinia/nuxt"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/proxy"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/proxy", "cookie-universal-nuxt"],
 
   axios: {
     baseURL: "http://new.webdanca.com:8084/v1/", // Used as fallback if no runtime config is provided

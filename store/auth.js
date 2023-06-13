@@ -1,61 +1,58 @@
-import { ref, onBeforeMount } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { defineStore } from "pinia";
 import { useAxios } from "@/plugins/axios";
-import nuxtStorage from "nuxt-storage";
-import { useRouter } from "@/plugins/router";
+import { useCookies } from "@/plugins/cookies";
 
 export const useAuthStore = defineStore("authStore", () => {
+  const cookies = useCookies();
+  const email = ref(cookies.get("email") || "");
   const password = ref("");
   const expires_in = ref(86400);
-  const created_at = ref(nuxtStorage.localStorage.getData("created_at") || "");
-  const access_token = ref(
-    nuxtStorage.localStorage.getData("access_token") || ""
-  );
-  const refresh_token = ref(
-    nuxtStorage.localStorage.getData("refresh_token") || ""
-  );
-  const email = ref("");
   const login = ref(true);
   const register = ref(false);
-  const router = useRouter();
   const api = useAxios();
 
-  onBeforeMount(() => {
-    api.setHeader('Authorization', `Bearer ${getAccessToken()}`);
+  onMounted(() => {
+    setAxiosHeader();
   });
 
-  /**
-   * Get the timestamp when the token was created
-   * @returns {number}
-   */
-  function getCreatedAt() {
-    return created_at.value;
+  watch(email, () => {
+    cookies.set("email", email.value);
+  });
+
+  function setAxiosHeader() {
+    api.setHeader("Authorization", `Bearer ${getAccessToken()}`);
   }
 
-  /**
-   * Get the token expiration time in seconds
-   * @returns {number}
-   */
-  function getExpiresIn() {
-    return expires_in.value;
-  }
-
-  /**
-   * Get the current timestamp in seconds
-   * @returns {number}
-   */
   function getTimestampInSeconds() {
     return Math.floor(new Date().getTime() / 1000);
   }
 
   function tokenIsExpired() {
-    return getTimestampInSeconds() - getCreatedAt() > getExpiresIn();
+    return getTimestampInSeconds() - getCreatedAt > expires_in.value;
   }
 
-  async function authenticate(data) {
-    password.value = data.password;
-    email.value = data.email;
+  function getAccessToken() {
+    return cookies.get("access_token");
+  }
 
+  function getCreatedAt() {
+    return cookies.get("created_at");
+  }
+
+  function setAccessToken(token) {
+    cookies.set("access_token", token);
+  }
+
+  function setRefreshToken(token) {
+    cookies.set("refresh_token", token);
+  }
+
+  function setCreatedAt(timestamp) {
+    cookies.set("created_at", timestamp);
+  }
+
+  async function authenticate() {
     return await api
       .post(
         "auth/authenticate",
@@ -68,39 +65,19 @@ export const useAuthStore = defineStore("authStore", () => {
         }
       )
       .then((response) => {
-        access_token.value = response.data.access_token;
-        refresh_token.value = response.data.refresh_token;
-        created_at.value = getTimestampInSeconds();
-        nuxtStorage.localStorage.setData(
-          "access_token",
-          response.data.access_token
-        );
-        nuxtStorage.localStorage.setData(
-          "refresh_token",
-          response.data.refresh_token
-        );
-        nuxtStorage.localStorage.setData("created_at", created_at.value);
-
-        router.push("/home/events");
+        setAccessToken(response.data.access_token);
+        setRefreshToken(response.data.refresh_token);
+        setCreatedAt(getTimestampInSeconds());
+        setAxiosHeader();
       });
   }
 
   function logout() {
-    access_token.value = "";
-    refresh_token.value = "";
-    created_at.value = "";
-    nuxtStorage.localStorage.removeItem("access_token");
-    nuxtStorage.localStorage.removeItem("refresh_token");
-    nuxtStorage.localStorage.removeItem("created_at");
-    router.push('/login');
+    cookies.removeAll();
   }
 
   function isAuthenticated() {
-    return access_token.value !== "";
-  }
-
-  function getAccessToken() {
-    return access_token.value;
+    return getAccessToken() !== "";
   }
 
   function showLogin() {
@@ -123,9 +100,7 @@ export const useAuthStore = defineStore("authStore", () => {
     authenticate,
     isAuthenticated,
     logout,
-    getAccessToken,
     tokenIsExpired,
-    getCreatedAt,
     getTimestampInSeconds,
   };
 });

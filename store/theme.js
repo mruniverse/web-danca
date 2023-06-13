@@ -1,24 +1,26 @@
 import { onMounted } from "vue";
 import { defineStore } from "pinia";
 import { useVuetify } from "@/plugins/vuetify";
-import { useStorage } from "@vueuse/core";
+import { useCookies } from "@/plugins/cookies";
 
 export const useThemeStore = defineStore("themeStore", () => {
-  const dark = useStorage('theme-dark', false);
+  const cookies = useCookies();
   const vuetify = useVuetify();
 
   onMounted(() => {
-    console.log(dark.value);
+    setThemeDark(cookies.get("dark"));
   });
 
   function setThemeDark(theme) {
-    dark.value = theme;
-    vuetify.theme.dark = theme;
+    setTimeout(() => {
+      vuetify.theme.dark = theme;
+      cookies.set("dark", theme);
+    }, 1);
   }
 
   function getThemeDark() {
-    return dark.value;
+    return cookies.get("dark");
   }
 
-  return { dark, setThemeDark, getThemeDark };
+  return { setThemeDark, getThemeDark };
 });

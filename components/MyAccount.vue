@@ -24,7 +24,7 @@
         <v-list-item-title>Minha conta</v-list-item-title>
         <v-icon>mdi-account-outline</v-icon>
       </v-list-item>
-      <v-list-item link @click="authStore.logout()">
+      <v-list-item link @click="logout()">
         <v-list-item-title>Sair</v-list-item-title>
         <v-icon>mdi-logout</v-icon>
       </v-list-item>
@@ -63,27 +63,39 @@ export default {
     const authStore = useAuthStore();
     const themeStore = useThemeStore();
     const pageStore = usePageStore();
-    const themeDark = ref(false);
+    const themeDark = ref(themeStore.getThemeDark() ? 1 : 0);
     const state = reactive({
       notifications: 3,
       closeOnContentClick: true,
     });
 
     watch(themeDark, (value) => {
-      if (value === 0) themeStore.setThemeDark(false);
-      else themeStore.setThemeDark(true);
+      setTheme(value);
+      preventClose();
+    });
+
+    function logout() {
+      authStore.logout();
+      router.push("/login");
+    }
+
+    function preventClose() {
       state.closeOnContentClick = false;
       setTimeout(() => {
         state.closeOnContentClick = true;
       }, 100);
-    });
+    }
+
+    function setTheme(theme) {
+      themeStore.setThemeDark(theme ? true : false);
+    }
 
     function setPage() {
       pageStore.setPage("Events");
       router.push("/home/events");
     }
 
-    return { authStore, themeDark, state, pageStore, setPage };
+    return { authStore, themeDark, state, pageStore, setPage, logout };
   },
 };
 </script>

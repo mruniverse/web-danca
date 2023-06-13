@@ -7,10 +7,7 @@
       <v-row no-gutters class="login-sheet" justify="center">
         <v-sheet class="login-sheet-style d-flex align-center">
           <v-overlay absolute :value="loading">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
           </v-overlay>
           <v-row no-gutters class="d-flex justify-center">
             <v-col cols="9">
@@ -18,41 +15,18 @@
                 <p class="login-title-text">Entre com e-mail e senha</p>
               </v-row>
               <v-row no-gutters>
-                <v-text-field
-                  v-model="state.email"
-                  append-icon="mdi-email-outline"
-                  label="E-mail"
-                  outlined
-                  class="login-input-style"
-                  @blur="v$.email.$touch"
-                  :error-messages="
-                    v$.email.$error ? v$.email.$errors[0].$message : ''
-                  "
-                >
+                <v-text-field v-model="auth.email" append-icon="mdi-email-outline" label="E-mail" outlined
+                  class="login-input-style" @blur="v$.email.$touch" :error-messages="v$.email.$error ? v$.email.$errors[0].$message : ''
+                    ">
                 </v-text-field>
               </v-row>
               <v-row no-gutters>
-                <v-text-field
-                  v-model="state.password"
-                  label="Senha"
-                  outlined
-                  :style="{
-                    'font-size': passwordVisibility ? '22px' : '',
-                  }"
+                <v-text-field v-model="auth.password" label="Senha" outlined
+                  :style="{ 'font-size': passwordVisibility ? '22px' : '' }"
                   :type="passwordVisibility ? 'password' : 'text'"
-                  :append-icon="
-                    passwordVisibility
-                      ? 'mdi-lock-off-outline'
-                      : 'mdi-lock-outline'
-                  "
-                  @click:append="
-                    () => (passwordVisibility = !passwordVisibility)
-                  "
-                  @blur="v$.password.$touch"
-                  :error-messages="
-                    v$.password.$error ? v$.password.$errors[0].$message : ''
-                  "
-                >
+                  :append-icon="passwordVisibility ? 'mdi-lock-off-outline' : 'mdi-lock-outline'"
+                  @click:append="() => (passwordVisibility = !passwordVisibility)" @blur="v$.password.$touch"
+                  :error-messages="v$.password.$error ? v$.password.$errors[0].$message : ''">
                 </v-text-field>
               </v-row>
               <v-row no-gutters>
@@ -60,15 +34,7 @@
                   <a>Esqueci a senha</a>
                 </v-col>
                 <v-col align="end">
-                  <v-btn
-                    @click="submit()"
-                    style="border-radius: 13px"
-                    elevation="0"
-                    color="#2887DA"
-                    dark
-                  >
-                    Entrar
-                  </v-btn>
+                  <v-btn @click="submit()" style="border-radius: 13px" elevation="0" color="#2887DA" dark> Entrar </v-btn>
                 </v-col>
               </v-row>
               <v-row no-gutters class="mt-5">
@@ -76,9 +42,7 @@
               </v-row>
               <v-row no-gutters justify="center" class="mt-10 mb-n5">
                 <p class="have-you-registered-text">É novo no Web Dança?</p>
-                <a @click="$router.push({ name: 'Register' })" class="px-2"
-                  >Cadastre-se</a
-                >
+                <a @click="$router.push({ name: 'Register' })" class="px-2">Cadastre-se</a>
               </v-row>
             </v-col>
           </v-row>
@@ -89,23 +53,18 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-import { useAuthStore } from "@/store/auth.js";
+import { ref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required, email } from "@vuelidate/validators";
 import { useToast } from "@/plugins/toast.js";
+import { useAuthStore } from "../store/auth";
+import { useRouter } from "@/plugins/router";
 
 const toast = useToast();
-const authStore = useAuthStore();
+const router = useRouter();
+const auth = useAuthStore();
 const passwordVisibility = ref("password");
 const loading = ref(false);
-const state = reactive({
-  email: "",
-  password: "",
-  username: "",
-  access_token: "",
-  refresh_token: "",
-});
 
 const validations = {
   email: {
@@ -116,20 +75,25 @@ const validations = {
     required: helpers.withMessage("A senha é obrigatória", required),
   },
 };
-const v$ = useVuelidate(validations, state);
+
+const v$ = useVuelidate(validations, auth);
+
+function whileLoading(callback){
+  loading.value = true;
+  callback();
+  loading.value = false;
+}
 
 async function submit() {
   v$.value.$touch();
   if (v$.value.$invalid) {
-    return;
+    return toast.error(v$.value.$errors[0].$message);
   } else {
-    loading.value = true;
-    await authStore.authenticate(state).catch((error) => {
-      console.log(error);
-      toast.error(error.response.data.message);
+    whileLoading(async () => {
+      await auth.authenticate();
+      router.push("/home/events")
     });
-    loading.value = false;
-  }
+ }
 }
 </script>
 
